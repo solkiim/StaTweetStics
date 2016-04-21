@@ -321,12 +321,10 @@ div.bar {
     color: #fff;
     background: #162252;
 }
-
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-success {
     color: #fff;
     background: #162252;
 }
-
 .bootstrap-switch .bootstrap-switch-label {
     text-align: center;
     margin-top: -5px;
@@ -336,7 +334,6 @@ div.bar {
     width: 27px!important;
     height: 25px!important;
 }
-
 .bootstrap-switch .bootstrap-switch-label div {
     margin-left: -2px!important;
     margin-bottom: -6px!important;
@@ -346,6 +343,9 @@ div.bar {
     border-radius: 25px!important;
     display: inline-block;
 }
+.bootstrap-switch .bootstrap-switch-focused{
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important}
 
 
 /*------------------ SUGS GROUP ------------------*/
