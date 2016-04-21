@@ -1,2 +1,11 @@
-edu/brown/cs/ydenisen/tweet/Oauth.class
+Suggest/Suggestor.class
+Suggest/Tuple.class
+Suggest/Word.class
+Suggest/TweetRanker.class
 edu/brown/cs/ydenisen/tweet/Main.class
+Suggest/TweetParser.class
+Suggest/Ranker.class
+Suggest/TweetSuggestor.class
+Suggest/Tweet.class
+edu/brown/cs/ydenisen/tweet/Oauth.class
+Suggest/Parser.class

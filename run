@@ -2,6 +2,9 @@
 
 # To run our code, we must have it in our classpath.
 # We use $(ls target/*.jar) instead of target/stars-1.0.jar so that
+#!/bin/bash
+# To run our code, we must have it in our classpath.
+# We use $(ls target/*.jar) instead of hardcoding the name so that
 # this script can be reused in other projects more easily.
 
 TARGET=$(ls target/*.jar 2>/dev/null)
@@ -18,6 +21,7 @@ fi
 # First, we put the CLASSPATH in .classpath if the pom.xml is newer
 # than out existing .classpath file. (We avoid this command if
 # .classpath is fresh, since it's rather slow.)
+
 if [ ! .mvn-classpath -nt pom.xml ]; then
   mvn dependency:build-classpath -Dmdep.outputFile=.mvn-classpath -q
 fi
@@ -42,3 +46,25 @@ PROJECT=$(basename $(pwd))
 java -cp $TARGET:$CP edu.brown.cs.$USER.$PROJECT.Main "$@"
 
 #rm -rf /ltmp/$USER/bacon.sqlite3
+# (You're free to change that, and then change the ./run script in
+# your handin to match.)
+
+PROJECT=$(basename "$(pwd)")
+
+# Find the package that Main is in. TAs use "staff", students should
+# rename it to their own username. In the file names and in the source!
+MAIN=$(ls src/main/java/edu/brown/cs/*/$PROJECT/Main.java)
+[ -z "$MAIN" ] && echo "You need a Main.java" && exit 1
+[ ! -e "$MAIN" ] && echo "You can only have one Main.java" && exit 1
+PKG=$(basename $(dirname $(dirname $MAIN)))
+
+# The funny symbol: "$@" passes the command-line arguments on from
+# this script to your Java program.
+#trap "rm -rf /ltmp/wflotte; exit 255;" SIGINT SIGKILL SIGTERM
+#ARG="/ltmp/wflotte/maps.sqlite3"
+#mkdir -p /ltmp/wflotte
+#cp /course/cs032/data/maps/maps.sqlite3 /ltmp/$USER >/dev/null
+
+java -ea -cp $TARGET:$CP StaTweetStics.Main "$@"
+#srm -rf /ltmp/wflotte/maps.sqlite3
+

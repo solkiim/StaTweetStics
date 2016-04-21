@@ -181,14 +181,17 @@ public class Oauth {
 	}
 
 	public void run() throws IOException{
-		//String timeline = AE1+args[0]+AE2;
-		//JSONArray tweets = fetchTimelineTweet(timeline);
-		JSONArray trending = getTrendingData(TREND_ENDPOINT);
-		//JSONObject o = (JSONObject) ((JSONObject) trending.get(0)).get("trending");
-		for(Object i : ((JSONObject) ((JSONObject) trending.get(0)).get("trending")).keySet()){
-			System.out.println(((JSONObject) ((JSONObject) trending.get(0)).get("trending")).get(i));
-			System.out.println();
+		String timeline = AE1+args[0]+AE2;
+		JSONArray tweets = fetchTimelineTweet(timeline);
+		for(int i = 0; i < tweets.size(); i++){
+			System.out.println(((JSONObject)tweets.get(i)).get("text"));
 		}
+//		JSONArray trending = getTrendingData(TREND_ENDPOINT);
+		//JSONObject o = (JSONObject) ((JSONObject) trending.get(0)).get("trending");
+//		for(Object i : ((JSONObject) ((JSONObject) trending.get(0)).get("trending")).keySet()){
+//			System.out.println(((JSONObject) ((JSONObject) trending.get(0)).get("trending")).get(i));
+//			System.out.println();
+//		}
 //		JSONObject o = (JSONObject) ;
 //		for(int i = 0; i < o.size(); i++){
 //			System.out.println(o.get(i));
