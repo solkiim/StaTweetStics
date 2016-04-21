@@ -1,4 +1,4 @@
-package edu.brown.cs.wflotte.termproject;
+package Suggest;
 import java.util.Arrays;
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;

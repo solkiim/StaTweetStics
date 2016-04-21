@@ -1,4 +1,4 @@
-package edu.brown.cs.wflotte.termproject;
+package Suggest;
 import java.util.Arrays;
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
@@ -73,5 +73,10 @@ public class Tweet implements Comparable<Tweet> {
 	}
 	public int hashCode(){
 		return Objects.hash(text);
+	}
+	@Override
+	public int compareTo(Tweet o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

@@ -1,4 +1,4 @@
-package edu.brown.cs.wflotte.termproject;
+package Suggest;
 /**
 * this class implements a fairly simple tuple.
 * @param <T> can be anything

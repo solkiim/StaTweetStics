@@ -1,7 +1,9 @@
-package edu.brown.cs.wflotte.termproject;
+package Suggest;
 import java.util.Arrays;
+
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.sql.SQLException;
@@ -10,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
 import java.util.TreeSet;
+
 import com.google.common.collect.Multiset;
 import com.google.common.collect.HashMultiset;
 

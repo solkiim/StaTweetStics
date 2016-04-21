@@ -1,3 +1,7 @@
+#!/usr/local/bin/bash
+
+# To run our code, we must have it in our classpath.
+# We use $(ls target/*.jar) instead of target/stars-1.0.jar so that
 #!/bin/bash
 # To run our code, we must have it in our classpath.
 # We use $(ls target/*.jar) instead of hardcoding the name so that
@@ -9,14 +13,15 @@ if [ -z "$TARGET" ]; then
     exit 1
 fi
 
-# In the pom.xml, we've already explained what other libraries we
+# In the pom.xml, we've already explained other what libraries we
 # depend on. Maven downloaded them, and put them "somewhere" (our
-# repository). Now we ask maven to build up the CLASSPATH that lets us
+# repository). Now we ask maven to build up the CLASSPATH that let us
 # run against those libraries.
 
-# We store the CLASSPATH in .mvn-classpath if the pom.xml is newer
-# than our existing .mvn-classpath file. (We avoid this command if
-# .mvn-classpath is fresh, since it's rather slow.)
+# First, we put the CLASSPATH in .classpath if the pom.xml is newer
+# than out existing .classpath file. (We avoid this command if
+# .classpath is fresh, since it's rather slow.)
+
 if [ ! .mvn-classpath -nt pom.xml ]; then
   mvn dependency:build-classpath -Dmdep.outputFile=.mvn-classpath -q
 fi
@@ -28,6 +33,19 @@ CP=$(cat .mvn-classpath)
 # package name from the current directory, instead of hard coding.
 # But this relies on some conventions in naming.  You'll have to call
 # your class "Main" and use our recommended package structure.
+
+PROJECT=$(basename $(pwd))
+
+# The funny symbol: "$@" passes the command-line arguments on from
+# this script to your Java program.
+
+#mkdir -p /ltmp/$USER
+#cp /course/cs032/data/bacon/bacon.sqlite3 /ltmp/$USER >/dev/null
+#chmod +w /ltmp/$USER/bacon.sqlite3
+
+java -cp $TARGET:$CP edu.brown.cs.$USER.$PROJECT.Main "$@"
+
+#rm -rf /ltmp/$USER/bacon.sqlite3
 # (You're free to change that, and then change the ./run script in
 # your handin to match.)
 
