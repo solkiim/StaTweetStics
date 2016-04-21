@@ -218,11 +218,11 @@ ul {
 }
 
 
-/*------------------ TREND GRAPH ------------------*/
+/*------------------ TREND GRAPH CONTINAER ------------------*/
 #trendsgraph {
     text-align: center;
     display: none;
-    transform: translateY(25%);
+    transform: translateY(80%);
 }
 
 #trendsgraph p {
@@ -244,6 +244,33 @@ ul {
 
 #closeTrendGraph:hover {
     cursor: pointer;
+}
+
+
+/*------------------ TREND GRAPH ------------------*/
+div.bar {
+    display: inline-block;
+    width: 3px;
+    height: 0px;   /* We'll override this later */ 
+    background-color: red;
+    margin-right: 0.1em;
+    scale: 4;
+}
+
+#div-chart{
+    width: 100%;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: 'Proxima Nova Alt Regular';
+    font-size: 11px;
 }
 
 
