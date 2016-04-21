@@ -1,4 +1,4 @@
-package Suggest;
+package edu.brown.cs.suggest;
 import java.util.Arrays;
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
