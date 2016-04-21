@@ -2,32 +2,26 @@
     font-family: 'Proxima Nova Bold';
     src: url('fonts/Proxima Nova Bold.otf');
 }
-
 @font-face {
     font-family: 'Proxima Nova Extrabold';
     src: url('fonts/Proxima Nova Extrabold.otf');
 }
-
 @font-face {
     font-family: 'Proxima Nova Alt Bold';
     src: url('fonts/Proxima Nova Alt Bold.otf');
 }
-
 @font-face {
     font-family: 'Proxima Nova Alt Light';
     src: url('fonts/Proxima Nova Alt Light.otf');
 }
-
 @font-face {
     font-family: 'Proxima Nova Alt Regular';
     src: url('fonts/Proxima Nova Alt Regular.otf');
 }
-
 @font-face {
     font-family: 'Proxima Nova Alt Condensed Thin';
     src: url('fonts/Proxima Nova Alt Condensed Thin.otf');
 }
-
 @font-face {
     font-family: 'Proxima Nova Alt Condensed Light';
     src: url('fonts/Proxima Nova Alt Condensed Light.otf');
@@ -37,7 +31,6 @@
 html {
     height: 100%;
 }
-
 body {
     width: 100%;
     height: 100%;
@@ -54,7 +47,6 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
-
 #particles {
     width: 100%!important;
     height: 100%!important;
@@ -62,10 +54,48 @@ body {
     top: 0!important;
     left: 0!important;
 }
-
 .row {
     width: 100%;
 }
+
+
+/*------------------ USERNAME DIALOG BOX ------------------*/
+.vex.vex-theme-wireframe .vex-content {
+    font-family: 'Proxima Nova Alt Regular';
+    letter-spacing: 2px;
+    color: #162252;
+    border: 2px solid #162252;
+    padding: 50px 70px;
+    margin: 10% auto 0 auto;
+    max-width: 100%;
+    width: 550px;
+    font-size: 16px;
+    text-align: center;
+}
+.vex.vex-theme-wireframe .vex-dialog-form .vex-dialog-input input[type="text"] {
+    width: 85%;
+    padding: 3px 8px;
+    font-size: 18px;
+    margin: 0 0 4px;
+    border: none;
+    border-bottom: 1px solid #162252; 
+    letter-spacing: 2px;
+    text-align: center;
+}
+.vex.vex-theme-wireframe .vex-dialog-form .vex-dialog-input input[type="text"]:focus {
+    border: none;
+    border-bottom: 1px solid #162252;
+}
+.vex.vex-theme-wireframe .vex-dialog-button.vex-dialog-button-primary {
+    background: #162252;
+    color: #fff;
+}
+.vex.vex-theme-wireframe .vex-dialog-button.vex-dialog-button-secondary {
+    background: #fff;
+    color: #162252;
+    border: 2px solid #162252; 
+}
+
 
 /*------------------ TWEET BOX ------------------*/
 #tweetbox {
@@ -75,14 +105,12 @@ body {
     z-index: 99;
     background-color: transparent;
 }
-
 #tweetWrite {
     width: 100%;
     height: 43px;
     border: none;
     border-bottom: 1px solid #ccc;
 }
-
 #tweetInput {
     width: calc(100% - 120px);
     height: 39px;
@@ -94,11 +122,9 @@ body {
     font-size: 15px;
     background-color: transparent;
 }
-
 #tweetInput:focus {
     outline: none;
 }
-
 #tweetButton {
     display: inline-block;
     color: #fff;
@@ -110,11 +136,9 @@ body {
     top: 0px;
     right: 0px;
 }
-
 #tweetButton:hover {
     text-decoration: none;
 }
-
 #tweetButton i {
     font-size: 18px;
     line-height: 43px;
@@ -125,12 +149,10 @@ body {
 .col {
     margin-bottom: 70px;
 }
-
 ul {
     list-style-type: none;
     padding: 0;
 }
-
 #content {
     margin-top: 120px;
 }
@@ -140,7 +162,6 @@ ul {
 #usernameDisplay {
     margin-bottom: 10px;
 }
-
 #usernameDisplay p {
     font-family: 'Proxima Nova Alt Light';
     color: #8c979f;
@@ -148,7 +169,6 @@ ul {
     line-height: 25px;
     letter-spacing: 1px;
 }
-
 #usernameDisplay h3, #usernameInput {
     font-family: 'Proxima Nova Alt Regular';
     margin-top: 0px;
@@ -159,16 +179,13 @@ ul {
     display: inline!important;
     line-height: 25px;
 }
-
 #usernameInput {
     width: 90px;
     background: transparent;
 }
-
 #usernameInput:focus {
     outline: none;
 }
-
 #usernameEdit {
     font-size: 16px;
     color: #162252;
@@ -181,7 +198,6 @@ ul {
     word-break: break-all;
     transform: translateY(50%);
 }
-
 #suggestions h1 {
     text-transform: uppercase;
     color: #8c979f;
@@ -191,7 +207,6 @@ ul {
     line-height: 30px;
     font-size: 20px;
 }
-
 #topsugslist li, #topsugsslide {
     padding: none;
     margin-top: 15px;
@@ -202,16 +217,13 @@ ul {
     text-transform: uppercase;
     letter-spacing: 6px;
 }
-
 #topsugsslide {
     font-size: 55px;
     margin-top: -5px!important;
 }
-
 #topsugslist {
     display: none;
 }
-
 #topsugslist li:hover, #top li:hover, #topsugsslide:hover {
     color: #ccd6dd;
     cursor: pointer;
@@ -224,7 +236,6 @@ ul {
     display: none;
     transform: translateY(80%);
 }
-
 #trendsgraph p {
     text-align:right;
     font-size: 18px;
@@ -232,7 +243,6 @@ ul {
     margin-bottom: -10px;
     margin-right: 10px;
 }
-
 #trendsgraph h3 {
     color: #162252;
     font-family: 'Proxima Nova Alt Regular';
@@ -241,7 +251,6 @@ ul {
     margin: 10px;
     text-transform: uppercase;
 }
-
 #closeTrendGraph:hover {
     cursor: pointer;
 }
@@ -256,18 +265,14 @@ div.bar {
     margin-right: 0.1em;
     scale: 4;
 }
-
 #div-chart{
     width: 100%;
 }
-
-.axis path,
-.axis line {
+.axis path, .axis line {
     fill: none;
     stroke: black;
     shape-rendering: crispEdges;
 }
-
 .axis text {
     font-family: 'Proxima Nova Alt Regular';
     font-size: 11px;
@@ -347,12 +352,10 @@ div.bar {
 #sugsgroup {
     margin-left: -4px;
 }
-
 #sugsgroup li {
     display: inline-block;
     margin: 10px 4px;
 }
-
 #sugsgroup ul li div {
     padding: 5px 15px;
     font-family: 'Proxima Nova Alt Light';
@@ -363,15 +366,12 @@ div.bar {
     border: 1px solid #acbac4;
     color: #8c979f;
 }
-
 #sugsgroup ul li div:hover {
     cursor: pointer;
 }
-
 #sugsgroup input {
     display: none
 }
-
 #sugsgroup input:checked + label div {
     background: #162252;
     color: #fff;

@@ -1,7 +1,22 @@
+var username;
+
+
 $(document).ready(function() {
     $('#particles').particleground({
-        dotColor: '#F2F5FF',
-        lineColor: '#F2F5FF' /*f5f7ff*/
+        dotColor: '#F0F4FF',
+        lineColor: '#F0F4FF' /*f5f7ff*/
+    });
+    
+    vex.dialog.buttons.YES.text = "let's go!"
+    vex.dialog.prompt({
+        message: 'What twitter handle do you wanna search?',
+        placeholder: 'username',
+        callback: function(value) {
+            username = value;
+            if (value !== false) {  // if valid username was entered
+                $("#usernameInput").val(value);
+            }
+        }
     });
 });
 
@@ -61,6 +76,7 @@ $(".fa").click(function() {
         $("#usernameEdit").attr("class", "fa fa-pencil");
         $("#usernameInput").prop("readonly", true);
         $("#usernameInput").css("border-bottom","none");
+        username = $("#usernameInput").val();
     } else {
          editingUsername = true;
         $("#usernameEdit").attr("class", "fa fa-check");
