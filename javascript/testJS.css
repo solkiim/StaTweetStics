@@ -1,0 +1,30 @@
+div.bar {
+    display: inline-block;
+    width: 3px;
+    height: 0px;   /* We'll override this later */ 
+    background-color: red;
+    margin-right: 0.1em;
+    scale: 4;
+}
+
+#div-chart{
+  width: 500px;
+  margin-bottom: 10px;
+}
+
+#div-chart {
+  border: 1px solid #d2d2d2;
+  padding: 20px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-family: sans-serif;
+  font-size: 11px;
+}
