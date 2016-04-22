@@ -1,4 +1,4 @@
-package Suggest;
+package edu.brown.cs.suggest;
 import java.util.Arrays;
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
@@ -20,7 +20,7 @@ import java.util.Set;
 public class TweetSuggestor implements Suggestor<String> {
 	Parser<Tweet> parser = new TweetParser();
 	Ranker<String> ranker = null;
-	Map<String,Word> wordMap = null;
+	//Map<String,Word> wordMap = null;
 	List<Tweet> tweets = new ArrayList<>();
 	public void parse(String raw){
 		tweets.add(parser.parse(raw));
@@ -30,7 +30,7 @@ public class TweetSuggestor implements Suggestor<String> {
 	}
 	public List<String> rank() {
 		TweetRanker r = new TweetRanker(tweets);
-		wordMap = r.getWords();
+		//wordMap = r.getWords();
 		ranker = r;
 		return ranker.rank();
 	}

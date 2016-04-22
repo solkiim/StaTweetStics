@@ -1,4 +1,4 @@
-package Suggest;
+package edu.brown.cs.suggest;
 import java.util.Arrays;
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.TreeSet;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.HashMultiset;
@@ -24,17 +25,18 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class TweetRanker implements Ranker<String> {
-    Map<String, Double> idfMap = new HashMap<>(); 
-    Map<String, Double> score = new HashMap<>();
-    Map<String, List<Tweet>> tweetwords = new HashMap<>();
-    Set<String> words = new TreeSet<>();
+    Map<Word, Double> idfMap = new HashMap<>(); 
+    Map<Word, Double> score = new HashMap<>();
+    Map<Word, List<Tweet>> tweetwords = new HashMap<>();
+    Set<Word> words = new HashSet<>();
+    
     double docSize;
     public TweetRanker(List<Tweet> tweets) {
         docSize = Integer.valueOf(tweets.size()).doubleValue();
         double average = 0;
         //pass 1
         for (Tweet t : tweets) {
-            for (String word : t.words()) {
+            for (Word word : t.words()) {
                 words.add(word);
                 List<Tweet> tweetList = tweetwords.getOrDefault(word, new ArrayList<Tweet>());
                 tweetList.add(t);
@@ -47,7 +49,7 @@ public class TweetRanker implements Ranker<String> {
         //pass 2
         for (Tweet t : tweets) {
             t.setTweetScore(average);
-            for (String word : t.words()) {
+            for (Word word : t.words()) {
                 double val = idfMap.get(word);
                 double alg = Math.log(docSize/(val+1.0)+1.0);
                 idfMap.put(word, Double.valueOf(alg));
@@ -55,8 +57,8 @@ public class TweetRanker implements Ranker<String> {
         }
         //pass 3
         for (Tweet t : tweets) {
-            for (String word : t.words()) {
-                score.put(word, t.tf().get(word)*t.tweetScore()*score.getOrDefault(word,1.0));
+            for (Word word : t.words()) {
+                score.put(word, t.tf().get(word.toString())*t.tweetScore()*score.getOrDefault(word,1.0));
             }
         }
         //pass 4 
@@ -91,23 +93,23 @@ public class TweetRanker implements Ranker<String> {
     public double tfIdf(Tweet doc, String term) {
         return tf(doc, term) * idf(term);
     }
-    public List<Tuple<String, Double>> score() {
-        List<Tuple<String, Double>> result = new ArrayList<>();
-        Queue<Tuple<String, Double>> pq = new PriorityQueue<>(10, (a,b) ->{
+    public List<Tuple<Word, Double>> score() {
+        List<Tuple<Word, Double>> result = new ArrayList<>();
+        Queue<Tuple<Word, Double>> pq = new PriorityQueue<>(10, (a,b) ->{
             return (-a.second().compareTo(b.second()));
         });
-        for (String word : words) {
+        for (Word word : words) {
             pq.add(new Tuple(word,score.get(word)*idfMap.get(word)));
         }
-        for(Tuple<String,Double> t = pq.poll();t != null;t = pq.poll()) {
+        for(Tuple<Word,Double> t = pq.poll();t != null;t = pq.poll()) {
             result.add(t);
         }
         return result;
     }
     public List<String> rank() {
         List<String> s = new ArrayList<>();
-        for (Tuple<String, Double> t : score()) {
-            s.add(t.first());
+        for (Tuple<Word, Double> t : score()) {
+            s.add(t.first().toString());
         }
         return s;
     }
@@ -120,12 +122,8 @@ public class TweetRanker implements Ranker<String> {
         }
         return s;
     }
-    public Map<String, Word> getWords() {
-        Map<String, Word> result = new HashMap<>();
-        for (String word : words) {
-             result.put(word,new Word(word, tweetwords.get(word)));
-        }
-        return result;
+    public Set<Word> getWords() {
+        return words;
     }
 
 

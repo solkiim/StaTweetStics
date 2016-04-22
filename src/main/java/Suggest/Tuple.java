@@ -1,4 +1,4 @@
-package Suggest;
+package edu.brown.cs.suggest;
 /**
 * this class implements a fairly simple tuple.
 * @param <T> can be anything
