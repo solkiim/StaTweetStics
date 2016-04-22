@@ -33,6 +33,8 @@ public class Oauth {
 	private static final String AE1 = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
 	private static final String AE2 = "&count=100&include_rts=false";
 	private static final String TREND_ENDPOINT = "https://api.twitter.com/1.1/trends/place.json?id=23424977";
+	
+	//
 
 	public Oauth(String[] args){
 		this.args = args;
@@ -187,11 +189,12 @@ public class Oauth {
 		JSONArray tweets = fetchTimelineTweet(timeline);
 		List<String> timeLineData = new ArrayList<String>(tweets.size());
 		List<Integer> favoriteCount = new ArrayList<Integer>(tweets.size());
+		List<String> createdAt = new ArrayList<String>(tweets.size());
 		for(int i = 0; i < (tweets).size(); i++){
-			favoriteCount.add(Integer.parseInt((String)((JSONObject)tweets.get(i)).get("favorite_count")));
-//			System.out.println(tweets.get(i));
-			timeLineData.add((String) ((JSONObject)tweets.get(i)).get("text"));
-//			System.out.println(((JSONObject)tweets.get(i)).get("text"));
+			createdAt.add(((JSONObject)tweets.get(i)).get("created_at").toString());
+			long l = Long.parseLong(((JSONObject)tweets.get(i)).get("favorite_count").toString());
+			favoriteCount.add((int)l);
+			timeLineData.add(((JSONObject)tweets.get(i)).get("text").toString());
 		}
 		JSONArray trending = (getTrendingData(TREND_ENDPOINT));
 		JSONArray trends = (JSONArray) ((JSONObject) trending.get(0)).get("trends");
@@ -199,10 +202,9 @@ public class Oauth {
 		for(int j = 0; j < trends.size(); j++){
 			if(((String)((JSONObject)trends.get(j)).get("name")).startsWith("#")){
 				trendingData.add(((String)((JSONObject)trends.get(j)).get("name")));
-//				System.out.println(((JSONObject)trends.get(j)).get("name"));
 			}
 		}
-		Data ret = new Data(timeLineData,trendingData,favoriteCount);
+		Data ret = new Data(timeLineData,trendingData,favoriteCount,createdAt);
 		System.out.println(ret.toString());
 	}
 
