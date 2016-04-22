@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/bin/bash
 
 # To run our code, we must have it in our classpath.
 # We use $(ls target/*.jar) instead of target/stars-1.0.jar so that
@@ -43,17 +43,17 @@ PROJECT=$(basename $(pwd))
 #cp /course/cs032/data/bacon/bacon.sqlite3 /ltmp/$USER >/dev/null
 #chmod +w /ltmp/$USER/bacon.sqlite3
 
-java -cp $TARGET:$CP edu.brown.cs.$USER.$PROJECT.Main "$@"
+java -cp $TARGET:$CP edu.brown.cs.ydenisen.tweet.Main "$@"
 
 #rm -rf /ltmp/$USER/bacon.sqlite3
 # (You're free to change that, and then change the ./run script in
 # your handin to match.)
 
 PROJECT=$(basename "$(pwd)")
-
+echo "$PROJECT"
 # Find the package that Main is in. TAs use "staff", students should
 # rename it to their own username. In the file names and in the source!
-MAIN=$(ls src/main/java/edu/brown/cs/*/$PROJECT/Main.java)
+MAIN=$(ls src/main/java/edu/brown/cs/*/tweet/Main.java)
 [ -z "$MAIN" ] && echo "You need a Main.java" && exit 1
 [ ! -e "$MAIN" ] && echo "You can only have one Main.java" && exit 1
 PKG=$(basename $(dirname $(dirname $MAIN)))

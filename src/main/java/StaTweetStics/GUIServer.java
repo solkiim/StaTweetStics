@@ -1,4 +1,4 @@
-package edu.brown.cs.wflotte.bacon;
+package edu.brown.cs.ydenisen.tweet;
 import java.util.Arrays;
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
@@ -27,7 +27,6 @@ import spark.ExceptionHandler;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import java.util.Map;
-import edu.brown.cs.wflotte.autocorrect.AutoCorrect;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.UnknownHostException;
@@ -39,7 +38,6 @@ import java.sql.ResultSet;
 * interations for the server.
 */
 public abstract class GUIServer {
-  private static AutoCorrect ac = new AutoCorrect();
   private static final Gson GSON = new Gson();
   private static final Splitter MY_SPLITTER = 
   Splitter.on(CharMatcher.WHITESPACE).trimResults().omitEmptyStrings();
@@ -64,12 +62,11 @@ public abstract class GUIServer {
     // JavaScript.
     // This tells Spark where to look for urls of the form "/static/*".
     Spark.setPort(port);
-    setUpAutoCorrect();
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
     FreeMarkerEngine freeMarker = createEngine();
     Spark.get("/StaTweetStics", new HomeHandler(), freeMarker);
-    Spark.get("/userTweets");
+    Spark.get("/userTweets", new userHandler(), freeMarker);
   }
   /**
   * this handels the inital home site.
@@ -84,7 +81,7 @@ public abstract class GUIServer {
     @Override
     public ModelAndView handle(final Request req, final Response res) {
       
-      Map<String, Object> variables = ImmutableMap.of("title", "Bacon");
+      Map<String, Object> variables = ImmutableMap.of("title", "StaTweetStics");
 
       return new ModelAndView(variables, "index.ftl");
     }
@@ -137,7 +134,7 @@ public abstract class GUIServer {
   * this is the class that provides for the autocorrect
   * functionality.
   */
-  private static class CorrectHandler implements Route {
+  private static class UserHandler implements Route {
     /**
     * spark server handler.
     * @param req the request
@@ -147,14 +144,15 @@ public abstract class GUIServer {
     @Override
     public Object handle(final Request req, final Response res) {
       QueryParamsMap qm = req.queryMap();
-      String input = qm.value("input");
-      int i = 0;
-      Map<String, Object> variables = new LinkedHashMap<>();
-      for (String out : ac.suggest(null, input)) {
-        variables.put("bres" + i, true);
-        variables.put("res" + i, out);
-        i++;
-      }
+      String input = qm.value("user");
+
+      // TODO: 1. Get a list of Tweets from OAuth
+
+      // TODO: 2. Pass the list of Tweets to Suggest, return top five words
+      // TODO: 3. For each word, pass the word into Suggest to get an arrayList of daily likes over the past three months
+      // TODO: 4. Produce a HashMap of each word to its arrayList, to return.
+
+      Map<String, Object> variables = new HashMap<>();
       return GSON.toJson(variables);
     }
   }

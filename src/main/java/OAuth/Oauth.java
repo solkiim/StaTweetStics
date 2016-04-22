@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import edu.brown.cs.ydenisen.tweet.Data;
+import edu.brown.cs.suggest.*;
+
 
 public class Oauth {
 
@@ -182,7 +184,7 @@ public class Oauth {
 		}
 	}
 
-	public void run() throws IOException{
+	public Data run() throws IOException{
 		String timeline = AE1+args[0]+AE2;
 		JSONArray tweets = fetchTimelineTweet(timeline);
 		List<String> timeLineData = new ArrayList<String>(tweets.size());
@@ -204,6 +206,12 @@ public class Oauth {
 		}
 		Data ret = new Data(timeLineData,trendingData,favoriteCount);
 		System.out.println(ret.toString());
+		Parser<List<Tweet>, Data> par = new TweetDataParser();
+		Ranker<String> rank = new TweetRanker(par.parse(ret));
+		List<String> ranks = rank.rank();
+		for (String s : ranks) {
+			System.out.println(s);
+		}
 	}
 
 }

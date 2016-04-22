@@ -1,37 +1,37 @@
 var bodySelection = d3.select("body");
 
-var svgContainer = bodySelection.append("svg")
-  .attr("width", 100)
-  .attr("height", 500);
-
 var dataset = [];
 var limit = 90;
 
 // random integers from 0 to 99. Reasonable for our case?
 for(var i = 0; i <= limit; i++) {
- dataset.push(Math.floor(Math.random()*100)) 
+ dataset.push(Math.floor(Math.random()*200)) 
 }
 
-var w = 500;
-var h = 100;
+var margin = {top: 20, right: 20, bottom: 20, left: 25},
+    width = 500
+    height = 200;
+
 var padding = 1;
 var scale = 1; // 4x scale
 
 // create svg element
 var svg = d3.select("#div-chart")
   .append("svg")
-  .attr("width", w + 40)
-  .attr("height", h + 40);
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append('g')
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");;
 
 svg.selectAll("rect")
   .data(dataset)
   .enter()
   .append("rect")
   .attr("x", function(d,i){
-    return i* (w/dataset.length);
+    return i* (width/dataset.length);
   })
-  .attr("y", function(d){ return h - d*scale; })
-  .attr("width", w/dataset.length - padding)
+  .attr("y", function(d){ return height - d*scale; })
+  .attr("width", width/dataset.length - padding)
   .attr("height", function(d){return d*scale;})
   .attr("fill", function(d){
     var r = 0;
@@ -43,10 +43,10 @@ svg.selectAll("rect")
 
 var xScale = d3.scale.linear()
   .domain([0, 90])
-  .range([0, 500])
+  .range([0, width])
 var yScale = d3.scale.linear()
-  .domain([0, 100])
-  .range([10, 90])
+  .domain([Math.max.apply(null, dataset), 0])
+  .range([0, height])
 
 // Axis
 var xAxis = d3.svg.axis()
@@ -60,7 +60,7 @@ var yAxis = d3.svg.axis()
 
 var xAxisGroup = svg.append("g")
   .attr("class", "axis") // assign "axis" class
- .attr("transform", "translate(0, " + (h - padding) + ")")
+  .attr("transform", "translate(0, " + (height - padding) + ")")
   .call(xAxis);
 
 var yAxisGroup = svg.append("g")
