@@ -5,10 +5,12 @@ import java.util.List;
 public class Data {
 	
 	private List<String> timeLineData;
+	private List<Integer> favoriteCount;
 	private List<String> trendingData;
 	
-	public Data(List<String> timeLineData, List<String> trendingData){
+	public Data(List<String> timeLineData, List<String> trendingData, List<Integer> favoriteCount){
 		this.timeLineData = timeLineData;
+		this.favoriteCount = favoriteCount;
 		this.trendingData = trendingData;
 	}
 	
@@ -18,6 +20,10 @@ public class Data {
 	
 	public List<String> getTrendingData(){
 		return this.trendingData;
+	}
+	
+	public List<Integer> getFavoriteCount(){
+		return this.favoriteCount;
 	}
 	
 	@Override 

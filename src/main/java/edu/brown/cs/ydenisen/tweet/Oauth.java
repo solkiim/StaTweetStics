@@ -186,7 +186,10 @@ public class Oauth {
 		String timeline = AE1+args[0]+AE2;
 		JSONArray tweets = fetchTimelineTweet(timeline);
 		List<String> timeLineData = new ArrayList<String>(tweets.size());
+		List<Integer> favoriteCount = new ArrayList<Integer>(tweets.size());
 		for(int i = 0; i < (tweets).size(); i++){
+			favoriteCount.add(Integer.parseInt((String)((JSONObject)tweets.get(i)).get("favorite_count")));
+//			System.out.println(tweets.get(i));
 			timeLineData.add((String) ((JSONObject)tweets.get(i)).get("text"));
 //			System.out.println(((JSONObject)tweets.get(i)).get("text"));
 		}
@@ -199,7 +202,7 @@ public class Oauth {
 //				System.out.println(((JSONObject)trends.get(j)).get("name"));
 			}
 		}
-		Data ret = new Data(timeLineData,trendingData);
+		Data ret = new Data(timeLineData,trendingData,favoriteCount);
 		System.out.println(ret.toString());
 	}
 
