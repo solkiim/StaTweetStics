@@ -170,6 +170,8 @@ public abstract class GUIServer {
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("words",ranks.toArray());
+        variables.put("topwordsboth",ranks.toArray());
+        variables.put("trending",result.getTrendingData().toArray())
         return GSON.toJson(variables);
       } catch (Exception e) {
         throw new RuntimeException(e);
