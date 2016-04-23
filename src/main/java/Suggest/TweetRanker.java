@@ -24,7 +24,7 @@ import com.google.common.collect.HashMultiset;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class TweetRanker implements Ranker<String> {
+public class TweetRanker implements Ranker<Word> {
     Map<Word, Double> idfMap = new HashMap<>(); 
     Map<Word, Double> score = new HashMap<>();
     Map<Word, List<Tweet>> tweetwords = new HashMap<>();
@@ -106,16 +106,16 @@ public class TweetRanker implements Ranker<String> {
         }
         return result;
     }
-    public List<String> rank() {
-        List<String> s = new ArrayList<>();
+    public List<Word> rank() {
+        List<Word> s = new ArrayList<>();
         for (Tuple<Word, Double> t : score()) {
-            s.add(t.first().toString());
+            s.add(t.first());
         }
         return s;
     }
-    public List<String> rank(int size) {
-        List<String> s = new ArrayList<>();
-        List<String> result = rank();
+    public List<Word> rank(int size) {
+        List<Word> s = new ArrayList<>();
+        List<Word> result = rank();
         int len = Math.min(result.size(),size);
         for (int i = 0; i < len; i++ ) {
             s.add(result.get(i));

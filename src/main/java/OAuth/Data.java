@@ -1,4 +1,4 @@
-package edu.brown.cs.ydenisen.tweet;
+package edu.brown.cs.OAuth;
 
 import java.util.List;
 
@@ -7,11 +7,13 @@ public class Data {
 	private List<String> timeLineData;
 	private List<Integer> favoriteCount;
 	private List<String> trendingData;
+	private List<String> createdAt;
 	
-	public Data(List<String> timeLineData, List<String> trendingData, List<Integer> favoriteCount){
+	public Data(List<String> timeLineData, List<String> trendingData, List<Integer> favoriteCount, List<String> createdAt){
 		this.timeLineData = timeLineData;
 		this.favoriteCount = favoriteCount;
 		this.trendingData = trendingData;
+		this.createdAt = createdAt;
 	}
 	
 	public List<String> getTimeLineData(){
@@ -26,6 +28,10 @@ public class Data {
 		return this.favoriteCount;
 	}
 	
+	public List<String> getCreatedAt(){
+		return this.createdAt;
+	}
+	
 	@Override 
 	public String toString(){
 		StringBuilder s = new StringBuilder();
@@ -33,6 +39,20 @@ public class Data {
 		s.append("\n");
 		for(String tl : this.timeLineData){
 			s.append(tl);
+			s.append(" | ");
+		}
+		s.append("\n");
+		s.append("Favorite counts");
+		s.append("\n");
+		for(Integer c : this.favoriteCount){
+			s.append(c);
+			s.append(" | ");
+		}
+		s.append("\n");
+		s.append("When Created");
+		s.append("\n");
+		for(String cr : this.createdAt){
+			s.append(cr);
 			s.append(" | ");
 		}
 		s.append("\n");

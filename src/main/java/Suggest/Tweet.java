@@ -29,10 +29,12 @@ public class Tweet implements Comparable<Tweet> {
 	private Map<String, Double> tf = new HashMap<>();
 	//private Set<String> words = new TreeSet<>();
 	private double retweet;
+	private int rawRetweet;
 	private double tweetScore;
 	private String text;
-	public Tweet(List<String> splitWords,String text,double retweet) {
-		this.retweet = retweet;
+	public Tweet(List<String> splitWords,String text,int retweet) {
+		this.rawRetweet = retweet;
+		this.retweet = (double) rawRetweet;
 		this.text = text;
 		double wordTotal = 0;
 	    for (String word : splitWords) {
@@ -49,6 +51,9 @@ public class Tweet implements Comparable<Tweet> {
 	}
 	public double retweets() {
 		return retweet;
+	}
+	public int rawRetweets() {
+		return rawRetweet;
 	}
 	public void setTweetScore(double average) {
 		tweetScore = retweet/average;

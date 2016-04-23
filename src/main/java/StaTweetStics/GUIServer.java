@@ -1,4 +1,5 @@
-package edu.brown.cs.ydenisen.tweet;
+package edu.brown.cs.StaTweetStics;
+
 import java.util.Arrays;
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.net.InetAddress;
 
 import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.sql.Connection;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -26,6 +28,7 @@ import spark.ExceptionHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.Map;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -33,12 +36,19 @@ import java.net.UnknownHostException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+//import edu.brown.cs.suggest.WordSerializer;
+import edu.brown.cs.suggest.*;
+import edu.brown.cs.OAuth.*;
+
+
 /**
 * this is the class that is responsible for all of the GUI
 * interations for the server.
 */
 public abstract class GUIServer {
-  private static final Gson GSON = new Gson();
+  private static final Gson GSON = new GsonBuilder()
+    .registerTypeAdapter(Word.class, new WordSerializer()).create();
   private static final Splitter MY_SPLITTER = 
   Splitter.on(CharMatcher.WHITESPACE).trimResults().omitEmptyStrings();
   private static int port = 4242;
@@ -66,7 +76,7 @@ public abstract class GUIServer {
     Spark.exception(Exception.class, new ExceptionPrinter());
     FreeMarkerEngine freeMarker = createEngine();
     Spark.get("/StaTweetStics", new HomeHandler(), freeMarker);
-    Spark.get("/userTweets", new userHandler(), freeMarker);
+    Spark.get("/userTweets", new UserHandler());
   }
   /**
   * this handels the inital home site.
@@ -143,17 +153,27 @@ public abstract class GUIServer {
     */
     @Override
     public Object handle(final Request req, final Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String input = qm.value("user");
+      try {
+        QueryParamsMap qm = req.queryMap();
+        String input = qm.value("user");
 
-      // TODO: 1. Get a list of Tweets from OAuth
+        // TODO: 1. Get a list of Tweets from OAuth
+        Oauth oa = new Oauth(input);
+        Parser<List<Tweet>, Data> par = new TweetDataParser();
 
-      // TODO: 2. Pass the list of Tweets to Suggest, return top five words
-      // TODO: 3. For each word, pass the word into Suggest to get an arrayList of daily likes over the past three months
-      // TODO: 4. Produce a HashMap of each word to its arrayList, to return.
+        Data result = oa.run();
+        // TODO: 2. Pass the list of Tweets to Suggest, return top five words
+        Ranker<Word> rank = new TweetRanker(par.parse(result));
+        List<Word> ranks = rank.rank(5);
+        // TODO: 3. For each word, pass the word into Suggest to get an arrayList of daily likes over the past three months
+        // TODO: 4. Produce a HashMap of each word to its arrayList, to return.
 
-      Map<String, Object> variables = new HashMap<>();
-      return GSON.toJson(variables);
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("words",ranks.toArray());
+        return GSON.toJson(variables);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 }

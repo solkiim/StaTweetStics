@@ -15,7 +15,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
 
-public interface Parser<T> {
-	T parse(String raw);
-	List<T> parse(List<String> raw);
+public interface Parser<T,S> {
+	T parse(S raw);
+	default List<T> parse(List<S> raw) {
+		List<T> res = new ArrayList<T>();
+		for (S r: raw) {
+			res.add(parse(r));
+		}
+		return res;
+	}
 }

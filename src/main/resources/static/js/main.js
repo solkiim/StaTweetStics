@@ -77,6 +77,15 @@ $(".fa").click(function() {
         $("#usernameInput").prop("readonly", true);
         $("#usernameInput").css("border-bottom","none");
         username = $("#usernameInput").val();
+
+        // sending the username to the backend
+        var postParameters = {'user': username};
+        $.get("/userTweets", postParameters, function(responseJSON) {
+            console.log(responseJSON);
+            var parsedResponse = JSON.parse(responseJSON);
+            console.log(parsedResponse.words);
+
+        })
     } else {
          editingUsername = true;
         $("#usernameEdit").attr("class", "fa fa-check");

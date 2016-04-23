@@ -60,7 +60,7 @@ public class Word implements Comparable<Word> {
 		return word;
 	}
 	public String printWordData() {
-		return String.format("word:{val: %s, Tweets:{ %s } val-end: %s}",word,tweets.toString(),word);
+		return String.format("word:{val: %s, Tweets:{ %s } val-end: %s}",word,tweets.size(),word);
 	}
 	@Override
 	public boolean equals(Object obj) {

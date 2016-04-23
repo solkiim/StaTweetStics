@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
-import edu.brown.cs.ydenisen.tweet.Data;
+import edu.brown.cs.OAuth.Data;
 
 public class TweetDataParser implements Parser<List<Tweet>, Data> {
 	private static final Splitter MY_SPLITTER = Splitter.on(CharMatcher.WHITESPACE).trimResults().omitEmptyStrings();
