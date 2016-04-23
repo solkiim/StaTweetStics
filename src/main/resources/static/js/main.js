@@ -22,9 +22,10 @@ $(document).ready(function() {
         message: 'What twitter handle do you wanna search?',
         placeholder: 'username',
         callback: function(value) {
-            username = value;
             if (value !== false) {  // if valid username was entered
+                username = value;
                 $("#usernameInput").val(value); // set username
+                updateUsername();
             }
         }
     });
@@ -97,15 +98,7 @@ $(".fa").click(function() {
         $("#usernameInput").prop("readonly", true);
         $("#usernameInput").css("border-bottom","none");
         username = $("#usernameInput").val();
-
-        // sending the username to the backend
-        var postParameters = {'user': username};
-        $.get("/userTweets", postParameters, function(responseJSON) {
-            console.log(responseJSON);
-            var parsedResponse = JSON.parse(responseJSON);
-            console.log(parsedResponse.words);
-
-        })
+        updateUsername();
     } else {
          editingUsername = true;
         $("#usernameEdit").attr("class", "fa fa-check");
@@ -113,6 +106,22 @@ $(".fa").click(function() {
         $("#usernameInput").css("border-bottom","1px solid #162252");
     }
 });
+
+function updateUsername() {
+    // sending the username to the backend
+    var postParameters = {'user': username};
+    $.get("/userTweets", postParameters, function(responseJSON) {
+        console.log(responseJSON);
+        var parsedResponse = JSON.parse(responseJSON);
+        console.log(parsedResponse.words);
+        var words = parsedResponse.words;
+        for (var i = 0; i < words.length; i++) {
+            displayedSugs[i] = words[i].text;
+        }
+        topSugList();
+        topSugSlide();
+    })
+}
 
 
 /*------------------ SLIDE OR LIST ------------------*/
