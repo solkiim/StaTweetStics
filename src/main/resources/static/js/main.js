@@ -12,6 +12,8 @@ $(document).ready(function() {
     
     // set up defaults if no username input
     topsugs = {"puppies":[0], "#springWeekend":[0], "CS32":[0], "finals":[0], "#bostonMarathon":[0]}
+    yourtrending = topsugs;
+    twittertrending = topsugs;
     displayedSugs = topsugs;
     
     topSugSlide();  // start top sugs slide
@@ -51,7 +53,7 @@ changeURL = function(e) {
 var statsOut = false;
 
 $("#topsugslist li, #topsugsslide").click(function() { 
-    alert("CLICKED");
+//    alert("CLICKED");
     $("#trendgraphtitle").html($(this).text() + " Trend Graph:");
     
     if (!statsOut) {
@@ -121,9 +123,9 @@ function updateUsername() {
     // sending the username to the backend
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
-        console.log(responseJSON);
+//        console.log(responseJSON);
         var parsedResponse = JSON.parse(responseJSON);
-        console.log(parsedResponse.words);
+//        console.log(parsedResponse.words);
         
         // clear data for previous username
         var topsugs = {};
