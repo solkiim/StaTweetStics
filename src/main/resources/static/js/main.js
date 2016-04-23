@@ -1,11 +1,18 @@
 var username;
-var displayedSugs = ["puppies", "#springWeekend", "CS32", "essays", "#bostonMarathon"];
+var topsugs = {};
+var yourtrending = {};
+var twittertrending = {};
+var displayedSugs;    // sugs displayed currently
 
 $(document).ready(function() {
     $('#particles').particleground({
         dotColor: '#F0F4FF',
         lineColor: '#F0F4FF' /*f5f7ff*/
     });
+    
+    // set up defaults if no username input
+    topsugs = {"puppies":[0], "#springWeekend":[0], "CS32":[0], "finals":[0], "#bostonMarathon":[0]}
+    displayedSugs = topsugs;
     
     topSugSlide();  // start top sugs slide
     
@@ -44,6 +51,7 @@ changeURL = function(e) {
 var statsOut = false;
 
 $("#topsugslist li, #topsugsslide").click(function() { 
+    alert("CLICKED");
     $("#trendgraphtitle").html($(this).text() + " Trend Graph:");
     
     if (!statsOut) {
@@ -66,8 +74,9 @@ $("#closeTrendGraph").click(function() {
 // populates the top sug list
 function topSugList() {
     var listhtml = "";
-    for (var i = 0; i < displayedSugs.length; i++) {
-        listhtml += ("<li>" + displayedSugs[i] + "</li>");
+    var wordlist = Object.keys(displayedSugs);
+    for (var i = 0; i < wordlist.length; i++) {
+        listhtml += ("<li>" + wordlist[i] + "</li>");
     }
     $("#topsugslist").html(listhtml);
 }
@@ -75,10 +84,11 @@ function topSugList() {
 // generates and starts the top sug slide
 function topSugSlide() {
     index = 0;
+    var wordlist = Object.keys(displayedSugs);
     function cycle() {
-        $("#topsugsslide").html(displayedSugs[index]);
+        $("#topsugsslide").html(wordlist[index]);
         index++;
-        if (index === displayedSugs.length) {
+        if (index === wordlist.length) {
             index = 0;
         }
         setTimeout(cycle, 3000);
@@ -114,10 +124,17 @@ function updateUsername() {
         console.log(responseJSON);
         var parsedResponse = JSON.parse(responseJSON);
         console.log(parsedResponse.words);
+        
+        // clear data for previous username
+        var topsugs = {};
+        var yourtrending = {};
+        var twittertrending = {};
+        
         var words = parsedResponse.words;
         for (var i = 0; i < words.length; i++) {
-            displayedSugs[i] = words[i].text;
+            topsugs[words[i].text] = words[i].data;
         }
+        displayedSugs = topsugs;
         topSugList();
         topSugSlide();
     })
@@ -143,6 +160,14 @@ $("input[name='my-checkbox']").on("switchChange.bootstrapSwitch", function(event
 /*------------------ SUGGESTION TYPE ------------------*/
 $("input[type='radio']").click(function(){
     if ($(this).is(":checked")) {
-        //alert($(this).val());
+        if ($(this).val() === "topsugs") {
+            displayedSugs = topsugs;
+        } else if ($(this).val() === "yourtrending") {
+            displayedSugs = yourtrending;
+        } else if ($(this).val() === "twittertrending") {
+            displayedSugs = twittertrending;
+        }
+        topSugList();
+        topSugSlide();
     }
 });
