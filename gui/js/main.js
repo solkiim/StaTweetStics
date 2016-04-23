@@ -11,6 +11,13 @@ $(document).ready(function() {
     
     // username dialog prompt
     vex.dialog.buttons.YES.text = "let's go!"
+    
+    vex.dialog.confirm({
+        message: 'Click on the suggestions to see trend graphs!'
+    });
+    
+    vex.dialog.buttons.YES.text = "i'm ready!"
+    
     vex.dialog.prompt({
         message: 'What twitter handle do you wanna search?',
         placeholder: 'username',
