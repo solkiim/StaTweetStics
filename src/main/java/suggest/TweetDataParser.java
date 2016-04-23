@@ -39,21 +39,22 @@ public class TweetDataParser implements Parser<List<Tweet>, Data> {
 
 		List<Tuple<String,String>> command = new ArrayList<>();
 		command.add(new Tuple("http://[^\\s]+"," "));
+		command.add(new Tuple("https://[^\\s]+"," "));
 		command.add(new Tuple("\\.\\.+"," "));
 		command.add(new Tuple("( |^\\s)['!\"$%&'()*+,-./:;<=>?@\\[\\]^_`\\{\\|\\}~']+\\w+( |$)", " "));
 		command.add(new Tuple("@\\w+", " "));//removes user
 		command.add(new Tuple("[\\.\\!\\?\\,\\;\\:\\\'\\\"]", ""));
 		//command.add(new Tuple("[( |^)['!\"$%&'()*+,-./:;<=>?@\\[\\]^_`\\{\\|\\}~']+\\w+( |$)]{2,}", " "));
-		//System.out.println("input: "+text);
+		System.out.println("input: "+text);
 		String newText = text;
 		int i = 0;
 		for (Tuple<String,String> r : command) {
-			//i++;
-			//System.out.println("input"+i+": "+newText);
+			i++;
+			System.out.println("input"+i+": "+newText);
 			newText = newText.replaceAll(r.first(),r.second());
 		}
-		//i++;
-		//System.out.println("input"+i+": "+newText);
+		i++;
+		System.out.println("input"+i+": "+newText);
 		return newText;
 	}
 	public List<String> normilizeWords(List<String> words){
