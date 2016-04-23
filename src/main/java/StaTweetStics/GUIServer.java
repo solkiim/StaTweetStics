@@ -169,9 +169,9 @@ public abstract class GUIServer {
         // TODO: 4. Produce a HashMap of each word to its arrayList, to return.
 
         Map<String, Object> variables = new HashMap<>();
-        variables.put("words",ranks.toArray());
-        variables.put("both",ranks.toArray());
-        variables.put("trending",result.getTrendingData().toArray())
+        variables.put("yourTrending",ranks.toArray());
+        variables.put("topSuggs",ranks.toArray());
+        variables.put("twitterTrending",result.getTrendingData().toArray())
         return GSON.toJson(variables);
       } catch (Exception e) {
         throw new RuntimeException(e);
