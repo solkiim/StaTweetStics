@@ -49,12 +49,12 @@ public class TweetDataParser implements Parser<List<Tweet>, Data> {
 		String newText = text;
 		int i = 0;
 		for (Tuple<String,String> r : command) {
-			i++;
-			System.out.println("input"+i+": "+newText);
+			//i++;
+			//System.out.println("input"+i+": "+newText);
 			newText = newText.replaceAll(r.first(),r.second());
 		}
-		i++;
-		System.out.println("input"+i+": "+newText);
+		//i++;
+		//System.out.println("input"+i+": "+newText);
 		return newText;
 	}
 	public List<String> normilizeWords(List<String> words){
