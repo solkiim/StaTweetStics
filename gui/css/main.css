@@ -29,14 +29,13 @@
 
 /*------------------ GENERAL ------------------*/
 html {
-    height: 100%;
+    height: 100%!important;
 }
 body {
-    width: 100%;
-    height: 100%;
+    width: 100%!important;
+    height: calc(100% - 43px)!important;
     padding: 0;
     margin: 0;
-    background: #fff;
 /*
     background: -webkit-linear-gradient(#fff, #e7e9f0);
     background: -o-linear-gradient(#fff, #e7e9f0);
@@ -46,6 +45,7 @@ body {
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
+    overflow-x: hidden;
 }
 #particles {
     width: 100%!important;
@@ -54,9 +54,22 @@ body {
     top: 0!important;
     left: 0!important;
 }
-.row {
+.container-fluid {
+    height: 100%;
+    display: table;
     width: 100%;
+    padding: 0;
 }
+.row-fluid {
+    height: 100%;
+    width: 100%;
+    display: table-cell; 
+    vertical-align: middle;
+}
+.col {
+    margin: 0;
+}
+
 
 
 /*------------------ USERNAME DIALOG BOX ------------------*/
@@ -86,6 +99,10 @@ body {
     border: none;
     border-bottom: 1px solid #162252;
 }
+.vex.vex-theme-wireframe .vex-dialog-button {
+    float: none;
+    margin: 5px;
+}
 .vex.vex-theme-wireframe .vex-dialog-button.vex-dialog-button-primary {
     background: #162252;
     color: #fff;
@@ -103,7 +120,7 @@ body {
     top: 0px;
     width: 100%;
     z-index: 99;
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.85);
 }
 #tweetWrite {
     width: 100%;
@@ -154,7 +171,50 @@ ul {
     padding: 0;
 }
 #content {
-    margin-top: 120px;
+    margin: 43px 0 0 0;
+}
+
+
+/*------------------ CONTENT: SUGGESTIONS ------------------*/
+#suggestions {
+/*    margin-top: 15%;*/
+    word-break: break-all;
+/*    transform: translateY(65%);*/
+/*    background: pink;*/
+    padding-left: 10%;
+}
+#suggestions h1 {
+    text-transform: uppercase;
+    color: #8c979f;
+    margin: 0px 0px 25px 0px;
+    font-family: 'Proxima Nova Alt Regular';
+    letter-spacing: 5px;
+    line-height: 30px;
+    font-size: 20px;
+}
+#topsugslist li, #topsugsslide {
+    padding: none;
+    margin-top: 15px;
+    color: #162252;
+    font-size: 30px;
+/*    font-size: 3.14vw;*/
+    font-family: 'Proxima Nova Alt Bold';
+    text-transform: uppercase;
+    letter-spacing: 6px;
+/*    letter-spacing: 0.6vw;*/
+}
+#topsugsslide {
+    font-size: 55px;
+/*    font-size: 5.75vw;*/
+    margin-top: -5px!important;
+/*    width: 100%;*/
+}
+#topsugslist {
+    display: none;
+}
+#topsugslist li:hover, #top li:hover, #topsugsslide:hover {
+    color: #ccd6dd;
+    cursor: pointer;
 }
 
 
@@ -192,93 +252,6 @@ ul {
 }
 
 
-/*------------------ CONTENT: SUGGESTIONS ------------------*/
-#suggestions {
-/*    margin-top: 15%;*/
-    word-break: break-all;
-    transform: translateY(50%);
-}
-#suggestions h1 {
-    text-transform: uppercase;
-    color: #8c979f;
-    margin: 0px 0px 25px 0px;
-    font-family: 'Proxima Nova Alt Regular';
-    letter-spacing: 5px;
-    line-height: 30px;
-    font-size: 20px;
-}
-#topsugslist li, #topsugsslide {
-    padding: none;
-    margin-top: 15px;
-    color: #162252;
-    font-size: 30px;
-    letter-spacing: 2px;
-    font-family: 'Proxima Nova Alt Bold';
-    text-transform: uppercase;
-    letter-spacing: 6px;
-}
-#topsugsslide {
-    font-size: 55px;
-    margin-top: -5px!important;
-}
-#topsugslist {
-    display: none;
-}
-#topsugslist li:hover, #top li:hover, #topsugsslide:hover {
-    color: #ccd6dd;
-    cursor: pointer;
-}
-
-
-/*------------------ TREND GRAPH CONTINAER ------------------*/
-#trendsgraph {
-    text-align: center;
-    display: none;
-    transform: translateY(80%);
-}
-#trendsgraph p {
-    text-align:right;
-    font-size: 18px;
-    color: #162252;
-    margin-bottom: -10px;
-    margin-right: 10px;
-}
-#trendsgraph h3 {
-    color: #162252;
-    font-family: 'Proxima Nova Alt Regular';
-    letter-spacing: 2px;
-    font-size: 25px;
-    margin: 10px;
-    text-transform: uppercase;
-}
-#closeTrendGraph:hover {
-    cursor: pointer;
-}
-
-
-/*------------------ TREND GRAPH ------------------*/
-div.bar {
-    display: inline-block;
-    width: 3px;
-    height: 0px;   /* We'll override this later */ 
-    background-color: red;
-    margin-right: 0.1em;
-    scale: 4;
-}
-#div-chart{
-    width: 100%;
-}
-.axis path, .axis line {
-    fill: none;
-    stroke: black;
-    shape-rendering: crispEdges;
-}
-.axis text {
-    font-family: 'Proxima Nova Alt Regular';
-    font-size: 11px;
-}
-
-
 /*------------------ SLIDE OR LIST ------------------*/
 .bootstrap-switch {
     display: inline-block;
@@ -297,7 +270,6 @@ div.bar {
     -ms-user-select: none;
     user-select: none;
     vertical-align: middle;
-    background: pink;
 }
 .bootstrap-switch .bootstrap-switch-container {
     display: inline-block;
@@ -354,7 +326,7 @@ div.bar {
 }
 #sugsgroup li {
     display: inline-block;
-    margin: 10px 4px;
+    margin: 10px 4px -5px;
 }
 #sugsgroup ul li div {
     padding: 5px 15px;
@@ -375,4 +347,60 @@ div.bar {
 #sugsgroup input:checked + label div {
     background: #162252;
     color: #fff;
+}
+
+
+/*------------------ TREND GRAPH CONTAINER ------------------*/
+#trendsgraph {
+    text-align: center;
+    display: none;
+/*    height: calc(100% - 43px);*/
+/*
+    width: 350px;
+    height: 350px;
+    background: black;
+*/
+    padding: 0;
+    overflow-x: hidden;
+}
+#trendsgraph p {
+    text-align:right;
+    font-size: 18px;
+    color: #162252;
+    margin-bottom: -10px;
+    margin-right: 10px;
+}
+#trendsgraph h3 {
+    color: #162252;
+    font-family: 'Proxima Nova Alt Regular';
+    letter-spacing: 2px;
+    font-size: 25px;
+    margin: 10px;
+    text-transform: uppercase;
+}
+#closeTrendGraph:hover {
+    cursor: pointer;
+}
+
+
+/*------------------ TREND GRAPH ------------------*/
+div.bar {
+    display: inline-block;
+    width: 3px;
+    height: 0px;   /* We'll override this later */ 
+    background-color: red;
+    margin-right: 0.1em;
+    scale: 4;
+}
+#div-chart{
+    width: 100%;
+}
+.axis path, .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+.axis text {
+    font-family: 'Proxima Nova Alt Regular';
+    font-size: 11px;
 }
