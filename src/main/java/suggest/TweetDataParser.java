@@ -26,11 +26,43 @@ public class TweetDataParser implements Parser<List<Tweet>, Data> {
 		assert timeLine.size() == favoriteCount.size() : "timeLine and count not same size";
 		for (int i = 0; i < timeLine.size(); i++) {
 			String text = timeLine.get(i);
+			String newText = normilizeText(text);
 			int rt = favoriteCount.get(i).intValue();
-			res.add(new Tweet(MY_SPLITTER.splitToList(text),text,rt));
+			List<String> words = MY_SPLITTER.splitToList(newText);
+			words = normilizeWords(words);
+			res.add(new Tweet(words,text,rt));
 		}
 		return res;
 		
+	}
+	public String normilizeText(String text) {
+
+		List<Tuple<String,String>> command = new ArrayList<>();
+		command.add(new Tuple("http://[^\\s]+"," "));
+		command.add(new Tuple("\\.\\.+"," "));
+		command.add(new Tuple("( |^\\s)['!\"$%&'()*+,-./:;<=>?@\\[\\]^_`\\{\\|\\}~']+\\w+( |$)", " "));
+		command.add(new Tuple("@\\w+", " "));//removes user
+		command.add(new Tuple("[\\.\\!\\?\\,\\;\\:\\\'\\\"]", ""));
+		//command.add(new Tuple("[( |^)['!\"$%&'()*+,-./:;<=>?@\\[\\]^_`\\{\\|\\}~']+\\w+( |$)]{2,}", " "));
+		//System.out.println("input: "+text);
+		String newText = text;
+		int i = 0;
+		for (Tuple<String,String> r : command) {
+			//i++;
+			//System.out.println("input"+i+": "+newText);
+			newText = newText.replaceAll(r.first(),r.second());
+		}
+		//i++;
+		//System.out.println("input"+i+": "+newText);
+		return newText;
+	}
+	public List<String> normilizeWords(List<String> words){
+		int len = words.size();
+		List<String> result = new ArrayList<>();
+		for (String word : words) {
+			result.add(word.toLowerCase());
+		}
+		return result;
 	}
 	// }
 	// public List<List<Tweet>> parse(List<Data> rawList) {
