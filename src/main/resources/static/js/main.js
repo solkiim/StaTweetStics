@@ -1,5 +1,5 @@
 var username;
-
+var displayedSugs = ["puppies", "#springWeekend", "CS32", "essays", "#bostonMarathon"];
 
 $(document).ready(function() {
     $('#particles').particleground({
@@ -7,14 +7,24 @@ $(document).ready(function() {
         lineColor: '#F0F4FF' /*f5f7ff*/
     });
     
+    topSugSlide();  // start top sugs slide
+    
+    // username dialog prompt
     vex.dialog.buttons.YES.text = "let's go!"
+    
+    vex.dialog.confirm({
+        message: 'Click on the suggestions to see trend graphs!'
+    });
+    
+    vex.dialog.buttons.YES.text = "i'm ready!"
+    
     vex.dialog.prompt({
         message: 'What twitter handle do you wanna search?',
         placeholder: 'username',
         callback: function(value) {
             username = value;
             if (value !== false) {  // if valid username was entered
-                $("#usernameInput").val(value);
+                $("#usernameInput").val(value); // set username
             }
         }
     });
@@ -52,19 +62,29 @@ $("#closeTrendGraph").click(function() {
 
 
 /*------------------ SUGGESTIONS LIST SLIDE ------------------*/
-$(function () {
-    var messages = ["puppies", "#springWeekend", "CS32", "essays", "#bostonMarathon"],
+// populates the top sug list
+function topSugList() {
+    var listhtml = "";
+    for (var i = 0; i < displayedSugs.length; i++) {
+        listhtml += ("<li>" + displayedSugs[i] + "</li>");
+    }
+    $("#topsugslist").html(listhtml);
+}
+
+// generates and starts the top sug slide
+function topSugSlide() {
     index = 0;
     function cycle() {
-        $("#topsugsslide").html(messages[index]);
+        $("#topsugsslide").html(displayedSugs[index]);
         index++;
-        if (index === messages.length) {
+        if (index === displayedSugs.length) {
             index = 0;
         }
         setTimeout(cycle, 3000);
     }
     cycle();
-});
+}
+
 
 
 /*------------------ USERNAME INPUT ------------------*/
@@ -102,9 +122,9 @@ $(".bootstrap-switch").css("background","#162252");
 
 $("input[name='my-checkbox']").on("switchChange.bootstrapSwitch", function(event, state) {
     if (state) {    // if switched to slides
-        $("#suggestions").css("transform","translateY(50%)");
+        topSugSlide();
     } else {        // if switched to lists
-        $("#suggestions").css("transform","translateY(15%)");
+        topSugList();
     }
     $("#topsugslist").slideToggle(500);
     $("#topsugsslide").slideToggle(500);

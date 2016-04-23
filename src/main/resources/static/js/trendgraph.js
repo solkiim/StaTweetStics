@@ -13,7 +13,7 @@ var margin = {top: 20, right: 20, bottom: 20, left: 25},
     height = 200;
 
 var padding = 1;
-var scale = 1; // 4x scale
+var scale = 200/Math.max.apply(null, dataset); // 4x scale
 
 // create svg element
 var svg = d3.select("#div-chart")
@@ -40,9 +40,8 @@ svg.selectAll("rect")
     return "rgb(" +r+ "," +g+ "," +b+ ")";
   });
 
-
 var xScale = d3.scale.linear()
-  .domain([0, 90])
+  .domain([0, dataset.length - 1])
   .range([0, width])
 var yScale = d3.scale.linear()
   .domain([Math.max.apply(null, dataset), 0])
@@ -56,7 +55,7 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
               .scale(yScale)
               .orient("left")
-              .ticks(5);
+              .ticks(10);
 
 var xAxisGroup = svg.append("g")
   .attr("class", "axis") // assign "axis" class

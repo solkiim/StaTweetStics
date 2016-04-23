@@ -35,18 +35,12 @@
         </div>
     </div>
     
-    <div class="container" id="content">
-        <div class="row">
+    <div class="container-fluid" id="content">
+        <div class="row-fluid">
             <div class="col col-sm-10" id="suggestions">
                 <h1>StaTweetstically speaking, <br>it'd be cool to tweet about...</h1>
-                <ul id="topsugslist">
-                    <li>puppies</li>
-                    <li>#throwBackThursday</li>
-                    <li>bacon</li>
-                    <li>midterms</li>
-                    <li>#springBreak</li>
-                </ul>
                 
+                <ul id="topsugslist"></ul>
                 <p id="topsugsslide"></p>
                 
                 <div id="usernameDisplay">
@@ -75,9 +69,9 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div><!--
             
-            <div class="col col-sm-5" id="trendsgraph">
+            --><div class="col col-sm-5" id="trendsgraph">
                 <p id="closeTrendGraph">x</p>
                 <h3 id="trendgraphtitle">#springBreak Trend Graph:</h3>
                 <div id="div-chart"></div>
