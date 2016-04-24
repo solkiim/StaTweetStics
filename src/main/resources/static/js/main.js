@@ -88,13 +88,14 @@ function topSugList() {
     $("#topsugslist").html(listhtml);
 }
 
-var timer;
+var timer;  // keeps track of current cycle's interval
+
 // generates and starts the top sug slide
 function topSugSlide() {
     if (timer !== undefined) {
-        clearInterval(timer);
+        clearInterval(timer);   // stop previous cycle
     }
-    timer = cycle();
+    timer = cycle();    // set new cycle
 }
 
 function cycle() {
@@ -114,6 +115,7 @@ function cycle() {
 /*------------------ USERNAME INPUT ------------------*/
 var editingUsername = false;
 
+// editing username via page form
 $(".fa").click(function() {
     if (editingUsername) {  // done editing username
         editingUsername = false;
@@ -130,11 +132,11 @@ $(".fa").click(function() {
     }
 });
 
+// updating username in back end and getting new data
 function updateUsername() {
     // sending the username to the backend
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
-//        console.log(responseJSON);
         var parsedResponse = JSON.parse(responseJSON);
         
         // clear data for previous username
