@@ -171,7 +171,7 @@ public abstract class GUIServer {
         Map<String, Object> variables = new HashMap<>();
         variables.put("yourTrending",ranks.toArray());
         variables.put("topSuggs",ranks.toArray());
-        variables.put("twitterTrending",result.getTrendingData().toArray())
+        variables.put("twitterTrending",result.getTrendingData().toArray());
         return GSON.toJson(variables);
       } catch (Exception e) {
         throw new RuntimeException(e);
