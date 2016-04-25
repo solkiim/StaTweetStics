@@ -32,7 +32,7 @@ function dialogBoxes() {
             if (value !== false) {  // if valid username was entered
                 username = value;
                 $("#usernameInput").val(value); // set username
-                updateUsername();
+                getYourTrending();
             } else {
                 $("#yourtrending").prop("checked", false);
                 $("#twittertrending").prop("checked", true);
@@ -42,6 +42,7 @@ function dialogBoxes() {
     });
 }
 
+/*------------------ GETTING TRENDING LISTS ------------------*/
 function getTopTrending() {
     $.get("/topTweets", {}, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
@@ -56,6 +57,28 @@ function getTopTrending() {
         }
 
         displayedSugs = twittertrending;
+        topSugList();
+        topSugSlide();
+    })
+}
+
+// updating username in back end and getting new data
+function getYourTrending() {
+    // sending the username to the backend
+    var postParameters = {'user': username};
+    $.get("/userTweets", postParameters, function(responseJSON) {
+        var parsedResponse = JSON.parse(responseJSON);
+        
+        // clear data for previous username
+        yourtrending = {};
+        
+        // populating your trending list
+        var parsedYourTrending = parsedResponse.yourTrending;
+        for (var i = 0; i < parsedYourTrending.length; i++) {
+            yourtrending[parsedYourTrending[i].text] = parsedYourTrending[i].data;
+        }
+        
+        displayedSugs = topsugs;
         topSugList();
         topSugSlide();
     })
@@ -139,7 +162,7 @@ $(".fa").click(function() {
         $("#usernameInput").prop("readonly", true);
         $("#usernameInput").css("border-bottom","none");
         username = $("#usernameInput").val();
-        updateUsername();
+        getYourTrending();
     } else {
          editingUsername = true;
         $("#usernameEdit").attr("class", "fa fa-check");
@@ -147,35 +170,6 @@ $(".fa").click(function() {
         $("#usernameInput").css("border-bottom","1px solid #162252");
     }
 });
-
-// updating username in back end and getting new data
-function updateUsername() {
-    // sending the username to the backend
-    var postParameters = {'user': username};
-    $.get("/userTweets", postParameters, function(responseJSON) {
-        var parsedResponse = JSON.parse(responseJSON);
-        
-        // clear data for previous username
-        yourtrending = {};
-        twittertrending = {};
-        
-        // populating your trending list
-        var parsedYourTrending = parsedResponse.yourTrending;
-        for (var i = 0; i < parsedYourTrending.length; i++) {
-            yourtrending[parsedYourTrending[i].text] = parsedYourTrending[i].data;
-        }
-        
-        // populating twitter trending list
-        var parsedTTrending = parsedResponse.twitterTrending;
-        for (var i = 0; i < 5; i++) {
-            twittertrending[parsedTTrending[i]] = parsedTTrending[i];
-        }
-        
-        displayedSugs = topsugs;
-        topSugList();
-        topSugSlide();
-    })
-}
 
 
 /*------------------ SLIDE OR LIST ------------------*/
