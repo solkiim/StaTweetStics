@@ -17,5 +17,8 @@ import java.util.Set;
 
 public interface Ranker<T> {
 	List<T> rank();
-	List<T> rank(int size);
+	default List<T> rank(int size){
+		List<T> r = rank();
+		return r.subList(0,Math.min(r.size(),size));
+	}
 }
