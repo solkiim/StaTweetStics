@@ -1,5 +1,4 @@
 var username;
-var topsugs = {};
 var yourtrending = {};
 var twittertrending = {};
 var displayedSugs;    // sugs displayed currently
@@ -35,7 +34,7 @@ function dialogBoxes() {
                 $("#usernameInput").val(value); // set username
                 updateUsername();
             } else {
-                $("#topsugs").prop("checked", false);
+                $("#yourtrending").prop("checked", false);
                 $("#twittertrending").prop("checked", true);
                 getTopTrending();
             }
@@ -47,8 +46,7 @@ function getTopTrending() {
     $.get("/topTweets", {}, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
         
-        topsugs = {"enter":[], "a twitter handle":[], "to see":[], "cool stats!":[]};
-        yourtrending = topsugs;
+        yourtrending = {"enter":[], "a twitter handle":[], "to see":[], "cool stats!":[]};
         twittertrending = {};
         
         var parsedTTrending = parsedResponse.twitterTrending;
@@ -158,15 +156,8 @@ function updateUsername() {
         var parsedResponse = JSON.parse(responseJSON);
         
         // clear data for previous username
-        topsugs = {};
         yourtrending = {};
         twittertrending = {};
-        
-        // populating top sugs list
-        var parsedTopSugs = parsedResponse.topSuggs;
-        for (var i = 0; i < parsedTopSugs.length; i++) {
-            topsugs[parsedTopSugs[i].text] = parsedTopSugs[i].data;
-        }
         
         // populating your trending list
         var parsedYourTrending = parsedResponse.yourTrending;
@@ -206,9 +197,7 @@ $("input[name='my-checkbox']").on("switchChange.bootstrapSwitch", function(event
 /*------------------ SUGGESTION TYPE ------------------*/
 $("input[type='radio']").click(function(){
     if ($(this).is(":checked")) {
-        if ($(this).val() === "topsugs") {
-            displayedSugs = topsugs;
-        } else if ($(this).val() === "yourtrending") {
+        if ($(this).val() === "yourtrending") {
             displayedSugs = yourtrending;
         } else if ($(this).val() === "twittertrending") {
             displayedSugs = twittertrending;
