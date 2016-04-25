@@ -23,12 +23,14 @@ import java.util.Objects;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.HashMultiset;
 import java.util.concurrent.ConcurrentHashMap;
+import edu.brown.cs.suggest.Graph.Vertex;
+import edu.brown.cs.suggest.Graph.Edge;
 
-public class Word implements Comparable<Word> {
+public class Word implements Comparable<Word>, Vertex<Word, Tweet> {
 	private static Map<String,Word> cache = new ConcurrentHashMap<>();
 	private Set<Tweet> tweets = new HashSet<>();
 	private final String word;
-
+	private double score;
 	public Word(String word){
 		this.word = word;
 	}
@@ -56,11 +58,20 @@ public class Word implements Comparable<Word> {
 	public Set<Tweet> getTweets() {
 		return tweets;
 	}
+	public Set<Tweet> getEdges() {
+		return getTweets();
+	}
+	public double nodeWeight() {
+		return score;
+	}
 	public String getWord() {
 		return word;
 	}
 	public String printWordData() {
 		return String.format("word:{val: %s, Tweets:{ %s } val-end: %s}",word,tweets.size(),word);
+	}
+	public void setScore(double score){
+		this.score = score;
 	}
 	@Override
 	public boolean equals(Object obj) {

@@ -65,6 +65,9 @@ public class TweetRanker implements Ranker<Word> {
         // for (String word : words) {
         //      score.put(word, score.getOrDefault(word,1)/average);
         // }
+        for (Word word : words) {
+            word.setScore(score.get(word).doubleValue());
+        }
     }
     /**
      * @param doc  list of strings

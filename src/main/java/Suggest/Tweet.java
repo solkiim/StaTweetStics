@@ -22,8 +22,10 @@ import java.util.TreeSet;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.HashMultiset;
 import java.util.Objects;
+import edu.brown.cs.suggest.Graph.Vertex;
+import edu.brown.cs.suggest.Graph.Edge;
 
-public class Tweet implements Comparable<Tweet> {
+public class Tweet implements Comparable<Tweet>, Edge<Word,Tweet> {
 	//private static Map<String, List<Tweet>> df = new LinkedHashMap<>();
 	private Set<Word> words = new HashSet<>();
 	private Map<String, Double> tf = new HashMap<>();
@@ -63,6 +65,12 @@ public class Tweet implements Comparable<Tweet> {
 	}
 	public Set<Word> words() {
 		return words;
+	}
+	public Set<Word> getVertex() {
+		return words;
+	}
+	public double getWeight() {
+		return retweet;
 	}
 	public Map<String, Double> tf() {
 		return tf;
