@@ -12,14 +12,6 @@ $(document).ready(function() {
     });
     
     dialogBoxes();
-    
-    // set up defaults if no username input
-    topsugs = {"puppies":[0], "#springWeekend":[0], "CS32":[0], "finals":[0], "#bostonMarathon":[0]}
-    yourtrending = topsugs;
-    twittertrending = topsugs;
-    displayedSugs = topsugs;
-    
-    topSugSlide();  // start top sugs slide
 });
 
 function dialogBoxes() {
@@ -32,6 +24,8 @@ function dialogBoxes() {
     
     vex.dialog.buttons.YES.text = "i'm ready!"
     
+    getTopTrending();
+    
     vex.dialog.prompt({
         message: 'What twitter handle do you wanna search?',
         placeholder: 'username',
@@ -40,9 +34,33 @@ function dialogBoxes() {
                 username = value;
                 $("#usernameInput").val(value); // set username
                 updateUsername();
+            } else {
+                $("#topsugs").prop("checked", false);
+                $("#twittertrending").prop("checked", true);
+                getTopTrending();
             }
         }
     });
+}
+
+function getTopTrending() {
+    $.get("/topTweets", {}, function(responseJSON) {
+        var parsedResponse = JSON.parse(responseJSON);
+        
+        topsugs = {"enter":[], "a twitter handle":[], "to see":[], "cool stats!":[]};
+        yourtrending = topsugs;
+        twittertrending = {};
+        
+        var parsedTTrending = parsedResponse.twitterTrending;
+        
+        for (var i = 0; i < 5; i++) {
+            twittertrending[parsedTTrending[i]] = parsedTTrending[i];
+        }
+
+        displayedSugs = twittertrending;
+        topSugList();
+        topSugSlide();
+    })
 }
 
 /*------------------ TWEET COMPOSITION ------------------*/
@@ -108,7 +126,7 @@ function cycle() {
             i = 0;
         }
     }
-    return setInterval(run, 3000);
+    return setInterval(run, 2500);
 }
 
 
