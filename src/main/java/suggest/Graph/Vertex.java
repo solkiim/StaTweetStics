@@ -10,4 +10,5 @@ public interface Vertex<V extends Vertex<V,E>, E extends Edge<V,E>> {
   * @return the set of edges for this vertex
   **/
   Set<E> getEdges();
+  double nodeWeight();
 }

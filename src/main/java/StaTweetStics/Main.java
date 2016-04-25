@@ -4,7 +4,11 @@ import edu.brown.cs.OAuth.Oauth;
 import java.io.IOException;
 import edu.brown.cs.OAuth.*;
 import edu.brown.cs.suggest.*;
+import edu.brown.cs.suggest.Graph.*;
 import java.util.List;
+import java.util.Scanner;
+import java.util.ArrayList;
+
 public class Main{
 
 	private String[] args;
@@ -14,20 +18,44 @@ public class Main{
 	}
 		
 	public static void main(String[] args) throws IOException{
+		System.out.println("StaTweetStics");
 		if (args.length == 1) {
 			Oauth oa = new Oauth(args[0]);
 			Parser<List<Tweet>, Data> par = new TweetDataParser();
 			Data res = oa.run();
+			System.out.println("got data");
 			System.out.println(res); 
 			Ranker<Word> rank = new TweetRanker(par.parse(res));
 			List<Word> ranks = rank.rank();
+			System.out.println("ranking - part 1");
+			NERanker<Word, Tweet> pr = new NERanker<>();
+			pr.init(ranks);
+			System.out.println("ranking - part 2");
+			ranks = pr.rank();
+			//System.out.println("done");
 			for (Word s : ranks) {
 				System.out.println(s.printWordData());
 			}
 		}
 		GUIServer.run(4567);
 		
-		
+		// List<String> data = new ArrayList<>();
+		// Scanner input = new Scanner(System.in);
+		// while (input.hasNextLine()){
+		// 	String rl = input.nextLine();
+		// 	if (rl.equals("")||rl.equals("\n")) {
+		// 		break;
+		// 	}
+		// 	data.add(rl);
+			
+		// }
+		// TweetParser tp = new TweetParser();
+		// List<Tweet> tweets = tp.parse(data);
+		// Ranker<Word> rank = new TweetRanker(tweets);
+		// //PageRanker<Word, Tweet> pr = new PageRanker<>();
+		// NERanker<Word, Tweet> pr = new NERanker<>();
+		// pr.init(rank.rank());
+		// pr.rank();
 	}
 
 }

@@ -39,6 +39,7 @@ import java.sql.ResultSet;
 
 //import edu.brown.cs.suggest.WordSerializer;
 import edu.brown.cs.suggest.*;
+import edu.brown.cs.suggest.Graph.*;
 import edu.brown.cs.OAuth.*;
 
 
@@ -164,14 +165,17 @@ public abstract class GUIServer {
         Data result = oa.run();
         // TODO: 2. Pass the list of Tweets to Suggest, return top five words
         Ranker<Word> rank = new TweetRanker(par.parse(result));
-        List<Word> ranks = rank.rank(5);
+        List<Word> ranks = rank.rank();
+        NERanker<Word, Tweet> pr = new NERanker<>();
+        pr.init(ranks);
+        ranks = pr.rank(5);
         // TODO: 3. For each word, pass the word into Suggest to get an arrayList of daily likes over the past three months
         // TODO: 4. Produce a HashMap of each word to its arrayList, to return.
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("yourTrending",ranks.toArray());
         variables.put("topSuggs",ranks.toArray());
-        variables.put("twitterTrending",result.getTrendingData().toArray())
+        variables.put("twitterTrending",result.getTrendingData().toArray());
         return GSON.toJson(variables);
       } catch (Exception e) {
         throw new RuntimeException(e);

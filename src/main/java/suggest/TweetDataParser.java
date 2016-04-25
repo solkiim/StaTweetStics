@@ -14,10 +14,39 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
+import java.util.HashSet;
 import edu.brown.cs.OAuth.Data;
 
 public class TweetDataParser implements Parser<List<Tweet>, Data> {
 	private static final Splitter MY_SPLITTER = Splitter.on(CharMatcher.WHITESPACE).trimResults().omitEmptyStrings();
+
+	private Set<String> stopwords = new HashSet<>();
+
+	public TweetDataParser() {
+		// stopwords.add("i");
+		// stopwords.add("am");
+		// stopwords.add("the");
+		// stopwords.add("with");
+		// stopwords.add("the");
+		// stopwords.add("a");
+		// stopwords.add("of");
+		// stopwords.add("in");
+		// stopwords.add("on");
+		// stopwords.add("is");
+		// stopwords.add("and");
+		// stopwords.add("that");
+		// stopwords.add("an");
+		// stopwords.add("are");
+		// stopwords.add("when");
+		// stopwords.add("if");
+		// stopwords.add("be");
+		// stopwords.add("so");
+		// stopwords.add("as");
+		// stopwords.add("not");
+		// stopwords.add("would");
+		// stopwords.add("who");
+	}
+
 	//private static final Splitter MY_SPLITTER2 = Splitter.on("|").trimResults().omitEmptyStrings();
 	public List<Tweet> parse(Data data) {
 		List<String> timeLine = data.getTimeLineData();
@@ -43,9 +72,9 @@ public class TweetDataParser implements Parser<List<Tweet>, Data> {
 		command.add(new Tuple("\\.\\.+"," "));
 		command.add(new Tuple("( |^\\s)['!\"$%&'()*+,-./:;<=>?@\\[\\]^_`\\{\\|\\}~']+\\w+( |$)", " "));
 		command.add(new Tuple("@\\w+", " "));//removes user
-		command.add(new Tuple("[\\.\\!\\?\\,\\;\\:\\\'\\\"]", ""));
+		command.add(new Tuple("[\\.\\!\\?\\,\\;\\:\\\'\\\"\\-]", ""));
 		//command.add(new Tuple("[( |^)['!\"$%&'()*+,-./:;<=>?@\\[\\]^_`\\{\\|\\}~']+\\w+( |$)]{2,}", " "));
-		System.out.println("input: "+text);
+		//System.out.println("input: "+text);
 		String newText = text;
 		int i = 0;
 		for (Tuple<String,String> r : command) {
@@ -61,10 +90,15 @@ public class TweetDataParser implements Parser<List<Tweet>, Data> {
 		int len = words.size();
 		List<String> result = new ArrayList<>();
 		for (String word : words) {
-			result.add(word.toLowerCase());
+			word = word.toLowerCase();
+			if (!stopwords.contains(word)) {
+				result.add(word);
+			}
+			
 		}
 		return result;
 	}
+	
 	// }
 	// public List<List<Tweet>> parse(List<Data> rawList) {
 	// 	List<Tweet> res = new ArrayList<>();
