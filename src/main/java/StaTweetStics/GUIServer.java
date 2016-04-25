@@ -77,6 +77,7 @@ public abstract class GUIServer {
     FreeMarkerEngine freeMarker = createEngine();
     Spark.get("/StaTweetStics", new HomeHandler(), freeMarker);
     Spark.get("/userTweets", new UserHandler());
+    Spark.get("/topTweets", new topTweetHandler());
   }
   /**
   * this handels the inital home site.
@@ -141,8 +142,7 @@ public abstract class GUIServer {
   }
 
   /**
-  * this is the class that provides for the autocorrect
-  * functionality.
+  * 
   */
   private static class UserHandler implements Route {
     /**
@@ -170,7 +170,6 @@ public abstract class GUIServer {
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("yourTrending",ranks.toArray());
-        variables.put("topSuggs",ranks.toArray());
         variables.put("twitterTrending",result.getTrendingData().toArray());
         return GSON.toJson(variables);
       } catch (Exception e) {
@@ -178,4 +177,34 @@ public abstract class GUIServer {
       }
     }
   }
+  
+  /**
+   * 
+   */
+   private static class topTweetHandler implements Route {
+     /**
+     * spark server handler.
+     * @param req the request
+     * @param res the response
+     * @return the json response object
+     */
+     @Override
+     public Object handle(final Request req, final Response res) {
+       try {
+         QueryParamsMap qm = req.queryMap();
+
+         // TODO: 1. Get a list of Tweets from OAuth
+         Oauth oa = new Oauth("wflotte");
+         Parser<List<Tweet>, Data> par = new TweetDataParser();
+
+         Data result = oa.run();
+
+         Map<String, Object> variables = new HashMap<>();
+         variables.put("twitterTrending",result.getTrendingData().toArray());
+         return GSON.toJson(variables);
+       } catch (Exception e) {
+         throw new RuntimeException(e);
+       }
+     }
+   }
 }

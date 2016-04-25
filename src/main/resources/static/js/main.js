@@ -1,5 +1,4 @@
 var username;
-var topsugs = {};
 var yourtrending = {};
 var twittertrending = {};
 var displayedSugs;    // sugs displayed currently
@@ -12,14 +11,6 @@ $(document).ready(function() {
     });
     
     dialogBoxes();
-    
-    // set up defaults if no username input
-    topsugs = {"puppies":[0], "#springWeekend":[0], "CS32":[0], "finals":[0], "#bostonMarathon":[0]}
-    yourtrending = topsugs;
-    twittertrending = topsugs;
-    displayedSugs = topsugs;
-    
-    topSugSlide();  // start top sugs slide
 });
 
 function dialogBoxes() {
@@ -32,6 +23,8 @@ function dialogBoxes() {
     
     vex.dialog.buttons.YES.text = "i'm ready!"
     
+    getTopTrending();
+    
     vex.dialog.prompt({
         message: 'What twitter handle do you wanna search?',
         placeholder: 'username',
@@ -40,9 +33,32 @@ function dialogBoxes() {
                 username = value;
                 $("#usernameInput").val(value); // set username
                 updateUsername();
+            } else {
+                $("#yourtrending").prop("checked", false);
+                $("#twittertrending").prop("checked", true);
+                getTopTrending();
             }
         }
     });
+}
+
+function getTopTrending() {
+    $.get("/topTweets", {}, function(responseJSON) {
+        var parsedResponse = JSON.parse(responseJSON);
+        
+        yourtrending = {"enter":[], "a twitter handle":[], "to see":[], "cool stats!":[]};
+        twittertrending = {};
+        
+        var parsedTTrending = parsedResponse.twitterTrending;
+        
+        for (var i = 0; i < 5; i++) {
+            twittertrending[parsedTTrending[i]] = parsedTTrending[i];
+        }
+
+        displayedSugs = twittertrending;
+        topSugList();
+        topSugSlide();
+    })
 }
 
 /*------------------ TWEET COMPOSITION ------------------*/
@@ -108,7 +124,7 @@ function cycle() {
             i = 0;
         }
     }
-    return setInterval(run, 3000);
+    return setInterval(run, 2500);
 }
 
 
@@ -140,15 +156,8 @@ function updateUsername() {
         var parsedResponse = JSON.parse(responseJSON);
         
         // clear data for previous username
-        topsugs = {};
         yourtrending = {};
         twittertrending = {};
-        
-        // populating top sugs list
-        var parsedTopSugs = parsedResponse.topSuggs;
-        for (var i = 0; i < parsedTopSugs.length; i++) {
-            topsugs[parsedTopSugs[i].text] = parsedTopSugs[i].data;
-        }
         
         // populating your trending list
         var parsedYourTrending = parsedResponse.yourTrending;
@@ -188,9 +197,7 @@ $("input[name='my-checkbox']").on("switchChange.bootstrapSwitch", function(event
 /*------------------ SUGGESTION TYPE ------------------*/
 $("input[type='radio']").click(function(){
     if ($(this).is(":checked")) {
-        if ($(this).val() === "topsugs") {
-            displayedSugs = topsugs;
-        } else if ($(this).val() === "yourtrending") {
+        if ($(this).val() === "yourtrending") {
             displayedSugs = yourtrending;
         } else if ($(this).val() === "twittertrending") {
             displayedSugs = twittertrending;

@@ -56,11 +56,7 @@
                 <div id="sugsgroup">
                     <ul>
                         <li>
-                            <input type='radio' name='radio' value='topsugs' id='topsugs' checked="checked"/>
-                            <label for='topsugs'><div>Top Suggestions</div></label>
-                        </li>
-                        <li>
-                            <input type='radio' name='radio' value='yourtrending' id='yourtrending'/>
+                            <input type='radio' name='radio' value='yourtrending' id='yourtrending' checked="checked"/>
                             <label for='yourtrending'><div>Your Trending</div></label>
                         </li>
                         <li>
