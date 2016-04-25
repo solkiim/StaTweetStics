@@ -56,11 +56,11 @@
                 <div id="sugsgroup">
                     <ul>
                         <li>
-                            <input type='radio' name='radio' value='yourtrending' id='yourtrending' checked="checked"/>
+                            <input type='radio' name='radio' value='yourtrending' id='yourtrending'/>
                             <label for='yourtrending'><div>Your Trending</div></label>
                         </li>
                         <li>
-                            <input type='radio' name='radio' value='twittertrending' id='twittertrending'/>
+                            <input type='radio' name='radio' value='twittertrending' id='twittertrending' checked="checked"/>
                             <label for='twittertrending'><div>Twitter Trending</div></label>
                         </li>
                     </ul>
