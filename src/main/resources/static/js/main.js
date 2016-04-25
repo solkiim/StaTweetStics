@@ -64,6 +64,9 @@ function getTopTrending() {
 
 // updating username in back end and getting new data
 function getYourTrending() {
+    $("#yourtrending").prop("checked", true);
+    $("#twittertrending").prop("checked", false);
+    
     // sending the username to the backend
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
@@ -78,7 +81,7 @@ function getYourTrending() {
             yourtrending[parsedYourTrending[i].text] = parsedYourTrending[i].data;
         }
         
-        displayedSugs = topsugs;
+        displayedSugs = yourtrending;
         topSugList();
         topSugSlide();
     })
