@@ -5,17 +5,16 @@ var twittertrending = {};
 var displayedSugs;    // sugs displayed currently
 
 $(document).ready(function() {
+    // particle background setup
     $('#particles').particleground({
         dotColor: '#F0F4FF',
         lineColor: '#F0F4FF' /*f5f7ff*/
     });
     
-    // set up defaults if no username input
-    topsugs = {"puppies":[0], "#springWeekend":[0], "CS32":[0], "finals":[0], "#bostonMarathon":[0]}
-    displayedSugs = topsugs;
-    
-    topSugSlide();  // start top sugs slide
-    
+    dialogBoxes();
+});
+
+function dialogBoxes() {
     // username dialog prompt
     vex.dialog.buttons.YES.text = "let's go!"
     
@@ -25,6 +24,8 @@ $(document).ready(function() {
     
     vex.dialog.buttons.YES.text = "i'm ready!"
     
+    getTopTrending();
+    
     vex.dialog.prompt({
         message: 'What twitter handle do you wanna search?',
         placeholder: 'username',
@@ -33,10 +34,34 @@ $(document).ready(function() {
                 username = value;
                 $("#usernameInput").val(value); // set username
                 updateUsername();
+            } else {
+                $("#topsugs").prop("checked", false);
+                $("#twittertrending").prop("checked", true);
+                getTopTrending();
             }
         }
     });
-});
+}
+
+function getTopTrending() {
+    $.get("/topTweets", {}, function(responseJSON) {
+        var parsedResponse = JSON.parse(responseJSON);
+        
+        topsugs = {"enter":[], "a twitter handle":[], "to see":[], "cool stats!":[]};
+        yourtrending = topsugs;
+        twittertrending = {};
+        
+        var parsedTTrending = parsedResponse.twitterTrending;
+        
+        for (var i = 0; i < 5; i++) {
+            twittertrending[parsedTTrending[i]] = parsedTTrending[i];
+        }
+
+        displayedSugs = twittertrending;
+        topSugList();
+        topSugSlide();
+    })
+}
 
 /*------------------ TWEET COMPOSITION ------------------*/
 changeURL = function(e) {
@@ -51,7 +76,7 @@ changeURL = function(e) {
 var statsOut = false;
 
 $("#topsugslist li, #topsugsslide").click(function() { 
-    alert("CLICKED");
+//    alert("CLICKED");
     $("#trendgraphtitle").html($(this).text() + " Trend Graph:");
     
     if (!statsOut) {
@@ -81,26 +106,34 @@ function topSugList() {
     $("#topsugslist").html(listhtml);
 }
 
+var timer;  // keeps track of current cycle's interval
+
 // generates and starts the top sug slide
 function topSugSlide() {
-    index = 0;
-    var wordlist = Object.keys(displayedSugs);
-    function cycle() {
-        $("#topsugsslide").html(wordlist[index]);
-        index++;
-        if (index === wordlist.length) {
-            index = 0;
-        }
-        setTimeout(cycle, 3000);
+    if (timer !== undefined) {
+        clearInterval(timer);   // stop previous cycle
     }
-    cycle();
+    timer = cycle();    // set new cycle
 }
 
+function cycle() {
+    var i = 0;
+    var wordlist = Object.keys(displayedSugs);
+    function run() {
+        $("#topsugsslide").html(wordlist[i]);
+        i++;
+        if (i === wordlist.length) {
+            i = 0;
+        }
+    }
+    return setInterval(run, 2500);
+}
 
 
 /*------------------ USERNAME INPUT ------------------*/
 var editingUsername = false;
 
+// editing username via page form
 $(".fa").click(function() {
     if (editingUsername) {  // done editing username
         editingUsername = false;
@@ -117,23 +150,36 @@ $(".fa").click(function() {
     }
 });
 
+// updating username in back end and getting new data
 function updateUsername() {
     // sending the username to the backend
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
-        console.log(responseJSON);
         var parsedResponse = JSON.parse(responseJSON);
-        console.log(parsedResponse.words);
         
         // clear data for previous username
-        var topsugs = {};
-        var yourtrending = {};
-        var twittertrending = {};
+        topsugs = {};
+        yourtrending = {};
+        twittertrending = {};
         
-        var words = parsedResponse.words;
-        for (var i = 0; i < words.length; i++) {
-            topsugs[words[i].text] = words[i].data;
+        // populating top sugs list
+        var parsedTopSugs = parsedResponse.topSuggs;
+        for (var i = 0; i < parsedTopSugs.length; i++) {
+            topsugs[parsedTopSugs[i].text] = parsedTopSugs[i].data;
         }
+        
+        // populating your trending list
+        var parsedYourTrending = parsedResponse.yourTrending;
+        for (var i = 0; i < parsedYourTrending.length; i++) {
+            yourtrending[parsedYourTrending[i].text] = parsedYourTrending[i].data;
+        }
+        
+        // populating twitter trending list
+        var parsedTTrending = parsedResponse.twitterTrending;
+        for (var i = 0; i < 5; i++) {
+            twittertrending[parsedTTrending[i]] = parsedTTrending[i];
+        }
+        
         displayedSugs = topsugs;
         topSugList();
         topSugSlide();
