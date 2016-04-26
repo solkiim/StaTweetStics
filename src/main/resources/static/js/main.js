@@ -63,17 +63,19 @@ function getTopTrending() {
 }
 
 // updating username in back end and getting new data
-function getYourTrending() {
-    $("#yourtrending").prop("checked", true);
-    $("#twittertrending").prop("checked", false);
-    
+function getYourTrending() {    
     // sending the username to the backend
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
+        console.log(parsedResponse);
         
         // clear data for previous username
         yourtrending = {};
+        
+        // switch the suggestion type to your trending
+        $("#yourtrending").prop("checked", true);
+        $("#twittertrending").prop("checked", false);
         
         // populating your trending list
         var parsedYourTrending = parsedResponse.yourTrending;
