@@ -10,6 +10,11 @@ import java.net.URLEncoder;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -25,19 +30,21 @@ import java.util.List;
 
 public class Oauth {
 
-	//private String[] args;
 	private String user;
+	private List<String> competitors = new ArrayList<String>();
 	private static final String CONSUMER_KEY = "dpifh5sWlT348T3grathQxpuD";
 	private static final String CONSUMER_SECRET = "pl6J6OnF1Zb7mLdLI3oh69iDOqCmFEkC4HvXczHyD3reaTYNkL";
 	private static final String EPU_TOKEN = "https://api.twitter.com/oauth2/token";
 	private static final String AE1 = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
-	private static final String AE2 = "&count=100&include_rts=false";
+	private static final String AE2 = "&count=200&include_rts=true";
+	private static final String AE3 = "&max_id=";
 	private static final String TREND_ENDPOINT = "https://api.twitter.com/1.1/trends/place.json?id=23424977";
-	
-	//
+	private static final String USER_DB = "tweetData.sqlite3";
+	private static final String COMP_DB = "compData.sqlite3";
 
-	public Oauth(String user){
+	public Oauth(String user, List<String> competitors){
 		this.user = user;
+		this.competitors = competitors;
 	}
 
 	/**
@@ -183,19 +190,103 @@ public class Oauth {
 			return new String(); 
 		}
 	}
-
-	public Data run() throws IOException{
-		String timeline = AE1+user+AE2;
-		JSONArray tweets = fetchTimelineTweet(timeline);
-		List<String> timeLineData = new ArrayList<String>(tweets.size());
-		List<Integer> favoriteCount = new ArrayList<Integer>(tweets.size());
-		List<String> createdAt = new ArrayList<String>(tweets.size());
+	
+	/**
+	 * Make a call to the Twitter API to get timeline data
+	 * @param tweets resource url with info being requested
+	 * @param timeLineData list of text of tweets being updated
+	 * @param favoriteCount list of favorite counts for each tweet stored 
+	 * @param createdAt list of times each tweet created 
+	 */
+	private void oneCall(JSONArray tweets, Connection conn, List<String> timeLineData, 
+			List<Integer> favoriteCount, List<String> createdAt){
+		
 		for(int i = 0; i < (tweets).size(); i++){
 			createdAt.add(((JSONObject)tweets.get(i)).get("created_at").toString());
 			long l = Long.parseLong(((JSONObject)tweets.get(i)).get("favorite_count").toString());
 			favoriteCount.add((int)l);
 			timeLineData.add(((JSONObject)tweets.get(i)).get("text").toString());
 		}
+		String fill = "INSERT INTO data VALUES(?,?,?,?,?)";
+		PreparedStatement prep = null;
+		try{
+			prep = conn.prepareStatement(fill);
+			for(int i = 0; i < tweets.size(); i++){
+				prep.setString(1, ((JSONObject)tweets.get(i)).get("text").toString());
+				long l = Long.parseLong(((JSONObject)tweets.get(i)).get("favorite_count").toString());
+				prep.setInt(2,(int)l);
+				long r = Long.parseLong(((JSONObject)tweets.get(i)).get("retweet_count").toString());
+				prep.setInt(3,(int)r);
+				prep.setString(4,((JSONObject)tweets.get(i)).get("id_str").toString());
+				prep.setString(5, this.user);
+				prep.addBatch();
+			}
+			prep.executeBatch();
+		} catch (SQLException e){
+			e.printStackTrace();
+			System.out.println("ERROR:");
+			System.exit(1);
+		} finally{
+			if(prep != null){
+				try{
+					prep.close();
+				} catch (SQLException e){
+					e.printStackTrace();
+					System.out.println("ERROR:");
+					System.exit(1);
+				}
+			}
+		}
+	}
+	
+	private void execute(List<String> timeLineData, List<Integer> favoriteCount, List<String> createdAt, String db) 
+			throws ClassNotFoundException, IOException{
+		Class.forName("org.sqlite.JDBC");
+		String urlToDb = "jdbc:sqlite:" + db;
+		Connection conn = null;
+		try{
+			conn = DriverManager.getConnection(urlToDb);
+		} catch(SQLException e){
+			e.printStackTrace();
+			System.out.println("ERROR:");
+			System.exit(1);
+		}
+		String timeline1 = AE1+user+AE2;
+		JSONArray tweets = fetchTimelineTweet(timeline1);
+		oneCall(tweets,conn,timeLineData,favoriteCount,createdAt);
+		long lastId = Long.parseLong(((JSONObject)tweets.get(tweets.size()-1)).get("id_str").toString());
+		StringBuilder t2 = new StringBuilder();
+		t2.append(AE1);
+		t2.append(user);
+		t2.append(AE2);
+		t2.append(AE3);
+		t2.append(lastId);
+		String timeline2 = t2.toString();
+		JSONArray tweets2 = fetchTimelineTweet(timeline2);
+		oneCall(tweets2,conn,timeLineData,favoriteCount,createdAt);
+		lastId = Long.parseLong(((JSONObject)tweets.get(tweets2.size()-1)).get("id_str").toString());
+		t2.replace(timeline2.length()-(String.valueOf(lastId)).length(), timeline2.length(), String.valueOf(lastId));
+		JSONArray tweets3 = fetchTimelineTweet(timeline2);
+		oneCall(tweets3,conn,timeLineData,favoriteCount,createdAt);
+		
+		try{
+			if(conn != null){
+				conn.close();
+			}
+		} catch (SQLException e){
+			e.printStackTrace();
+			System.out.println("ERROR:");
+			System.exit(1);
+		}
+	}
+
+
+	public List<Data> run() throws IOException, ClassNotFoundException{
+		// *********************USER STUFF HAPPENING***************************
+		List<String> timeLineData = new ArrayList<String>();
+		List<Integer> favoriteCount = new ArrayList<Integer>();
+		List<String> createdAt = new ArrayList<String>();
+		execute(timeLineData,favoriteCount,createdAt,USER_DB);
 		JSONArray trending = (getTrendingData(TREND_ENDPOINT));
 		JSONArray trends = (JSONArray) ((JSONObject) trending.get(0)).get("trends");
 		List<String> trendingData = new ArrayList<String>();
@@ -204,7 +295,20 @@ public class Oauth {
 				trendingData.add(((String)((JSONObject)trends.get(j)).get("name")));
 			}
 		}
-		Data ret = new Data(timeLineData,trendingData,favoriteCount,createdAt);
+		Data userData = new Data(timeLineData,trendingData,favoriteCount,createdAt);
+		
+		// *********************COMPETITOR STUFF HAPPENING***************************
+		List<String> comptlData = new ArrayList<String>();
+		List<Integer> compFaveCount = new ArrayList<Integer>();
+		List<String> compCreatedAt = new ArrayList<String>();
+		for(int i = 0; i < this.competitors.size(); i++){
+			execute(comptlData,compFaveCount,compCreatedAt,COMP_DB);
+		}
+		Data compData = new Data(comptlData,trendingData,compFaveCount,compCreatedAt);
+		
+		List<Data> ret = new ArrayList<Data>(2);
+		ret.add(userData);
+		ret.add(compData);
 		return ret;
 	}
 

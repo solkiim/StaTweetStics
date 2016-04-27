@@ -159,12 +159,12 @@ public abstract class GUIServer {
         String input = qm.value("user");
 
         // TODO: 1. Get a list of Tweets from OAuth
-        Oauth oa = new Oauth(input);
+        Oauth oa = new Oauth(input, new ArrayList<String>());
         Parser<List<Tweet>, Data> par = new TweetDataParser();
 
-        Data result = oa.run();
+        List<Data> result = oa.run();
         // TODO: 2. Pass the list of Tweets to Suggest, return top five words
-        Ranker<Word> rank = new TweetRanker(par.parse(result));
+        Ranker<Word> rank = new TweetRanker(par.parse(result.get(0)));
         List<Word> ranks = rank.rank();
         NERanker<Word, Tweet> pr = new NERanker<>();
         pr.init(ranks);
@@ -197,13 +197,13 @@ public abstract class GUIServer {
          QueryParamsMap qm = req.queryMap();
 
          // TODO: 1. Get a list of Tweets from OAuth
-         Oauth oa = new Oauth("wflotte");
+         Oauth oa = new Oauth("wflotte",new ArrayList<String>());
          Parser<List<Tweet>, Data> par = new TweetDataParser();
 
-         Data result = oa.run();
+         List<Data> result = oa.run();
 
          Map<String, Object> variables = new HashMap<>();
-         variables.put("twitterTrending",result.getTrendingData().toArray());
+         variables.put("twitterTrending",result.get(0).getTrendingData().toArray());
          return GSON.toJson(variables);
        } catch (Exception e) {
          throw new RuntimeException(e);

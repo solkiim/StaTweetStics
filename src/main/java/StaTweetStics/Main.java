@@ -17,15 +17,15 @@ public class Main{
 		this.args = args;
 	}
 		
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws IOException,ClassNotFoundException{
 		System.out.println("StaTweetStics");
 		if (args.length == 1) {
-			Oauth oa = new Oauth(args[0]);
+			Oauth oa = new Oauth(args[0],new ArrayList<String>());
 			Parser<List<Tweet>, Data> par = new TweetDataParser();
-			Data res = oa.run();
+			List<Data> res = oa.run();
 			System.out.println("got data");
 			System.out.println(res); 
-			Ranker<Word> rank = new TweetRanker(par.parse(res));
+			Ranker<Word> rank = new TweetRanker(par.parse(res.get(0)));
 			List<Word> ranks = rank.rank();
 			System.out.println("ranking - part 1");
 			NERanker<Word, Tweet> pr = new NERanker<>();
