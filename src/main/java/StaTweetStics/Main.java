@@ -20,6 +20,7 @@ public class Main{
 	public static void main(String[] args) throws IOException,ClassNotFoundException{
 		System.out.println("StaTweetStics");
 		if (args.length == 1) {
+			//I put in an empty list where competitor handles should go when stuff is implemented
 			Oauth oa = new Oauth(args[0],new ArrayList<String>());
 			Parser<List<Tweet>, Data> par = new TweetDataParser();
 			List<Data> res = oa.run();

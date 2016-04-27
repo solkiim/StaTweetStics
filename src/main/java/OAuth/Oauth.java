@@ -106,7 +106,13 @@ public class Oauth {
 			}
 		}
 	}
-
+	
+	/**
+	 * Get timeline data
+	 * @param endPointUrl url used to make api call
+	 * @return jsonarray of data
+	 * @throws IOException
+	 */
 	private JSONArray fetchTimelineTweet(String endPointUrl) throws IOException {
 		HttpsURLConnection conn = null;
 		try {
@@ -134,6 +140,12 @@ public class Oauth {
 		}
 	}
 	
+	/**
+	 * Get trending data from twitter for the US
+	 * @param endpointUrl url used to make api call
+	 * @return jsonarray of trending data
+	 * @throws IOException
+	 */
 	private JSONArray getTrendingData(String endpointUrl) throws IOException{
 		HttpsURLConnection conn = null;
 		try{
@@ -239,6 +251,15 @@ public class Oauth {
 		}
 	}
 	
+	/**
+	 * Make call to API and fill specified db
+	 * @param timeLineData
+	 * @param favoriteCount
+	 * @param createdAt
+	 * @param db database to be filled
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	private void execute(List<String> timeLineData, List<Integer> favoriteCount, List<String> createdAt, String db) 
 			throws ClassNotFoundException, IOException{
 		Class.forName("org.sqlite.JDBC");
