@@ -21,9 +21,11 @@ public class Main{
 		System.out.println("StaTweetStics");
 		if (args.length == 1) {
 			//I put in an empty list where competitor handles should go when stuff is implemented
-			Oauth oa = new Oauth(args[0],new ArrayList<String>());
+			//Oauth oa = new Oauth(args[0],new ArrayList<String>());
+			Oauth.setUser(args[0]);
+			Oauth.setCompetitors(new ArrayList<String>());
 			Parser<List<Tweet>, Data> par = new TweetDataParser();
-			List<Data> res = oa.run();
+			List<Data> res = Oauth.run();
 			System.out.println("got data");
 			System.out.println(res); 
 			Ranker<Word> rank = new TweetRanker(par.parse(res.get(0)));

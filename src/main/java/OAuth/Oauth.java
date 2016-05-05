@@ -30,8 +30,8 @@ import java.util.List;
 
 public class Oauth {
 
-	private String user;
-	private List<String> competitors = new ArrayList<String>();
+	private static String user;
+	private static List<String> competitors = new ArrayList<String>();
 	private static final String CONSUMER_KEY = "dpifh5sWlT348T3grathQxpuD";
 	private static final String CONSUMER_SECRET = "pl6J6OnF1Zb7mLdLI3oh69iDOqCmFEkC4HvXczHyD3reaTYNkL";
 	private static final String EPU_TOKEN = "https://api.twitter.com/oauth2/token";
@@ -42,16 +42,33 @@ public class Oauth {
 	private static final String USER_DB = "tweetData.sqlite3";
 	private static final String COMP_DB = "compData.sqlite3";
 
-	public Oauth(String user, List<String> competitors){
-		this.user = user;
-		this.competitors = competitors;
+	//private constructor for static purposes
+	private Oauth(){
+//		this.user = user;
+//		this.competitors = competitors;
+	}
+	
+	/**
+	 * Setter for the user
+	 * @param givenUser the user from the args
+	 */
+	public static void setUser(String givenUser){
+		user = givenUser;
+	}
+	
+	/**
+	 * Setter for the competitors
+	 * @param givenComp the competitors from the args
+	 */
+	public static void setCompetitors(List<String> givenComp){
+		competitors = givenComp;
 	}
 
 	/**
 	* Encode the consumer key and secret
 	* @return string of the encoded consumer key and secret
 	**/
-	private String encodeKeys(String key, String secret){
+	private static String encodeKeys(String key, String secret){
 		try{
 			String encodedConsumerKey = URLEncoder.encode(key,"UTF-8");
 			String encodedConsumerSecret = URLEncoder.encode(secret,"UTF-8");
@@ -72,7 +89,7 @@ public class Oauth {
 	* @param endPointUrl twitter api url
 	* @return string of the bearer token if no problems arise
 	**/
-	private String requestBearerToken(String endPointURL) throws IOException{
+	private static String requestBearerToken(String endPointURL) throws IOException{
 		HttpsURLConnection conn = null;
 		String creds = encodeKeys(CONSUMER_KEY,CONSUMER_SECRET);
 		try{
@@ -113,7 +130,7 @@ public class Oauth {
 	 * @return jsonarray of data
 	 * @throws IOException
 	 */
-	private JSONArray fetchTimelineTweet(String endPointUrl) throws IOException {
+	private static JSONArray fetchTimelineTweet(String endPointUrl) throws IOException {
 		HttpsURLConnection conn = null;
 		try {
 			URL url = new URL(endPointUrl); 
@@ -146,7 +163,7 @@ public class Oauth {
 	 * @return jsonarray of trending data
 	 * @throws IOException
 	 */
-	private JSONArray getTrendingData(String endpointUrl) throws IOException{
+	private static JSONArray getTrendingData(String endpointUrl) throws IOException{
 		HttpsURLConnection conn = null;
 		try{
 			URL url = new URL(endpointUrl);
@@ -174,7 +191,7 @@ public class Oauth {
 	}
 
 	// Writes a request to a connection
-	private boolean writeRequest(HttpsURLConnection connection, String textBody) {
+	private static boolean writeRequest(HttpsURLConnection connection, String textBody) {
 		try {
 			BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
 			wr.write(textBody);
@@ -188,7 +205,7 @@ public class Oauth {
 		
 		
 	// Reads a response for a given connection and returns it as a string.
-	private String readResponse(HttpsURLConnection connection) throws IOException{
+	private static String readResponse(HttpsURLConnection connection) throws IOException{
 		try {
 			StringBuilder str = new StringBuilder();
 			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -198,6 +215,7 @@ public class Oauth {
 			}
 			return str.toString();
 		} catch (IOException e) { 
+			System.out.println("I get here");
 			e.printStackTrace();
 			return new String(); 
 		}
@@ -210,7 +228,7 @@ public class Oauth {
 	 * @param favoriteCount list of favorite counts for each tweet stored 
 	 * @param createdAt list of times each tweet created 
 	 */
-	private void oneCall(JSONArray tweets, Connection conn, List<String> timeLineData, 
+	private static void oneCall(JSONArray tweets, Connection conn, List<String> timeLineData, 
 			List<Integer> favoriteCount, List<String> createdAt){
 		
 		for(int i = 0; i < (tweets).size(); i++){
@@ -230,7 +248,7 @@ public class Oauth {
 				long r = Long.parseLong(((JSONObject)tweets.get(i)).get("retweet_count").toString());
 				prep.setInt(3,(int)r);
 				prep.setString(4,((JSONObject)tweets.get(i)).get("id_str").toString());
-				prep.setString(5, this.user);
+				prep.setString(5,user);
 				prep.addBatch();
 			}
 			prep.executeBatch();
@@ -260,7 +278,7 @@ public class Oauth {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	private void execute(List<String> timeLineData, List<Integer> favoriteCount, List<String> createdAt, String db) 
+	private static void execute(List<String> timeLineData, List<Integer> favoriteCount, List<String> createdAt, String db) 
 			throws ClassNotFoundException, IOException{
 		Class.forName("org.sqlite.JDBC");
 		String urlToDb = "jdbc:sqlite:" + db;
@@ -302,7 +320,7 @@ public class Oauth {
 	}
 
 
-	public List<Data> run() throws IOException, ClassNotFoundException{
+	public static List<Data> run() throws IOException, ClassNotFoundException{
 		// *********************USER STUFF HAPPENING***************************
 		List<String> timeLineData = new ArrayList<String>();
 		List<Integer> favoriteCount = new ArrayList<Integer>();
@@ -322,7 +340,7 @@ public class Oauth {
 		List<String> comptlData = new ArrayList<String>();
 		List<Integer> compFaveCount = new ArrayList<Integer>();
 		List<String> compCreatedAt = new ArrayList<String>();
-		for(int i = 0; i < this.competitors.size(); i++){
+		for(int i = 0; i < competitors.size(); i++){
 			execute(comptlData,compFaveCount,compCreatedAt,COMP_DB);
 		}
 		Data compData = new Data(comptlData,trendingData,compFaveCount,compCreatedAt);

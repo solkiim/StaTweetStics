@@ -1,18 +1,20 @@
 package edu.brown.cs.StaTweetStics;
 
 import java.util.Arrays;
+
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.sql.SQLException;
 import java.io.File;
 //TODO REMOVE
 import java.net.InetAddress;
-
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.sql.Connection;
+
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -21,26 +23,29 @@ import spark.Route;
 import spark.Spark;
 import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
+
 import java.io.IOException;
 import java.net.URLDecoder;
+
 import freemarker.template.Configuration;
 import spark.ExceptionHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import java.util.Map;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.UnknownHostException;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import edu.brown.cs.OAuth.Data;
+import edu.brown.cs.OAuth.Oauth;
 //import edu.brown.cs.suggest.WordSerializer;
 import edu.brown.cs.suggest.*;
 import edu.brown.cs.suggest.Graph.*;
-import edu.brown.cs.OAuth.*;
 
 
 /**
@@ -159,10 +164,12 @@ public abstract class GUIServer {
         String input = qm.value("user");
 
         // TODO: 1. Get a list of Tweets from OAuth
-        Oauth oa = new Oauth(input, new ArrayList<String>());
+        //Oauth oa = new Oauth(input, new ArrayList<String>());
+        Oauth.setUser(input);
+        Oauth.setCompetitors(new ArrayList<String>());
         Parser<List<Tweet>, Data> par = new TweetDataParser();
 
-        List<Data> result = oa.run();
+        List<Data> result = Oauth.run();
         // TODO: 2. Pass the list of Tweets to Suggest, return top five words
         Ranker<Word> rank = new TweetRanker(par.parse(result.get(0)));
         List<Word> ranks = rank.rank();
@@ -197,10 +204,12 @@ public abstract class GUIServer {
          QueryParamsMap qm = req.queryMap();
 
          // TODO: 1. Get a list of Tweets from OAuth
-         Oauth oa = new Oauth("wflotte",new ArrayList<String>());
+         //Oauth oa = new Oauth("wflotte",new ArrayList<String>());
+         Oauth.setUser("wflotte");
+         Oauth.setCompetitors(new ArrayList<String>());
          Parser<List<Tweet>, Data> par = new TweetDataParser();
 
-         List<Data> result = oa.run();
+         List<Data> result = Oauth.run();
 
          Map<String, Object> variables = new HashMap<>();
          variables.put("twitterTrending",result.get(0).getTrendingData().toArray());
