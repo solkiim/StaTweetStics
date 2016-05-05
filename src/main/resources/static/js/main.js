@@ -103,20 +103,20 @@ var statsOut = false;
 
 $("#topsugslist li, #topsugsslide").click(function() { 
 //    alert("CLICKED");
-    $("#trendgraphtitle").html($(this).text() + " Trend Graph:");
+    $("#statsTitle").html($(this).text() + " Trend Graph:");
     
     if (!statsOut) {
-        $("#trendsgraph").slideToggle(400);
+        $("#tweetStats").slideToggle(400);
         $("#suggestions").attr("class", "col col-sm-7");
-        $("#trendsgraph").css("display", "block");
+        $("#tweetStats").css("display", "block");
         statsOut = true;
     }
 });
 
-$("#closeTrendGraph").click(function() { 
-    $("#trendsgraph").toggle();
+$("#closeStats").click(function() { 
+    $("#tweetStats").toggle();
     $("#suggestions").attr("class", "col col-sm-12");
-    $("#trendsgraph").css("display", "none");
+    $("#tweetStats").css("display", "none");
     statsOut = false;
 });
 
@@ -195,6 +195,7 @@ $("input[name='my-checkbox']").on("switchChange.bootstrapSwitch", function(event
 
 /*------------------ SUGGESTION TYPE ------------------*/
 $("input[type='radio']").click(function(){
+    alert("hi");
     if ($(this).is(":checked")) {
         if ($(this).val() === "yourtrending") {
             displayedSugs = yourtrending;
