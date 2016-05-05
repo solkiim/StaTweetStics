@@ -321,14 +321,14 @@ ul {
 
 
 /*------------------ SUGS GROUP ------------------*/
-#sugsgroup {
+.radiogroup {
     margin-left: -4px;
 }
-#sugsgroup li {
+.radiogroup li {
     display: inline-block;
     margin: 10px 4px -5px;
 }
-#sugsgroup ul li div {
+.radiogroup ul li div {
     padding: 5px 15px;
     font-family: 'Proxima Nova Alt Light';
     text-transform: lowercase;
@@ -338,20 +338,20 @@ ul {
     border: 1px solid #acbac4;
     color: #8c979f;
 }
-#sugsgroup ul li div:hover {
+.radiogroup ul li div:hover {
     cursor: pointer;
 }
-#sugsgroup input {
+.radiogroup input {
     display: none
 }
-#sugsgroup input:checked + label div {
+.radiogroup input:checked + label div {
     background: #162252;
     color: #fff;
 }
 
 
 /*------------------ TREND GRAPH CONTAINER ------------------*/
-#trendsgraph {
+#tweetStats {
     text-align: center;
     display: none;
 /*    height: calc(100% - 43px);*/
@@ -363,14 +363,14 @@ ul {
     padding: 0;
     overflow-x: hidden;
 }
-#trendsgraph p {
+#tweetStats p {
     text-align:right;
     font-size: 18px;
     color: #162252;
     margin-bottom: -10px;
     margin-right: 10px;
 }
-#trendsgraph h3 {
+#tweetStats h3 {
     color: #162252;
     font-family: 'Proxima Nova Alt Regular';
     letter-spacing: 2px;
@@ -378,29 +378,6 @@ ul {
     margin: 10px;
     text-transform: uppercase;
 }
-#closeTrendGraph:hover {
+#closeStats:hover {
     cursor: pointer;
-}
-
-
-/*------------------ TREND GRAPH ------------------*/
-div.bar {
-    display: inline-block;
-    width: 3px;
-    height: 0px;   /* We'll override this later */ 
-    background-color: red;
-    margin-right: 0.1em;
-    scale: 4;
-}
-#div-chart{
-    width: 100%;
-}
-.axis path, .axis line {
-    fill: none;
-    stroke: black;
-    shape-rendering: crispEdges;
-}
-.axis text {
-    font-family: 'Proxima Nova Alt Regular';
-    font-size: 11px;
 }
