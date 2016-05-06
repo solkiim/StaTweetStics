@@ -57,11 +57,11 @@
                     <ul>
                         <li>
                             <input type='radio' name='sortby' value='retweets' id='retweets' checked="checked"/>
-                            <label for='yourtrending'><div>Your Trending</div></label>
+                            <label for='retweets'><div>Retweets</div></label>
                         </li>
                         <li>
                             <input type='radio' name='sortby' value='likes' id='likes'/>
-                            <label for='twittertrending'><div>Twitter Trending</div></label>
+                            <label for='likes'><div>Likes</div></label>
                         </li>
                     </ul>
                 </div>
@@ -70,11 +70,11 @@
                 <div id="sugsgroup" class="radiogroup">
                     <ul>
                         <li>
-                            <input type='radio' name='radio' value='yourtrending' id='yourtrending' checked="checked"/>
+                            <input type='trend' name='trendtype' value='yourtrending' id='yourtrending' checked="checked"/>
                             <label for='yourtrending'><div>Your Trending</div></label>
                         </li>
                         <li>
-                            <input type='radio' name='radio' value='twittertrending' id='twittertrending'/>
+                            <input type='radio' name='trendtype' value='twittertrending' id='twittertrending'/>
                             <label for='twittertrending'><div>Twitter Trending</div></label>
                         </li>
                     </ul>

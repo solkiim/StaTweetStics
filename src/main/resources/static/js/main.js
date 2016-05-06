@@ -36,7 +36,7 @@ function dialogBoxes() {
             } else {
                 $("#yourtrending").prop("checked", false);
                 $("#twittertrending").prop("checked", true);
-                getTopTrending();
+                //getTopTrending();
             }
         }
     });
@@ -194,9 +194,9 @@ $("input[name='my-checkbox']").on("switchChange.bootstrapSwitch", function(event
 
 
 /*------------------ SUGGESTION TYPE ------------------*/
-$("input[type='radio']").click(function(){
-    alert("hi");
+$("input[name='trendtype']").click(function(){
     if ($(this).is(":checked")) {
+        console.log($(this).val());
         if ($(this).val() === "yourtrending") {
             displayedSugs = yourtrending;
         } else if ($(this).val() === "twittertrending") {
