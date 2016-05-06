@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
+import edu.brown.cs.suggest.ORM.Db;
 public class Oauth {
 
 	private String user;
@@ -39,12 +39,13 @@ public class Oauth {
 	private static final String AE2 = "&count=200&include_rts=true";
 	private static final String AE3 = "&max_id=";
 	private static final String TREND_ENDPOINT = "https://api.twitter.com/1.1/trends/place.json?id=23424977";
-	private static final String USER_DB = "tweetData.sqlite3";
+	private static String USER_DB = "tweetData.sqlite3";
 	private static final String COMP_DB = "compData.sqlite3";
 
-	public Oauth(String user, List<String> competitors){
+	public Oauth(String user, List<String> competitors, String userDb){
 		this.user = user;
 		this.competitors = competitors;
+		USER_DB = userDb;
 	}
 
 	/**
@@ -263,15 +264,18 @@ public class Oauth {
 	private void execute(List<String> timeLineData, List<Integer> favoriteCount, List<String> createdAt, String db) 
 			throws ClassNotFoundException, IOException{
 		Class.forName("org.sqlite.JDBC");
+		//System.out.println("db "+db);
 		String urlToDb = "jdbc:sqlite:" + db;
 		Connection conn = null;
 		try{
-			conn = DriverManager.getConnection(urlToDb);
-		} catch(SQLException e){
+			System.out.println("hi");
+			conn = Db.getConnection();//DriverManager.getConnection(urlToDb);
+		} catch(Exception e){
 			e.printStackTrace();
 			System.out.println("ERROR:");
 			System.exit(1);
 		}
+		System.out.println("hi1+ "+conn);
 		String timeline1 = AE1+user+AE2;
 		JSONArray tweets = fetchTimelineTweet(timeline1);
 		oneCall(tweets,conn,timeLineData,favoriteCount,createdAt);
@@ -290,17 +294,33 @@ public class Oauth {
 		JSONArray tweets3 = fetchTimelineTweet(timeline2);
 		oneCall(tweets3,conn,timeLineData,favoriteCount,createdAt);
 		
+		// try{
+		// 	if(conn != null){
+		// 		conn.close();
+		// 	}
+		// } catch (SQLException e){
+		// 	e.printStackTrace();
+		// 	System.out.println("ERROR:");
+		// 	System.exit(1);
+		// }
+	}
+	public static void addUserTODb(String handle, String tweet, String id,int fav, int rt) {
 		try{
-			if(conn != null){
-				conn.close();
-			}
+			String fill = "INSERT INTO data VALUES(?,?,?,?,?)";
+			PreparedStatement prep = Db.prepare(fill);
+			prep.setString(1, tweet);
+			prep.setInt(2,fav);
+			prep.setInt(3,rt);
+			prep.setString(4, id);
+			prep.setString(5, handle);
+			prep.addBatch();
+			prep.executeBatch();
 		} catch (SQLException e){
 			e.printStackTrace();
 			System.out.println("ERROR:");
 			System.exit(1);
 		}
 	}
-
 
 	public List<Data> run() throws IOException, ClassNotFoundException{
 		// *********************USER STUFF HAPPENING***************************

@@ -50,7 +50,6 @@ PROJECT=$(basename $(pwd))
 # your handin to match.)
 
 PROJECT=$(basename "$(pwd)")
-echo "$PROJECT"
 # Find the package that Main is in. TAs use "staff", students should
 # rename it to their own username. In the file names and in the source!
 MAIN=$(ls src/main/java/StaTweetstics/Main.java)
