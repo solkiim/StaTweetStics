@@ -59,6 +59,9 @@ public class Word implements Comparable<Word>, Vertex<Word, Tweet> {
 	public Set<Tweet> getTweets() {
 		return tweets;
 	}
+	public void addTweet(Tweet twt) {
+		tweets.add(twt);
+	}
 	public Set<Tweet> getEdges() {
 		return getTweets();
 	}

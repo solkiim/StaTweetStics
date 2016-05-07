@@ -96,7 +96,7 @@ public class Main{
 			userList.add(usr);
 			System.out.println("ranking - part 1");
 
-			MyLDA3 lda = new MyLDA3(alpha,//alpha, 
+			MyLDA4 lda = new MyLDA4(alpha,//alpha, 
 				beta,//
 				betaB,
 				gamma0,
@@ -268,9 +268,9 @@ public class Main{
 			}
 			//System.out.println("printFB");
 			//lda.printFB();
-			System.out.println("MyLDA3");
+			System.out.println("MyLDA4");
 			return;
-		} else if (args.length == 10) {
+		} else if (args.length == 11) {
 			
 			double alpha = 0, beta = 0,betaB = 0, gamma0 = 0, gamma1 =0;
 			int numTopics = 0, numIterations = 0;
@@ -296,7 +296,7 @@ public class Main{
 			userList.add(usr);
 			System.out.println("ranking - part 1");
 
-			MyLDA3 lda = new MyLDA3(alpha,//alpha, 
+			MyLDA4 lda = new MyLDA4(alpha,//alpha, 
 				beta,//
 				betaB,
 				gamma0,
@@ -348,7 +348,14 @@ public class Main{
 			}
 			System.out.println("printFB");
 			lda.printFB(topTopics);
-			System.out.println("MyLDA3");
+			try{
+				lda.outputToFile(args[10]);
+			} catch(Exception e) {
+				System.out.println("ERROR:");
+				throw new RuntimeException(e);
+			}
+			
+			System.out.println("MyLDA4");
 			return;
 		} 
 		// else if (args.length == 1) {

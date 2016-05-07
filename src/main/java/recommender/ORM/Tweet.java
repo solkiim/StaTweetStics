@@ -42,6 +42,7 @@ public interface Tweet extends Entity, Edge<Word,Tweet> {
 	void setTweetScore(double average);
 	double tweetScore();
 	Set<Word> words();
+	void replaceWord(Word wordToReplace, Word newWord);
 	Set<Word> getVertex();
 	double getWeight();
 	Map<String, Double> tf();

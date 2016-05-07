@@ -571,5 +571,13 @@ public class StopWords {
         add("’s ");
         add("didnt");
         add("@");
+        add("&amp");
+        add("ii");
+        add("day");
+        add("month");
+        add("year");
+        add("years");
+        add("ago");
+        add("lets");
     }
 }

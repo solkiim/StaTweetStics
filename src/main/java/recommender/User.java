@@ -33,8 +33,10 @@ public class User {
 	public User(String handle) {
 		this.handle = handle;
 		tweets = TweetProxy.fromUserHandle(handle);
+		Set<Tweet> tweets2 = new HashSet<>();
 		if (tweets == null || tweets.size() == 0) {
 			try {
+				//Set<Tweet> tweets2 = new HashSet<>();
 				System.out.println("Querying Twitter for @"+handle+"...");
 				Oauth oa = new Oauth(handle,new ArrayList<>(),Db.getURL());
 				oa.run();
@@ -44,6 +46,12 @@ public class User {
 				throw new RuntimeException(e);
 			}
 		}
+		for (Tweet t : tweets) {
+			if (!t.text().contains("@")) {
+				tweets2.add(t);
+			}
+		}
+		tweets = tweets2;
 		TweetStringParser tsp = new TweetStringParser();
 		for (Tweet twt : tweets) {
 			twt.parse(tsp);

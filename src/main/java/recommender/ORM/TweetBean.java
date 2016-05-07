@@ -89,6 +89,15 @@ public class TweetBean extends EntityBean<Tweet> implements Tweet {
   //   return text.compareTo(obj.text());
   // }
   @Override
+  public void replaceWord(Word wordToReplace, Word newWord) {
+    words.remove(wordToReplace);
+    words.add(newWord);
+    Double val = tf.get(wordToReplace.toString());
+    if (val != null) {
+      tf.put(newWord.toString(),val);
+    }
+  }
+  @Override
   public String toString() {
     return String.format("tweet:{text: %s, retweets: %d}",text,rawRetweet);
   }

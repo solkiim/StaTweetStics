@@ -1,6 +1,7 @@
 package edu.brown.cs.suggest.ORM;
 import java.util.Objects;
 
+
 /**
  * An EntityBean is the Object in memory for an entity.
  *

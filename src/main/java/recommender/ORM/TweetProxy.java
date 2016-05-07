@@ -100,6 +100,11 @@ public class TweetProxy extends EntityProxy<Tweet> implements Tweet {
     fill();
     return internal.tf();
   }
+  @Override
+  public void replaceWord(Word wordToReplace, Word newWord){
+    fill();
+    replaceWord(wordToReplace,newWord);
+  }
 
   /**
    * Fills internal from Db cache.
