@@ -195,6 +195,7 @@ $("input[name='my-checkbox']").on("switchChange.bootstrapSwitch", function(event
 
 /*------------------ SUGGESTION TYPE ------------------*/
 $("input[name='trendtype']").click(function(){
+    $(this).prop("checked", true);
     if ($(this).is(":checked")) {
         console.log($(this).val());
         if ($(this).val() === "yourtrending") {
