@@ -1,0 +1,1 @@
+$(".usernameInput").on('click', function())

@@ -101,8 +101,8 @@ changeURL = function(e) {
 /*------------------ GRAPH TOGGLE ------------------*/
 var statsOut = false;
 
-$("#topsugslist li, #topsugsslide").click(function() { 
-//    alert("CLICKED");
+$(body).on("click", "#topsugslist li, #topsugsslide"), function() { 
+    alert("CLICKED");
     $("#statsTitle").html($(this).text() + " Trend Graph:");
     
     if (!statsOut) {
