@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Iterator;
 import edu.brown.cs.suggest.*;
+import edu.brown.cs.suggest.ORM.*;
 
 public class similarWords {
 	
@@ -40,7 +41,7 @@ public class similarWords {
 			
 			String newWord = word.toLowerCase().replaceAll("c", "k").replaceAll("s", "z")
 			.replaceAll("u", "ew").replaceAll("oo", "ew").replaceAll("o", "0")
-			.replaceAll("e", "3").replaecAll("x", "cks");
+			.replaceAll("e", "3").replaceAll("x", "cks");
 
 			oldToNew.put(word, newWord);
 		}
