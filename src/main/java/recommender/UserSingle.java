@@ -36,7 +36,6 @@ public class UserSingle implements User {
 		Set<Tweet> tweets2 = new HashSet<>();
 		if (tweets == null || tweets.size() == 0) {
 			try {
-				//Set<Tweet> tweets2 = new HashSet<>();
 				System.out.println("Querying Twitter for @"+handle+"...");
 				Oauth oa = new Oauth(handle,new ArrayList<>(),Db.getURL());
 				oa.run();

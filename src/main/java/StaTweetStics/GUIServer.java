@@ -37,7 +37,6 @@ import java.net.UnknownHostException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-//import edu.brown.cs.suggest.WordSerializer;
 import edu.brown.cs.suggest.*;
 import edu.brown.cs.suggest.ORM.*;
 import edu.brown.cs.suggest.Graph.*;
@@ -163,32 +162,17 @@ public abstract class GUIServer {
 	    QueryParamsMap qm = req.queryMap();
 	    String input = qm.value("user");
 	    List<Word> results = new ArrayList<>();
-	      //System.out.println("willtest:"+Arrays.asList(args));
 				
 		List<User> userList = new ArrayList<>();
 		List<String> usrHandle = new ArrayList<>();
 		usrHandle.add(input);
-		// for (int l = 4;l < args.length; l++) {
-		// 	usrHandle.add(args[l]);
-		// }
 		userList.add(new UserMulti(usrHandle));
 		int topWords = 5;
 		int topTopics = 5;
 		int displayWords = 1;
-		// try {
-		// 	topTopics = Integer.parseInt(args[0]);
-		// 	topWords = Integer.parseInt(args[1]);
-		// } catch (Exception e) {
-		// 	System.out.println("Error: args <user> <alpha|d> <beta|d> <topics|int> <iter|int>");
-		// }
-		//User usr = new UserSingle(args[2]);
-		//Word.reset(SimilarWords.combineSimilar(Word.cache()));
-		//List<User> userList = new ArrayList();
-		//userList.add(usr);
 		System.out.println("ranking - part 1");
 
-		MyLDA4 lda = new MyLDA4(6,userList);//docs);
-		//System.out.println("ranking - part 2");
+		MyLDA4 lda = new MyLDA4(6,userList);
 		lda.inference();
 		System.out.println("Results");
 		int u = -1;

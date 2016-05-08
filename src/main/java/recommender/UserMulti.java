@@ -37,7 +37,6 @@ public class UserMulti implements User {
 			Set<Tweet> tweets2 = new HashSet<>();
 			if (tweets3 == null || tweets3.size() == 0) {
 				try {
-					//Set<Tweet> tweets2 = new HashSet<>();
 					System.out.println("Querying Twitter for @"+handle+"...");
 					Oauth oa = new Oauth(handle,new ArrayList<>(),Db.getURL());
 					oa.run();
