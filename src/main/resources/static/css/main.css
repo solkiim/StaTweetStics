@@ -169,7 +169,7 @@ ul {
 #suggestions {
     word-break: break-all;
     padding-left: 10%;
-    background-color: pink;
+/*    background-color: pink;*/
 }
 #suggestions h1 {
     text-transform: uppercase;
@@ -353,7 +353,7 @@ ul {
     border-radius: 2px;
     border: 2px solid #162252;
     color: #162252;
-    background-color: pink;
+/*    background-color: pink;*/
 }
 #closeStats:hover {
     cursor: pointer;
