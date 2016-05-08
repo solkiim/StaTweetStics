@@ -1,4 +1,5 @@
 package edu.brown.cs.suggest;
+
 import java.util.Arrays;
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
@@ -27,19 +28,23 @@ import edu.brown.cs.suggest.Graph.Vertex;
 import edu.brown.cs.suggest.Graph.Edge;
 import edu.brown.cs.suggest.ORM.*;
 import edu.brown.cs.OAuth.Oauth;
+
 public class UserSingle implements User {
+	
 	private String handle;
 	private Set<Tweet> tweets;
+	
 	public UserSingle(String handle) {
 		this.handle = handle;
 		tweets = TweetProxy.fromUserHandle(handle);
 		Set<Tweet> tweets2 = new HashSet<>();
 		if (tweets == null || tweets.size() == 0) {
 			try {
-				//Set<Tweet> tweets2 = new HashSet<>();
 				System.out.println("Querying Twitter for @"+handle+"...");
-				Oauth oa = new Oauth(handle,new ArrayList<>(),Db.getURL());
-				oa.run();
+				Oauth.setUser(handle);
+				Oauth.setCompetitors(new ArrayList<>());
+				Oauth.setUserDB(Db.getURL());
+				Oauth.run();
 				tweets = TweetProxy.fromUserHandle(handle);
 			} catch (Exception e) {
 				//System.out.println("ERROR: an error has occured");
