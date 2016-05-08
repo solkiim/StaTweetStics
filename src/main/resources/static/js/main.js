@@ -178,11 +178,12 @@ $(".bootstrap-switch-label").html("<div></div>");
 $(".bootstrap-switch").css("background","#162252");
 
 $("input[name='list-or-slide']").on("switchChange.bootstrapSwitch", function(event, state) {
-    alert($("input[name='list-or-slide']").attr( "data-handle-width" ));
     if (state) {    // if switched to slides
         topSugSlide();
+        $("#tweetStats").css("top", "0px");
     } else {        // if switched to lists
         topSugList();
+        $("#tweetStats").css("top", "25px");
     }
     $("#topsugslist").slideToggle(500);
     $("#topsugsslide").slideToggle(500);

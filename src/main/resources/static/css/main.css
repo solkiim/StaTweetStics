@@ -36,12 +36,6 @@ body {
     height: calc(100% - 43px)!important;
     padding: 0;
     margin: 0;
-/*
-    background: -webkit-linear-gradient(#fff, #e7e9f0);
-    background: -o-linear-gradient(#fff, #e7e9f0);
-    background: -moz-linear-gradient(#fff, #e7e9f0);
-    background: linear-gradient(#fff, #e7e9f0);
-*/
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
@@ -68,11 +62,20 @@ body {
 }
 .col {
     margin: 0;
+    margin-bottom: 70px;
+    display: table-cell;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+#content {
+    margin: 43px 0 0 0;
 }
 
 
 
-/*------------------ USERNAME DIALOG BOX ------------------*/
+/*------------------ INTRO DIALOG BOX ------------------*/
 .vex.vex-theme-wireframe .vex-content {
     font-family: 'Proxima Nova Alt Regular';
     letter-spacing: 2px;
@@ -162,26 +165,11 @@ body {
 }
 
 
-/*------------------ CONTENT GENERAL ------------------*/
-.col {
-    margin-bottom: 70px;
-}
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-#content {
-    margin: 43px 0 0 0;
-}
-
-
 /*------------------ CONTENT: SUGGESTIONS ------------------*/
 #suggestions {
-/*    margin-top: 15%;*/
     word-break: break-all;
-/*    transform: translateY(65%);*/
-/*    background: pink;*/
     padding-left: 10%;
+    background-color: pink;
 }
 #suggestions h1 {
     text-transform: uppercase;
@@ -354,23 +342,18 @@ ul {
 #tweetStats {
     text-align: center;
     display: none;
-    width: 400px;
+    width: 430px;
     height: inherit;
 /*    height: 420px;*/
-    max-height: 420px;
+    max-height: 470px;
     position: relative;
-    top: 50px;
-    padding: 10px;
+    top: 0px;
+    padding: 25px;
     background: #fff;
     border-radius: 2px;
     border: 2px solid #162252;
     color: #162252;
-}
-#closeStats {
-    text-align:right;
-    font-size: 18px;
-    margin-bottom: -10px;
-    margin-right: 10px;
+    background-color: pink;
 }
 #closeStats:hover {
     cursor: pointer;
@@ -398,10 +381,16 @@ ul {
     font-family: 'Proxima Nova Alt Light';
     color: #8c979f;
     letter-spacing: 1.5px;
-    font-size: 17px;
+    font-size: 15px;
 }
-
-
+#closeStats {
+    font-family: 'Proxima Nova Alt Regular';
+    text-align:right;
+    color: #162252;
+    font-size: 20px;
+    margin-bottom: -10px;
+    margin-right: 10px;
+}
 .triangle-border {
   position:relative;
   padding:15px;
@@ -422,8 +411,6 @@ ul {
     display:block;
   width:0;
 }
-
-/* creates the smaller  triangle */
 .triangle-border.left:after {
     content:"";
   position:absolute;
