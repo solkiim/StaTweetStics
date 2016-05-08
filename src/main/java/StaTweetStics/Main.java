@@ -25,50 +25,50 @@ public class Main{
 	public static void main(String[] args) throws Exception{
 		System.out.println("StaTweetStics");
 //<<<<<<< HEAD
-		if (args.length == 1) {
-			//I put in an empty list where competitor handles should go when stuff is implemented
-			//Oauth oa = new Oauth(args[0],new ArrayList<String>());
-			Oauth.setUser(args[0]);
-			Oauth.setCompetitors(new ArrayList<String>());
-			Parser<List<Tweet>, Data> par = new TweetDataParser();
-			List<Data> res = Oauth.run();
-			System.out.println("got data");
-			System.out.println(res); 
-			Ranker<Word> rank = new TweetRanker(par.parse(res.get(0)));
-			List<Word> ranks = rank.rank();
-			System.out.println("ranking - part 1");
-			NERanker<Word, Tweet> pr = new NERanker<>();
-			pr.init(ranks);
-			System.out.println("ranking - part 2");
-			ranks = pr.rank();
-			//System.out.println("done");
-			for (Word s : ranks) {
-				System.out.println(s.printWordData());
+//		if (args.length == 1) {
+//			//I put in an empty list where competitor handles should go when stuff is implemented
+//			//Oauth oa = new Oauth(args[0],new ArrayList<String>());
+//			Oauth.setUser(args[0]);
+//			Oauth.setCompetitors(new ArrayList<String>());
+//			Parser<List<Tweet>, Data> par = new TweetDataParser();
+//			List<Data> res = Oauth.run();
+//			System.out.println("got data");
+//			System.out.println(res); 
+//			Ranker<Word> rank = new TweetRanker(par.parse(res.get(0)));
+//			List<Word> ranks = rank.rank();
+//			System.out.println("ranking - part 1");
+//			NERanker<Word, Tweet> pr = new NERanker<>();
+//			pr.init(ranks);
+//			System.out.println("ranking - part 2");
+//			ranks = pr.rank();
+//			//System.out.println("done");
+//			for (Word s : ranks) {
+//				System.out.println(s.printWordData());
 //=======
-//		System.out.println("args:"+Arrays.asList(args));
+		System.out.println("args:"+Arrays.asList(args));
 //		
-//		System.out.println(Db.getURL());
-//		if (args.length == 2) {
-//			Db.setURL(args[args.length-1]);
-//			User usr = null;
-//			try (Db db = new Db()) {
-//				usr = new User(args[0]);
-//			}
-//			System.out.println(usr.getTweets());
-//			return;	
-//		}
-//		else if(args.length > 2){
-//			Db.setURL(args[args.length-1]);
-//			for (int i = 0; i < args.length; i++) {
-//				if (args[i].equals("--wf")) {
-//					List<String> arg2 = Arrays.asList(args);
-//					List<String> arg3 = arg2.subList(i+1,args.length-1);
-//					String[] args4 = arg3.toArray(new String[0]);
-//					try (Db db = new Db()) {
-//						willtest(args4);
-//					}
-//					
-//				}
+		System.out.println(Db.getURL());
+		if (args.length == 2) {
+			Db.setURL(args[args.length-1]);
+			User usr = null;
+			try (Db db = new Db()) {
+				usr = new User(args[0]);
+			}
+			System.out.println(usr.getTweets());
+			return;	
+		}
+		else if(args.length > 2){
+			Db.setURL(args[args.length-1]);
+			for (int i = 0; i < args.length; i++) {
+				if (args[i].equals("--wf")) {
+					List<String> arg2 = Arrays.asList(args);
+					List<String> arg3 = arg2.subList(i+1,args.length-1);
+					String[] args4 = arg3.toArray(new String[0]);
+					try (Db db = new Db()) {
+						willtest(args4);
+					}
+					
+				}
 //>>>>>>> be200a1584989a2766eaa713c74e45ab66121350
 			}
 		}

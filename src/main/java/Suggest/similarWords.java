@@ -81,7 +81,7 @@ public class similarWords {
    *          , any String
    * @return an ArrayList of all versions of 'word' with one substitution
    */
-  private ArrayList<String> substitutionHelper(String word) {
+  private static ArrayList<String> substitutionHelper(String word) {
     ArrayList<String> wordList = new ArrayList<String>();
     // an empty list to which we will add words later
     String alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -105,7 +105,7 @@ public class similarWords {
    * @return an ArrayList of all versions of 'word' with one inserted letter
    *
    */
-  private ArrayList<String> insertionHelper(String word) {
+  private static ArrayList<String> insertionHelper(String word) {
     ArrayList<String> wordList = new ArrayList<String>();
     // an empty list to which we will add words later
     String alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -127,7 +127,7 @@ public class similarWords {
    *          , any String
    * @return an ArrayList of all versions of 'word' with one deleted letter
    */
-  private ArrayList<String> deletionHelper(String word) {
+  private static ArrayList<String> deletionHelper(String word) {
     ArrayList<String> wordList = new ArrayList<String>();
     // an empty list to which we will add words later
     for (int i = 0; i < word.length(); i++) {
@@ -151,7 +151,7 @@ public class similarWords {
    * @return a list of words which are within the
    *         maximum Levenshtein edit distance from "word"
    */
-  public Set<String> levSuggestions(String word, int distance) {
+  public static Set<String> levSuggestions(String word, int distance) {
       Set<String> wordSet = new HashSet<String>();
     // We plan on adding words to the set, since order doesn't matter
     // and we want to avoid duplicates

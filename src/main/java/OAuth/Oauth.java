@@ -425,7 +425,7 @@ public class Oauth {
 	private static final String AE1 = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
 	private static final String AE2 = "&count=200&include_rts=true";
 	private static final String AE3 = "&max_id=";
-	private static final String TREND_ENDPOINT = "https://api.twitter.com/1.1/trends/place.json?id=23424977";
+//	private static final String TREND_ENDPOINT = "https://api.twitter.com/1.1/trends/place.json?id=23424977";
 	private static final String USER_DB = "tweetData.sqlite3";
 	private static final String COMP_DB = "compData.sqlite3";
 
@@ -550,32 +550,32 @@ public class Oauth {
 	 * @return jsonarray of trending data
 	 * @throws IOException
 	 */
-	private static JSONArray getTrendingData(String endpointUrl) throws IOException{
-		HttpsURLConnection conn = null;
-		try{
-			URL url = new URL(endpointUrl);
-			conn = (HttpsURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setDoInput(true);
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Host","api.twitter.com");
-			conn.setRequestProperty("User-Agent","StaTWEETstics");
-			conn.setRequestProperty("Authorization","Bearer "+requestBearerToken(EPU_TOKEN));
-			conn.setUseCaches(false);
-			
-			JSONArray o = (JSONArray)JSONValue.parse(readResponse(conn));
-			if(o != null){
-				return o;
-			}
-			return null;
-		} catch(MalformedURLException e){
-			throw new IOException("Invalid endpoint URL.",e);
-		} finally{
-			if(conn != null){
-				conn.disconnect();
-			}
-		}
-	}
+//	private static JSONArray getTrendingData(String endpointUrl) throws IOException{
+//		HttpsURLConnection conn = null;
+//		try{
+//			URL url = new URL(endpointUrl);
+//			conn = (HttpsURLConnection) url.openConnection();
+//			conn.setDoOutput(true);
+//			conn.setDoInput(true);
+//			conn.setRequestMethod("GET");
+//			conn.setRequestProperty("Host","api.twitter.com");
+//			conn.setRequestProperty("User-Agent","StaTWEETstics");
+//			conn.setRequestProperty("Authorization","Bearer "+requestBearerToken(EPU_TOKEN));
+//			conn.setUseCaches(false);
+//			
+//			JSONArray o = (JSONArray)JSONValue.parse(readResponse(conn));
+//			if(o != null){
+//				return o;
+//			}
+//			return null;
+//		} catch(MalformedURLException e){
+//			throw new IOException("Invalid endpoint URL.",e);
+//		} finally{
+//			if(conn != null){
+//				conn.disconnect();
+//			}
+//		}
+//	}
 
 	// Writes a request to a connection
 	private static boolean writeRequest(HttpsURLConnection connection, String textBody) {
@@ -713,15 +713,15 @@ public class Oauth {
 		List<Integer> favoriteCount = new ArrayList<Integer>();
 		List<String> createdAt = new ArrayList<String>();
 		execute(timeLineData,favoriteCount,createdAt,USER_DB);
-		JSONArray trending = (getTrendingData(TREND_ENDPOINT));
-		JSONArray trends = (JSONArray) ((JSONObject) trending.get(0)).get("trends");
-		List<String> trendingData = new ArrayList<String>();
-		for(int j = 0; j < trends.size(); j++){
-			if(((String)((JSONObject)trends.get(j)).get("name")).startsWith("#")){
-				trendingData.add(((String)((JSONObject)trends.get(j)).get("name")));
-			}
-		}
-		Data userData = new Data(timeLineData,trendingData,favoriteCount,createdAt);
+//		JSONArray trending = (getTrendingData(TREND_ENDPOINT));
+//		JSONArray trends = (JSONArray) ((JSONObject) trending.get(0)).get("trends");
+//		List<String> trendingData = new ArrayList<String>();
+//		for(int j = 0; j < trends.size(); j++){
+//			if(((String)((JSONObject)trends.get(j)).get("name")).startsWith("#")){
+//				trendingData.add(((String)((JSONObject)trends.get(j)).get("name")));
+//			}
+//		}
+		Data userData = new Data(timeLineData,favoriteCount,createdAt);
 		
 		// *********************COMPETITOR STUFF HAPPENING***************************
 		List<String> comptlData = new ArrayList<String>();
@@ -730,7 +730,7 @@ public class Oauth {
 		for(int i = 0; i < competitors.size(); i++){
 			execute(comptlData,compFaveCount,compCreatedAt,COMP_DB);
 		}
-		Data compData = new Data(comptlData,trendingData,compFaveCount,compCreatedAt);
+		Data compData = new Data(comptlData,compFaveCount,compCreatedAt);
 		
 		List<Data> ret = new ArrayList<Data>(2);
 		ret.add(userData);

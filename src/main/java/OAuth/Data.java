@@ -6,13 +6,13 @@ public class Data {
 	
 	private List<String> timeLineData;
 	private List<Integer> favoriteCount;
-	private List<String> trendingData;
+//	private List<String> trendingData;
 	private List<String> createdAt;
 	
-	public Data(List<String> timeLineData, List<String> trendingData, List<Integer> favoriteCount, List<String> createdAt){
+	public Data(List<String> timeLineData, List<Integer> favoriteCount, List<String> createdAt){
 		this.timeLineData = timeLineData;
 		this.favoriteCount = favoriteCount;
-		this.trendingData = trendingData;
+//		this.trendingData = trendingData;
 		this.createdAt = createdAt;
 	}
 	
@@ -20,9 +20,9 @@ public class Data {
 		return this.timeLineData;
 	}
 	
-	public List<String> getTrendingData(){
-		return this.trendingData;
-	}
+//	public List<String> getTrendingData(){
+//		return this.trendingData;
+//	}
 	
 	public List<Integer> getFavoriteCount(){
 		return this.favoriteCount;
@@ -55,13 +55,13 @@ public class Data {
 			s.append(cr);
 			s.append(" | ");
 		}
-		s.append("\n");
-		s.append("Trending Data");
-		s.append("\n");
-		for(String t : this.trendingData){
-			s.append(t);
-			s.append(" | ");
-		}
+//		s.append("\n");
+//		s.append("Trending Data");
+//		s.append("\n");
+//		for(String t : this.trendingData){
+//			s.append(t);
+//			s.append(" | ");
+//		}
 		return s.toString();
 	}
 
