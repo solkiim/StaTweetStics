@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Iterator;
+import edu.brown.cs.suggest.*;
 
 public class similarWords {
 	
@@ -63,11 +64,11 @@ public class similarWords {
 				if ((oldToNew.get(word).equals(oldToNew.get(otherWord))) 
 					|| (suggestions.contains(oldToNew.get(otherWord)))) {
 					i.remove(otherWord);
-					total.addAll(wordMap.get(otherWord).tweets);
+					totalSet.addAll(wordMap.get(otherWord).tweets);
 				}
 			}
 
-			combinedMap.put(word, total);
+			combinedMap.put(word, totalSet);
    		 }
    		 return combinedMap;
 	}
