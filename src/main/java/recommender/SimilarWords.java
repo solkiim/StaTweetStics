@@ -158,6 +158,12 @@ public class SimilarWords {
    */
   public static Set<String> levSuggestions(String word, int distance) {
       Set<String> wordSet = new HashSet<String>();
+
+      if (distance <= 0) {
+        wordSet.add(word);
+        return wordSet;
+      }
+
     // We plan on adding words to the set, since order doesn't matter
     // and we want to avoid duplicates
 	  ArrayList<String> tempList = new ArrayList<String>();

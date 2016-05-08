@@ -67,7 +67,14 @@ public class Main{
 					try (Db db = new Db()) {
 						willtest(args4);
 					}
-					
+				}
+				if (args[i].equals("--wf2")) {
+					List<String> arg2 = Arrays.asList(args);
+					List<String> arg3 = arg2.subList(i+1,args.length-1);
+					String[] args4 = arg3.toArray(new String[0]);
+					try (Db db = new Db()) {
+						willtest2(args4);
+					}
 				}
 //>>>>>>> be200a1584989a2766eaa713c74e45ab66121350
 			}
@@ -103,8 +110,6 @@ public class Main{
 			int topWords = 0;
 			int topTopics = 0;
 			try {
-				//0.5 0.01 .01 20 50 100 
-				////.25 .5 20 20 18 4000
 				topTopics = Integer.parseInt(args[0]);
 				topWords = Integer.parseInt(args[1]);
 				alpha = Double.parseDouble(args[3]);
@@ -171,23 +176,86 @@ public class Main{
 			
 			System.out.println("MyLDA4");
 			return;
-		} 
-		// else if (args.length == 1) {
-		// 	try(BufferedReader br = new BufferedReader(new FileReader(args[0]))) {
-		// 	    String line = br.readLine();
-		// 	    int i = 0;
-		// 	    while (line != null) {
-		// 	    	i++;
-		// 	       	//System.out.println(line);
-		// 	       	//Oauth.addUserTODb("obama", line, "obamaTest"+i,i, i);
-		// 	        line = br.readLine();
-
-		// 	    }
-		// 	} catch (IOException e) {
-		// 		throw new RuntimeException(e);
-		// 	}
-		// }
+		}
 	}
+	private static void willtest2(String[] args) {
+		System.out.println("willtest:"+Arrays.asList(args));
+		StopWords.init();
+		List<User> userList = new ArrayList();
+		for (int l = 2;l < args.length; l++) {
+			User usr = new User(args[l]);
+			userList.add(usr);
+		}
+		double alpha = 0, beta = 0,betaB = 0, gamma0 = 0, gamma1 =0;
+		int numTopics = 0, numIterations = 0;
+		int topWords = 0;
+		int topTopics = 0;
+		try {
+			topTopics = Integer.parseInt(args[0]);
+			topWords = Integer.parseInt(args[1]);
+		} catch (Exception e) {
+			System.out.println("Error: args <user> <alpha|d> <beta|d> <topics|int> <iter|int>");
+		}
+		User usr = new User(args[2]);
+		Word.reset(SimilarWords.combineSimilar(Word.cache()));
+		//List<User> userList = new ArrayList();
+		//userList.add(usr);
+		System.out.println("ranking - part 1");
+
+		MyLDA4 lda = new MyLDA4(6,userList);//docs);
+		//System.out.println("ranking - part 2");
+		lda.inference();
+		System.out.println("Results");
+		int u = -1;
+		int i = 0;
+		List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
+		for (List<List<Tweet>> topics : usrResults) {
+			u++;
+			System.out.println("User "+userList.get(u).getHandle()+": ");
+			for (List<Tweet> topic : topics) {
+				if (i > topTopics) {
+					continue;
+				}
+
+				System.out.println("Topic "+i+": ");
+				i++;
+				Ranker<Word> rank = new TweetRanker(topic);
+				Word.reset(SimilarWords.combineSimilar(Word.cache()));
+				List<Word> ranks = rank.rank();
+				NERanker<Word, Tweet> pr = new NERanker<>();
+				pr.init(ranks);
+				ranks = pr.rank();
+				int w = 0;
+				for (Word s : ranks) {
+					if (w >= topWords) {
+						continue;
+					}
+					w++;
+					System.out.print("  ");
+					System.out.println(s.printWordData());
+				}
+			}
+		}
+		System.out.println("printFB");
+		lda.printFB(topTopics);
+		System.out.println("MyLDA4");
+		return;
+	} 
+	// else if (args.length == 1) {
+	// 	try(BufferedReader br = new BufferedReader(new FileReader(args[0]))) {
+	// 	    String line = br.readLine();
+	// 	    int i = 0;
+	// 	    while (line != null) {
+	// 	    	i++;
+	// 	       	//System.out.println(line);
+	// 	       	//Oauth.addUserTODb("obama", line, "obamaTest"+i,i, i);
+	// 	        line = br.readLine();
+
+	// 	    }
+	// 	} catch (IOException e) {
+	// 		throw new RuntimeException(e);
+	// 	}
+	// }
 }
 // 	private void willtest(String[] args) {
 // 		if (args.length == 1) {

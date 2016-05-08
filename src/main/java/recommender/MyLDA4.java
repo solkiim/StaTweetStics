@@ -20,7 +20,9 @@ import java.io.File;
 import java.io.FileWriter;
 /**
 
+
 NEED TO CHANGE
+
 
 */
 public class MyLDA4 {
@@ -484,6 +486,7 @@ public class MyLDA4 {
 	}
 	public List<List<List<Tweet>>> getTopicsToRank() {
 		List<List<List<Tweet>>> finalResult = new ArrayList<>();
+		System.out.println("num Users:"+numUsers);
 		for (int uIndex = 0; uIndex < numUsers; uIndex++ ) {
 			List<List<Tweet>> result = new ArrayList<>();
 			List<Integer> topics = getTop(theta_general[uIndex],numTopics+1);
