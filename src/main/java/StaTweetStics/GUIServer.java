@@ -49,7 +49,8 @@
 // * interations for the server.
 // */
 // public abstract class GUIServer {
-//   private static final int TOP_WORDS = 10;
+//   private static final int TOP_WORDS = 5;
+//   private static final int topTopics = 6;
 //   private static final Gson GSON = new GsonBuilder()
 //     .registerTypeAdapter(Word.class, new WordSerializer()).create();
 //   private static final Splitter MY_SPLITTER = 
@@ -156,52 +157,50 @@
 //     @Override
 //     public Object handle(final Request req, final Response res) {
 //       try {
-//         QueryParamsMap qm = req.queryMap();
-//         String input = qm.value("user");
+// 	      QueryParamsMap qm = req.queryMap();
+// 	      String input = qm.value("user");
 
-//         User usr = new User(input);
-// 			List<User> userList = new ArrayList();
-// 			userList.add(usr);
-// 			System.out.println("ranking - part 1");
-
-// 			MyLDA4 lda = new MyLDA4(TOP_WORDS,userList);
-// 			//System.out.println("ranking - part 2");
-// 			lda.inference();
-// 			System.out.println("Results");
-// 			int i = 0;
-// 			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
-// 			for (List<List<Tweet>> topics : usrResults) {
-// 				for (List<Tweet> topic : topics) {
-// 					if (i > topTopics) {
-// 						continue;
-// 					}
-// 					System.out.println("Topic "+i+": ");
-// 					i++;
-// 					Ranker<Word> rank = new TweetRanker(topic);
-// 					Word.reset(SimilarWords.combineSimilar(Word.cache()));
-// 					List<Word> ranks = rank.rank();
-// 					NERanker<Word, Tweet> pr = new NERanker<>();
-// 					pr.init(ranks);
-// 					ranks = pr.rank();
-// 					int w = 0;
-// 					for (Word s : ranks) {
-// 						if (w >= TOP_WORDS) {
+// 	      User usr = new User(input);
+// 				List<User> userList = new ArrayList();
+// 				userList.add(usr);
+// 				System.out.println("ranking - part 1");
+// 				Word.reset(SimilarWords.combineSimilar(Word.cache()));
+// 				MyLDA4 lda = new MyLDA4(TOP_WORDS,userList);
+// 				//System.out.println("ranking - part 2");
+// 				lda.inference();
+// 				System.out.println("Results");
+// 				int i = 0;
+// 				int u = -1;
+// 				int d = -1;
+// 				int w = -1;
+// 				Word[][][] rankResult = new Word[usrResults.size()][][];
+// 				List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
+// 				for (List<List<Tweet>> topics : usrResults) {
+// 					for (List<Tweet> topic : topics) {
+// 						if (i > topTopics) {
 // 							continue;
 // 						}
-// 						w++;
-// 						System.out.print("  ");
-// 						System.out.println(s.printWordData());
+// 						System.out.println("Topic "+i+": ");
+// 						i++;
+// 						Ranker<Word> rank = new TweetRanker(topic);
+						
+// 						List<Word> ranks = rank.rank();
+// 						NERanker<Word, Tweet> pr = new NERanker<>();
+// 						pr.init(ranks);
+// 						ranks = pr.rank();
+// 						int w = 0;
+// 						for (Word s : ranks) {
+// 							if (w >= TOP_WORDS) {
+// 								continue;
+// 							}
+// 							w++;
+// 							System.out.print("  ");
+// 							System.out.println(s.printWordData());
+// 						}
 // 					}
 // 				}
-// 			}
-// 			//System.out.println("printFB");
-// 			//lda.printFB(topTopics);
-// 			try{
-// 				//lda.outputToFile(args[10]);
-// 			} catch(Exception e) {
-// 				System.out.println("ERROR:");
-// 				throw new RuntimeException(e);
-// 			}
+// 				//System.out.println("printFB");
+// 				//lda.printFB(topTopics);
 //         variables.put("yourTrending",ranks.toArray());
 //         return GSON.toJson(variables);
 //       } catch (Exception e) {

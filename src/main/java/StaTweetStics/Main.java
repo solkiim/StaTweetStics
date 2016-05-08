@@ -48,6 +48,15 @@ public class Main{
 					}
 					
 				}
+				if (args[i].equals("--wf2")) {
+					List<String> arg2 = Arrays.asList(args);
+					List<String> arg3 = arg2.subList(i+1,args.length-1);
+					String[] args4 = arg3.toArray(new String[0]);
+					try (Db db = new Db()) {
+						willtest(args4);
+					}
+					
+				}
 			}
 		}
 		//GUIServer.run(4567);
@@ -96,6 +105,7 @@ public class Main{
 				System.out.println("Error: args <user> <alpha|d> <beta|d> <topics|int> <iter|int>");
 			}
 			User usr = new User(args[2]);
+			Word.reset(SimilarWords.combineSimilar(Word.cache()));
 			List<User> userList = new ArrayList();
 			userList.add(usr);
 			System.out.println("ranking - part 1");
@@ -113,12 +123,13 @@ public class Main{
 			lda.inference();
 			System.out.println("Results");
 			int i = 0;
-			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
+			for(List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
 			for (List<List<Tweet>> topics : usrResults) {
 				for (List<Tweet> topic : topics) {
 					if (i > topTopics) {
 						continue;
 					}
+
 					System.out.println("Topic "+i+": ");
 					i++;
 					Ranker<Word> rank = new TweetRanker(topic);

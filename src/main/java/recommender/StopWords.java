@@ -579,5 +579,11 @@ public class StopWords {
         add("years");
         add("ago");
         add("lets");
+        add("week");
+        add("top");
+        add("here");
+        add("heres");
+        add("im");
+        add("belong");
     }
 }
