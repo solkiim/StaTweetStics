@@ -2,6 +2,10 @@ package edu.brown.cs.suggest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Iterator;
 
 public class similarWords {
 	
@@ -25,7 +29,7 @@ public class similarWords {
 	public static Map<String, Word> combineSimilar (Map<String, Word> wordMap) {
 
 		// A hashmap linking each word to its 'default' (see below)
-		Map<String, Word> oldToNew = new HashMap<String, Word>();
+		Map<String, String> oldToNew = new HashMap<String, String>();
 
 		// A set of all the words
 		Set<String> wordSet = wordMap.keySet(); 
@@ -33,7 +37,7 @@ public class similarWords {
 		// We create a 'default' for each word
 		for (String word : wordSet) {
 			
-			String newWord = word.lower().replaceAll("c", "k").replaceAll("s", "z")
+			String newWord = word.toLowerCase().replaceAll("c", "k").replaceAll("s", "z")
 			.replaceAll("u", "ew").replaceAll("oo", "ew").replaceAll("o", "0")
 			.replaceAll("e", "3").replaecAll("x", "cks");
 
@@ -45,8 +49,8 @@ public class similarWords {
 
 		// We check if the defaults are the same, or within
 		// one Levenshtein distance from each other
-		for (Iterator<Word> i = wordSet.iterator(); i.hasNext();) {
-    		Integer word = i.next();
+		for (Iterator<String> i = wordSet.iterator(); i.hasNext();) {
+    		String word = i.next();
 
     		// Levenshtein suggestions for word
 			Set<String> suggestions = levSuggestions(oldToNew.get(word), 1);
