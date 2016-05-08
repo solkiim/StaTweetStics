@@ -16,9 +16,9 @@ import java.util.LinkedList;
 import java.io.IOException;
 import edu.brown.cs.suggest.ORM.*;
 /**
-
+--------------
 NEED TO CHANGE
-
+--------------
 */
 public class MyLDA3 {
 	public double alpha; // Hyper-parameter alpha

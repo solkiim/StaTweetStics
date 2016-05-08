@@ -28,11 +28,15 @@ import edu.brown.cs.suggest.Graph.Edge;
 import edu.brown.cs.suggest.ORM.Tweet;
 
 public class Word implements Comparable<Word>, Vertex<Word, Tweet> {
-	private static Map<String,Word> cache = new ConcurrentHashMap<>();
+	private static ThreadLocal<Map<String,Word>> cache = new ThreadLocal<>();
+	//private static Map<String,Word> cache = new ConcurrentHashMap<>();
 	private Set<Tweet> tweets = new HashSet<>();
 	private final String word;
 	private double score;
 	public Word(String word){
+		if (cache.get() == null) {
+			cache.set(new ConcurrentHashMap<>());
+		}
 		this.word = word;
 	}
 	public Word(String word,Set<Tweet> tweets){
@@ -40,18 +44,24 @@ public class Word implements Comparable<Word>, Vertex<Word, Tweet> {
 		this.word = word;
 	}
 	public static Word valueOf(String word){
-		Word w = cache.get(word);
+		if (cache.get() == null) {
+			cache.set(new ConcurrentHashMap<>());
+		}
+		Word w = cache.get().get(word);
 		if (w == null) {
 			w = new Word(word);
-			cache.put(word,w);
+			cache.get().put(word,w);
 		}
 		return w;
 	}
 	public static Word valueOf(String word,Tweet tweet){
-		Word w = cache.get(word);
+		if (cache.get() == null) {
+			cache.set(new ConcurrentHashMap<>());
+		}
+		Word w = cache.get().get(word);
 		if (w == null) {
 			w = new Word(word);
-			cache.put(word,w);
+			cache.get().put(word,w);
 		}
 		w.tweets.add(tweet);
 		return w;
@@ -102,6 +112,17 @@ public class Word implements Comparable<Word>, Vertex<Word, Tweet> {
 		return word;
 	}
 	public static void clearCache() {
-		cache.clear();
+		if (cache.get() == null) {
+			cache.set(new ConcurrentHashMap<>());
+		}
+		cache.get().clear();
 	}
+	public static void reset(Map<String, Word> m) {
+		if (cache.get() == null) {
+			cache.set(new ConcurrentHashMap<>());
+		}
+		cache.get().clear();
+		cache.get().putAll(m);
+	}
+	public static Map<String, Word> cache() { return cache.get(); }
 }

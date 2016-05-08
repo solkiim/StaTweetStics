@@ -39,6 +39,7 @@
 
 // //import edu.brown.cs.suggest.WordSerializer;
 // import edu.brown.cs.suggest.*;
+// import edu.brown.cs.suggest.ORM.*;
 // import edu.brown.cs.suggest.Graph.*;
 // import edu.brown.cs.OAuth.*;
 
@@ -48,6 +49,7 @@
 // * interations for the server.
 // */
 // public abstract class GUIServer {
+//   private static final int TOP_WORDS = 10;
 //   private static final Gson GSON = new GsonBuilder()
 //     .registerTypeAdapter(Word.class, new WordSerializer()).create();
 //   private static final Splitter MY_SPLITTER = 
@@ -78,7 +80,6 @@
 //     FreeMarkerEngine freeMarker = createEngine();
 //     Spark.get("/StaTweetStics", new HomeHandler(), freeMarker);
 //     Spark.get("/userTweets", new UserHandler());
-//     Spark.get("/topTweets", new topTweetHandler());
 //   }
 //   /**
 //   * this handels the inital home site.
@@ -158,21 +159,49 @@
 //         QueryParamsMap qm = req.queryMap();
 //         String input = qm.value("user");
 
-//         // TODO: 1. Get a list of Tweets from OAuth
-//         Oauth oa = new Oauth(input, new ArrayList<String>());
-//         Parser<List<Tweet>, Data> par = new TweetDataParser();
+//         User usr = new User(input);
+// 			List<User> userList = new ArrayList();
+// 			userList.add(usr);
+// 			System.out.println("ranking - part 1");
 
-//         List<Data> result = oa.run();
-//         // TODO: 2. Pass the list of Tweets to Suggest, return top five words
-//         Ranker<Word> rank = new TweetRanker(par.parse(result.get(0)));
-//         List<Word> ranks = rank.rank();
-//         NERanker<Word, Tweet> pr = new NERanker<>();
-//         pr.init(ranks);
-//         ranks = pr.rank(5);
-//         // TODO: 3. For each word, pass the word into Suggest to get an arrayList of daily likes over the past three months
-//         // TODO: 4. Produce a HashMap of each word to its arrayList, to return.
-
-//         Map<String, Object> variables = new HashMap<>();
+// 			MyLDA4 lda = new MyLDA4(TOP_WORDS,userList);
+// 			//System.out.println("ranking - part 2");
+// 			lda.inference();
+// 			System.out.println("Results");
+// 			int i = 0;
+// 			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
+// 			for (List<List<Tweet>> topics : usrResults) {
+// 				for (List<Tweet> topic : topics) {
+// 					if (i > topTopics) {
+// 						continue;
+// 					}
+// 					System.out.println("Topic "+i+": ");
+// 					i++;
+// 					Ranker<Word> rank = new TweetRanker(topic);
+// 					Word.reset(SimilarWords.combineSimilar(Word.cache()));
+// 					List<Word> ranks = rank.rank();
+// 					NERanker<Word, Tweet> pr = new NERanker<>();
+// 					pr.init(ranks);
+// 					ranks = pr.rank();
+// 					int w = 0;
+// 					for (Word s : ranks) {
+// 						if (w >= TOP_WORDS) {
+// 							continue;
+// 						}
+// 						w++;
+// 						System.out.print("  ");
+// 						System.out.println(s.printWordData());
+// 					}
+// 				}
+// 			}
+// 			//System.out.println("printFB");
+// 			//lda.printFB(topTopics);
+// 			try{
+// 				//lda.outputToFile(args[10]);
+// 			} catch(Exception e) {
+// 				System.out.println("ERROR:");
+// 				throw new RuntimeException(e);
+// 			}
 //         variables.put("yourTrending",ranks.toArray());
 //         return GSON.toJson(variables);
 //       } catch (Exception e) {
@@ -180,34 +209,4 @@
 //       }
 //     }
 //   }
-  
-//   /**
-//    * 
-//    */
-//    private static class topTweetHandler implements Route {
-//      /**
-//      * spark server handler.
-//      * @param req the request
-//      * @param res the response
-//      * @return the json response object
-//      */
-//      @Override
-//      public Object handle(final Request req, final Response res) {
-//        try {
-//          QueryParamsMap qm = req.queryMap();
-
-//          // TODO: 1. Get a list of Tweets from OAuth
-//          Oauth oa = new Oauth("wflotte",new ArrayList<String>());
-//          Parser<List<Tweet>, Data> par = new TweetDataParser();
-
-//          List<Data> result = oa.run();
-
-//          Map<String, Object> variables = new HashMap<>();
-//          variables.put("twitterTrending",result.get(0).getTrendingData().toArray());
-//          return GSON.toJson(variables);
-//        } catch (Exception e) {
-//          throw new RuntimeException(e);
-//        }
-//      }
-//    }
 // }

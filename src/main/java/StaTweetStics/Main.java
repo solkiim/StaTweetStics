@@ -74,203 +74,7 @@ public class Main{
 	private static void willtest(String[] args) {
 		System.out.println("willtest:"+Arrays.asList(args));
 		StopWords.init();
-		if (args.length == 8) {
-			
-			double alpha = 0, beta = 0,betaB = 0, gamma0 = 0, gamma1 =0;
-			int numTopics = 0, numIterations = 0;
-			try {
-				//0.5 0.01 .01 20 50 100 
-				////.25 .5 20 20 18 4000
-				alpha = Double.parseDouble(args[1]);
-				beta = Double.parseDouble(args[2]);
-				betaB = Double.parseDouble(args[3]);
-				gamma0 = Double.parseDouble(args[4]);
-				gamma1 = Double.parseDouble(args[5]);
-				numTopics = Integer.parseInt(args[6]);
-				numIterations = Integer.parseInt(args[7]);
-			} catch (Exception e) {
-				System.out.println("Error: args <user> <alpha|d> <beta|d> <topics|int> <iter|int>");
-			}
-			User usr = new User(args[0]);
-			List<User> userList = new ArrayList();
-			userList.add(usr);
-			System.out.println("ranking - part 1");
-
-			MyLDA4 lda = new MyLDA4(alpha,//alpha, 
-				beta,//
-				betaB,
-				gamma0,
-				gamma1,  
-				numTopics,//numTopics 
-				numIterations,//numIterations
-				30,//,TopWords, 
-				0,//SaveStep, 
-				userList);//docs);
-			System.out.println("ranking - part 2");
-			lda.inference();
-			System.out.println("Results");
-			int i = 0;
-			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
-			for (List<List<Tweet>> topics : usrResults) {
-				for (List<Tweet> topic : topics) {
-					System.out.println("Topic "+i+": ");
-					i++;
-					for (Tweet tops : topic) {
-						System.out.println(tops.words());
-					}
-					Ranker<Word> rank = new TweetRanker(topic);
-					List<Word> ranks = rank.rank();
-					System.out.print("  ");
-					System.out.println("ranking - part 1");
-					NERanker<Word, Tweet> pr = new NERanker<>();
-					pr.init(ranks);
-					System.out.print("  ");
-					System.out.println("ranking - part 2");
-					ranks = pr.rank();
-					//System.out.println("done");
-					for (Word s : ranks) {
-						System.out.print("  ");
-						System.out.println(s.printWordData());
-					}
-				}
-			}
-			System.out.println("printFB");
-			lda.printFB();
-			System.out.println("MyLDA3");
-			return;
-		} else if (args.length == 5) {
-			double alpha = 0, beta = 0, gamma = 0;
-			int numTopics = 0, numIterations = 0;
-			try {
-				//0.5 0.01 .01 20 50 100 
-				////.25 .5 20 20 18 4000
-				alpha = Double.parseDouble(args[1]);
-				beta = Double.parseDouble(args[2]);				
-				numTopics = Integer.parseInt(args[3]);
-				numIterations = Integer.parseInt(args[4]);
-			} catch (Exception e) {
-				System.out.println("Error: args <user> <alpha|d> <beta|d> <topics|int> <iter|int>");
-			}
-			User usr = new User(args[0]);
-			List<User> userList = new ArrayList();
-			userList.add(usr);
-			System.out.println("ranking - part 1");
-
-			LDA lda = new LDA(alpha,//alpha, 
-				beta, 
-				numTopics,//numTopics 
-				numIterations,//numIterations
-				10000,//,TopWords, 
-				0,//SaveStep, 
-				usr.getTweets());//docs);
-			System.out.println("ranking - part 2");
-			lda.inference();
-			System.out.println("Results");
-			int i = 0;
-			//List<List<Tweet>> usrResults = lda.getTopicsToRank();
-			// for (List<List<Tweet>> topics : lda.getTopicsToRank()) {
-			// 	for (List<Tweet> topic : topics) {
-			// 		System.out.println("Topic "+i+": ");
-			// 		i++;
-			// 		for (Tweet tops : topic) {
-			// 			System.out.println(tops.words());
-			// 		}
-			// 		Ranker<Word> rank = new TweetRanker(topic);
-			// 		List<Word> ranks = rank.rank();
-			// 		System.out.print("  ");
-			// 		System.out.println("ranking - part 1");
-			// 		NERanker<Word, Tweet> pr = new NERanker<>();
-			// 		pr.init(ranks);
-			// 		System.out.print("  ");
-			// 		System.out.println("ranking - part 2");
-			// 		ranks = pr.rank();
-			// 		//System.out.println("done");
-			// 		for (Word s : ranks) {
-			// 			System.out.print("  ");
-			// 			System.out.println(s.printWordData());
-			// 		}
-			// 	}
-			// }
-			System.out.println("printFB");
-			lda.printFB();
-			System.out.println("MyLDA3");
-			return;
-		} else if (args.length == 9) {
-			
-			double alpha = 0, beta = 0,betaB = 0, gamma0 = 0, gamma1 =0;
-			int numTopics = 0, numIterations = 0;
-			int topWords = 0;
-			try {
-				//0.5 0.01 .01 20 50 100 
-				////.25 .5 20 20 18 4000
-				topWords = Integer.parseInt(args[0]);
-				alpha = Double.parseDouble(args[2]);
-				beta = Double.parseDouble(args[3]);
-				betaB = Double.parseDouble(args[4]);
-				gamma0 = Double.parseDouble(args[5]);
-				gamma1 = Double.parseDouble(args[6]);
-				numTopics = Integer.parseInt(args[7]);
-				numIterations = Integer.parseInt(args[8]);
-			} catch (Exception e) {
-				System.out.println("Error: args <user> <alpha|d> <beta|d> <topics|int> <iter|int>");
-			}
-			User usr = new User(args[1]);
-			List<User> userList = new ArrayList();
-			userList.add(usr);
-			System.out.println("ranking - part 1");
-
-			MyLDA3 lda = new MyLDA3(alpha,//alpha, 
-				beta,//
-				betaB,
-				gamma0,
-				gamma1,  
-				numTopics,//numTopics 
-				numIterations,//numIterations
-				topWords,//,TopWords, 
-				0,//SaveStep, 
-				userList);//docs);
-			//System.out.println("ranking - part 2");
-			lda.inference();
-			System.out.println("Results");
-			int i = 0;
-			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
-			for (List<List<Tweet>> topics : usrResults) {
-				for (List<Tweet> topic : topics) {
-					System.out.println("Topic "+i+": ");
-					i++;
-					for (Tweet tops : topic) {
-						System.out.println(tops.words());
-					}
-					Ranker<Word> rank = new TweetRanker(topic);
-					List<Word> ranks = rank.rank();
-					//System.out.print("  ");
-					//System.out.println("ranking - part 1");
-					NERanker<Word, Tweet> pr = new NERanker<>();
-					pr.init(ranks);
-					//System.out.print("  ");
-					//System.out.println("ranking - part 2");
-					ranks = pr.rank();
-					//System.out.println("done");
-					// if (ranks.size() > 0) {
-					// 	System.out.print("  ");
-					// 	System.out.println(s.printWordData());
-					// }
-					int w = 0;
-					for (Word s : ranks) {
-						if (w >= topWords) {
-							continue;
-						}
-						w++;
-						System.out.print("  ");
-						System.out.println(s.printWordData());
-					}
-				}
-			}
-			//System.out.println("printFB");
-			//lda.printFB();
-			System.out.println("MyLDA4");
-			return;
-		} else if (args.length == 11) {
+		if (args.length == 11) {
 			
 			double alpha = 0, beta = 0,betaB = 0, gamma0 = 0, gamma1 =0;
 			int numTopics = 0, numIterations = 0;
@@ -303,8 +107,7 @@ public class Main{
 				gamma1,  
 				numTopics,//numTopics 
 				numIterations,//numIterations
-				topWords,//,TopWords, 
-				0,//SaveStep, 
+				topWords,//,TopWords,
 				userList);//docs);
 			//System.out.println("ranking - part 2");
 			lda.inference();
@@ -318,23 +121,12 @@ public class Main{
 					}
 					System.out.println("Topic "+i+": ");
 					i++;
-					// for (Tweet tops : topic) {
-					// 	System.out.println(tops.words());
-					// }
 					Ranker<Word> rank = new TweetRanker(topic);
+					Word.reset(SimilarWords.combineSimilar(Word.cache()));
 					List<Word> ranks = rank.rank();
-					//System.out.print("  ");
-					//System.out.println("ranking - part 1");
 					NERanker<Word, Tweet> pr = new NERanker<>();
 					pr.init(ranks);
-					//System.out.print("  ");
-					//System.out.println("ranking - part 2");
 					ranks = pr.rank();
-					//System.out.println("done");
-					// if (ranks.size() > 0) {
-					// 	System.out.print("  ");
-					// 	System.out.println(s.printWordData());
-					// }
 					int w = 0;
 					for (Word s : ranks) {
 						if (w >= topWords) {

@@ -78,9 +78,12 @@ public class MyLDA4 {
 
 	// Double array used to sample a topic
 	public double[] multiPros;
-	public int savestep = 0;
-	public MyLDA4(double inAlpha, double inBeta , double inBetaB, double inGamma0,double inGamma1,  int inNumTopics, 
-		int inNumIterations, int inTopWords, int inSaveStep, List<User> _users) {
+	public MyLDA4(int inTopWords, List<User> _users) {
+		this(0.25,0.01,0.01,20.0,20.0,100,800,inTopWords,_users);
+	}
+	public MyLDA4(double inAlpha, double inBeta, double inBetaB,
+		double inGamma0,double inGamma1,  int inNumTopics, 
+		int inNumIterations, int inTopWords, List<User> _users) {
 		users = _users;
 		numUsers = users.size();
 		alpha = inAlpha;
@@ -89,7 +92,6 @@ public class MyLDA4 {
 		numTopics = inNumTopics;
 		numIterations = inNumIterations;
 		topWords = inTopWords;
-		savestep = inSaveStep;
 		gamma = new double[2];
 		gamma[0] = inGamma0;
 		gamma[1] = inGamma1;
@@ -157,6 +159,7 @@ public class MyLDA4 {
 		System.out.println("Number of top topical words: " + topWords);
 		initialize();
 	}
+	
 	public void initialize() {
 		System.out.println("Randomly initializing topic assignments...");
 
@@ -484,17 +487,12 @@ public class MyLDA4 {
 		for (int uIndex = 0; uIndex < numUsers; uIndex++ ) {
 			List<List<Tweet>> result = new ArrayList<>();
 			List<Integer> topics = getTop(theta_general[uIndex],numTopics+1);
-			//System.out.println("toppics: "+topics);
 			for (Integer tIndex : topics) {
-				//System.out.println("tppks: "+tIndex);
-				//int tIndex = topicIndex.intValue();
 				Word.clearCache();
 				List<Tweet> tweetSub = new ArrayList<>();
 				for (int dIndex = 0; dIndex < corpus.get(uIndex).size(); dIndex++) {
 					if (topicAssignments.get(uIndex).get(dIndex) == tIndex) {
-						//System.out.println("topic: "+topicAssignments.get(uIndex).get(dIndex)+", tIndex: "+tIndex);
 						int docSize = corpus.get(uIndex).get(dIndex).size();
-						//System.out.println("-  dIndex: "+dIndex);
 						Tweet twt = id2Doc.get(Integer.valueOf(dIndex));
 						assert twt != null : "tweet is null";
 						tweetSub.add(new TweetProxy(twt.getId()));
@@ -525,30 +523,6 @@ public class MyLDA4 {
 					i++;
 					System.out.println("Word:{"+id2WordVocabulary.get(rnk)+" , "+phi_word[tIndex][rnk]+"}");
 				}
-				//for (int dIndex = 0; dIndex < corpus.get(uIndex).size(); dIndex++) {
-
-					// if (topicAssignments.get(uIndex).get(dIndex) == tIndex) {
-					// 	Tweet twt = id2Doc.get(dIndex);
-					// 	List<String> foreg = new ArrayList<>();
-					// 	//List<String> backg = new ArrayList<>();
-					// 	int docSize = corpus.get(uIndex).get(dIndex).size();
-					// 	for (int wIndex = 0; wIndex < docSize; wIndex++) {
-					// 		if (foreBack[uIndex][dIndex][wIndex] == 1) {
-					// 			// Get current word
-					// 			int word = corpus.get(uIndex).get(dIndex).get(wIndex);
-					// 			Word w = id2WordVocabulary.get(word);
-					// 			foreg.add(w.toString());
-					// 		}
-					// 	}
-					// 	System.out.print("  ");
-					// 	System.out.println("Tweet:");
-					// 	System.out.print("  ");
-					// 	System.out.println(" - text: "+twt.text());
-					// 	System.out.print("  ");
-					// 	System.out.println(" - words: "+twt.words());
-					// 	System.out.print("  ");
-					// 	System.out.println(" - foreW: "+foreg);
-					// }
 			}
 		}
 	}
