@@ -1,32 +1,32 @@
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/UserSingle.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Parser.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/StaTweetStics/GUIServer.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/StaTweetStics/Main.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Tuple.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/OAuth/Data.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/User.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Graph/Vertex.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/ORM/package-info.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/StopWords.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/ORM/TweetBean.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Graph/NERanker.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/ORM/EntityBean.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Graph/GraphSearch.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/OAuth/Oauth.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/UserMulti.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Graph/Edge.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/WordSerializer.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/ORM/TweetProxy.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Graph/package-info.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Graph/Path.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/SimilarWords.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/ORM/Db.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Word.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/ORM/Entity.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/TweetRanker.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/TweetStringParser.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/Ranker.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/Suggest/similarWords.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/ORM/Tweet.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/MyLDA4.java
-/Users/irinadenisenko/Documents/Helen 2015-16/CS32/StaTweetStics/src/main/java/recommender/ORM/EntityProxy.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/ORM/Db.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/UserMulti.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/User.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/MyLDA4.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/TweetRanker.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Graph/NERanker.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/Suggest/similarWords.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/OAuth/Oauth.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/ORM/Tweet.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Graph/package-info.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/ORM/EntityProxy.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/OAuth/Data.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/ORM/Entity.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Graph/Edge.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Parser.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Graph/GraphSearch.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/SimilarWords.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/StopWords.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Tuple.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/TweetStringParser.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Graph/Vertex.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/ORM/package-info.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/StaTweetStics/GUIServer.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/WordSerializer.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Word.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/StaTweetStics/Main.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/ORM/TweetProxy.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/UserSingle.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/ORM/EntityBean.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Ranker.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Graph/Path.java
+/Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/ORM/TweetBean.java

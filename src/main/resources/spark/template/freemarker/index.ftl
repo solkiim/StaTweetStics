@@ -38,6 +38,7 @@
     <div class="container-fluid" id="content">
         <div class="row-fluid">
             <div class="col col-sm-10" id="suggestions">
+                <div class="centerthis">
                 <h1>StaTweetstically speaking, <br>it'd be cool to tweet about...</h1>
                 
                 <ul id="topsugslist"></ul>
@@ -83,6 +84,7 @@
                         </li>
                     </ul>
                 </div>
+                    </div>
             </div><!--
             
             --><div class="col col-sm-5 triangle-border left" id="tweetStats">

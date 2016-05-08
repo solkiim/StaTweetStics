@@ -180,10 +180,8 @@ $(".bootstrap-switch").css("background","#162252");
 $("input[name='list-or-slide']").on("switchChange.bootstrapSwitch", function(event, state) {
     if (state) {    // if switched to slides
         topSugSlide();
-        $("#tweetStats").css("top", "0px");
     } else {        // if switched to lists
         topSugList();
-        $("#tweetStats").css("top", "25px");
     }
     $("#topsugslist").slideToggle(500);
     $("#topsugsslide").slideToggle(500);
