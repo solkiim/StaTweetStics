@@ -40,22 +40,6 @@ public class Main{
 		else if(args.length > 2){
 			Db.setURL(args[args.length-1]);
 			for (int i = 0; i < args.length; i++) {
-				if (args[i].equals("--wf")) {
-					List<String> arg2 = Arrays.asList(args);
-					List<String> arg3 = arg2.subList(i+1,args.length-1);
-					String[] args4 = arg3.toArray(new String[0]);
-					try (Db db = new Db()) {
-						willtest(args4);
-					}
-				}
-				if (args[i].equals("--wf2")) {
-					List<String> arg2 = Arrays.asList(args);
-					List<String> arg3 = arg2.subList(i+1,args.length-1);
-					String[] args4 = arg3.toArray(new String[0]);
-					try (Db db = new Db()) {
-						willtest2(args4);
-					}
-				}
 				if (args[i].equals("--wf3")) {
 					List<String> arg2 = Arrays.asList(args);
 					List<String> arg3 = arg2.subList(i+1,args.length-1);

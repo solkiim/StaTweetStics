@@ -150,37 +150,6 @@ public abstract class GUIServer {
   * 
   */
   private static class UserHandler implements Route {
-  // 	public static void toJSON(String outFile, List<List<List<Word>>> topWords){
-  // 		List<List<Word>> topicWords = topWords.get(0);
-		// 	JsonObject jo = new JsonObject();
-		// 	jo.addProperty("name", "");
-		// 	JsonArray ja = new JsonArray();
-		// 	for (List<Word> topics : topicWords){
-		// 		//String[] topic = topWords[i];
-		// 		if (topic.size()<=0) {
-		// 			continue;
-		// 		}
-		// 		JsonObject jTopic = new JsonObject();
-		// 		jTopic.addProperty("name", topic.get(0).toString());
-		// 		JsonArray jWordsArray = new JsonArray();
-		// 		for (Word word : topic) {
-		// 			JsonObject jWord = new JsonObject();
-		// 			//String[] toks = word.split(":");
-		// 			jWord.addProperty("name", word.toString());
-		// 			jWord.addProperty("size", word.score()*1000);
-		// 			jWordsArray.add(jWord);
-		// 		}
-		// 		jTopic.add("children", jWordsArray);
-		// 		ja.add(jTopic);
-		// 	}
-		// 	jo.add("children", ja);
-		// 	try
-		// 	{
-		// 		PrintWriter pw = new PrintWriter(outFile);
-		// 		pw.println(jo.toString());
-		// 		pw.close();
-		// 	} catch (IOException e) { e.printStackTrace(); }
-		// }
     /**
     * spark server handler.
     * @param req the request
@@ -259,8 +228,6 @@ public abstract class GUIServer {
 			}
 			wordsUser.add(wordsTopic);
 		}
-		// System.out.println("printFB");
-		// lda.printFB(topTopics);
 		System.out.println("MyLDA4");
         variables.put("yourTrending",results.toArray());
         return GSON.toJson(variables);
