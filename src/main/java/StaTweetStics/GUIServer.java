@@ -50,7 +50,7 @@ import edu.brown.cs.OAuth.*;
 public abstract class GUIServer {
 
 	private static final int TOP_WORDS = 5;
-	private static final int topTopics = 6;
+	private static final int topTopics = 5;
 	private static final Gson GSON = new GsonBuilder()
 	.registerTypeAdapter(Word.class, new WordSerializer()).create();
 	private static final Splitter MY_SPLITTER = 
@@ -176,6 +176,7 @@ public abstract class GUIServer {
 
 				MyLDA4 lda = new MyLDA4(6,userList);
 				lda.inference();
+				lda.printFB();
 				System.out.println("Results");
 				int u = -1;
 				int i = 0;

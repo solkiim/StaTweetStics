@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
+import edu.brown.cs.suggest.ORM.Db;
 public class Oauth {
 
 	private static String user;
@@ -198,7 +198,7 @@ public class Oauth {
 	 */
 	private static void oneCall(JSONArray tweets, Connection conn, List<String> timeLineData, 
 			List<Integer> favoriteCount, List<String> createdAt){
-		
+		System.out.println("CHECKPOINT 1");
 		for(int i = 0; i < (tweets).size(); i++){
 			createdAt.add(((JSONObject)tweets.get(i)).get("created_at").toString());
 			long l = Long.parseLong(((JSONObject)tweets.get(i)).get("favorite_count").toString());
@@ -207,8 +207,11 @@ public class Oauth {
 		}
 		String fill = "INSERT INTO data VALUES(?,?,?,?,?)";
 		PreparedStatement prep = null;
+		System.out.println(fill);
 		try{
-			prep = conn.prepareStatement(fill);
+			System.out.println(conn);
+			prep = Db.prepare(fill);//conn.prepareStatement(fill);
+			System.out.println(prep.toString());
 			for(int i = 0; i < tweets.size(); i++){
 				prep.setString(1, ((JSONObject)tweets.get(i)).get("text").toString());
 				long l = Long.parseLong(((JSONObject)tweets.get(i)).get("favorite_count").toString());
@@ -226,13 +229,13 @@ public class Oauth {
 			System.exit(1);
 		} finally{
 			if(prep != null){
-				try{
-					prep.close();
-				} catch (SQLException e){
-					e.printStackTrace();
-					System.out.println("ERROR:");
-					System.exit(1);
-				}
+//				try{
+//					//prep.close();
+//				} catch (SQLException e){
+//					e.printStackTrace();
+//					System.out.println("ERROR:");
+//					System.exit(1);
+//				}
 			}
 		}
 	}

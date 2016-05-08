@@ -489,6 +489,10 @@ public class StopWords {
         add("w");
         add("want");
         add("wants");
+        add("wanted");
+        add("wanting");
+        add("#");
+        add("dm");
         add("was");
         add("way");
         add("we");
