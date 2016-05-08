@@ -44,46 +44,32 @@
                 <ul id="topsugslist"></ul>
                 <p id="topsugsslide"></p>
                 
+                <input type="checkbox" name="list-or-slide" checked data-on-color="success" data-off-color="success" data-handle-width="31" data-on-text="list" data-off-text="slide" style="margin-left: 20px">
+                    
+                <input type="checkbox" name="like-or-retweet" checked data-on-color="success" data-off-color="success" data-handle-width="53" data-on-text="retweets" data-off-text="likes" style="margin-left: 20px">
+                
                 <div id="usernameDisplay">
-                    <input type="checkbox" name="one-or-many-users" checked data-on-color="success" data-off-color="success" data-handle-width="40" data-on-text="1 user" data-off-text="">
-
-                    <p>suggestions for</p>
+                    <input type="checkbox" name="indiv-or-compare" checked data-on-color="success" data-off-color="success" data-handle-width="95" data-on-text="individual user" data-off-text="compare users" style="margin-left: 20px">
+                    <p>for</p>
                     <h3>@</h3>
                     <input type="text" id="usernameInput" placeholder="username" autocomplete="off" readonly="true">
                     <i class="fa fa-pencil" id="usernameEdit"></i>
                 </div>
-                
-                <input type="checkbox" name="list-or-slide" checked data-on-color="success" data-off-color="success" data-handle-width="31" data-on-text="slide" data-off-text="list" style="margin-left: 20px">
-                                
+
 <!--
-                <br>
-                <div id="sortby" class="radiogroup">
+                <div id="sugsgroup" class="radiogroup">
                     <ul>
                         <li>
-                            <input type='radio' name='sortby' value='retweets' id='retweets' checked="checked"/>
-                            <label for='retweets'><div>Retweets</div></label>
+                            <input type='radio' name='num-users' value='indivuser' id='indivuser' checked="checked"/>
+                            <label for='indivuser'><div>individual user</div></label>
                         </li>
                         <li>
-                            <input type='radio' name='sortby' value='likes' id='likes'/>
-                            <label for='likes'><div>Likes</div></label>
+                            <input type='radio' name='num-users' value='compareusers' id='compareusers'/>
+                            <label for='compareusers'><div>compare users</div></label>
                         </li>
                     </ul>
                 </div>
 -->
-                
-                <br>
-                <div id="sugsgroup" class="radiogroup">
-                    <ul>
-                        <li>
-                            <input type='radio' name='trendtype' value='yourtrending' id='yourtrending' checked="checked"/>
-                            <label for='yourtrending'><div>Your Trending</div></label>
-                        </li>
-                        <li>
-                            <input type='radio' name='trendtype' value='twittertrending' id='twittertrending'/>
-                            <label for='twittertrending'><div>Twitter Trending</div></label>
-                        </li>
-                    </ul>
-                </div>
                     </div>
             </div><!--
             
@@ -98,7 +84,7 @@
                 <br>
                 <div>
                     <h5>Top Tweet:</h5>
-                    <p>'I'm all yours tonight!' she cried, 'Do something to me you'd never normally dare do to a woman!' 'All right' he said, and made eye contact. With this it's 160.</p>
+                    <h6>'I'm all yours tonight!' she cried, 'Do something to me you'd never normally dare do to a woman!' 'All right' he said, and made eye contact. With this it's 160.</h6>
                 </div>
             </div>
         </div>
