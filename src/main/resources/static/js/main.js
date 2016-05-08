@@ -18,7 +18,7 @@ function dialogBoxes() {
     vex.dialog.buttons.YES.text = "let's go!"
     
     vex.dialog.confirm({
-        message: 'Click on the suggestions to see trend graphs!'
+        message: 'Click on the suggestions to see statistics!'
     });
     
     vex.dialog.buttons.YES.text = "i'm ready!"
@@ -34,9 +34,9 @@ function dialogBoxes() {
                 $("#usernameInput").val(value); // set username
                 getYourTrending();
             } else {
+                yourtrending = {"enter":[], "a twitter handle":[], "to see":[], "cool stats!":[]};
                 $("#yourtrending").prop("checked", false);
                 $("#twittertrending").prop("checked", true);
-                //getTopTrending();
             }
         }
     });
@@ -46,10 +46,7 @@ function dialogBoxes() {
 function getTopTrending() {
     $.get("/topTweets", {}, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
-        
-        yourtrending = {"enter":[], "a twitter handle":[], "to see":[], "cool stats!":[]};
         twittertrending = {};
-        
         var parsedTTrending = parsedResponse.twitterTrending;
         
         for (var i = 0; i < 5; i++) {
@@ -98,12 +95,11 @@ changeURL = function(e) {
 };
 
 
-/*------------------ GRAPH TOGGLE ------------------*/
+/*------------------ STATS TOGGLE ------------------*/
 var statsOut = false;
 
-$("#topsugslist li, #topsugsslide").click(function() { 
-//    alert("CLICKED");
-    $("#statsTitle").html($(this).text() + " Trend Graph:");
+$(document).on("click", "#topsugslist li, #topsugsslide", function() { 
+    $("#statsTitle").html($(this).text() + " Stats:");
     
     if (!statsOut) {
         $("#tweetStats").slideToggle(400);
@@ -195,14 +191,12 @@ $("input[name='my-checkbox']").on("switchChange.bootstrapSwitch", function(event
 
 /*------------------ SUGGESTION TYPE ------------------*/
 $("input[name='trendtype']").click(function(){
-    if ($(this).is(":checked")) {
-        console.log($(this).val());
-        if ($(this).val() === "yourtrending") {
-            displayedSugs = yourtrending;
-        } else if ($(this).val() === "twittertrending") {
-            displayedSugs = twittertrending;
-        }
-        topSugList();
-        topSugSlide();
+    $(this).prop("checked", true);
+    if ($(this).val() === "yourtrending") {
+        displayedSugs = yourtrending;
+    } else if ($(this).val() === "twittertrending") {
+        displayedSugs = twittertrending;
     }
+    topSugList();
+    topSugSlide();
 });

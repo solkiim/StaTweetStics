@@ -64,7 +64,8 @@ public class similarWords {
 			for (String otherWord: wordSet) {
 				if ((oldToNew.get(word).equals(oldToNew.get(otherWord))) 
 					|| (suggestions.contains(oldToNew.get(otherWord)))) {
-					i.remove(otherWord);
+					i.remove();
+					//otherWord
 					totalSet.addAll(wordMap.get(otherWord).tweets);
 				}
 			}

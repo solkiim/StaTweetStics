@@ -70,7 +70,7 @@
                 <div id="sugsgroup" class="radiogroup">
                     <ul>
                         <li>
-                            <input type='trend' name='trendtype' value='yourtrending' id='yourtrending' checked="checked"/>
+                            <input type='radio' name='trendtype' value='yourtrending' id='yourtrending' checked="checked"/>
                             <label for='yourtrending'><div>Your Trending</div></label>
                         </li>
                         <li>
@@ -81,10 +81,19 @@
                 </div>
             </div><!--
             
-            --><div class="col col-sm-5" id="tweetStats">
+            --><div class="col col-sm-5 triangle-border left" id="tweetStats">
                 <p id="closeStats">x</p>
-                <h3 id="statsTitle">#springBreak Trend Graph:</h3>
-                <div id="div-chart"></div>
+                <h3 id="statsTitle">Stats:</h3>
+                <br>
+                <div>
+                    <h5>Avg Retweets:</h5>
+                    <h1>38</h1>
+                </div>
+                <br>
+                <div>
+                    <h5>Top Tweet:</h5>
+                    <p>'I'm all yours tonight!' she cried, 'Do something to me you'd never normally dare do to a woman!' 'All right' he said, and made eye contact.</p>
+                </div>
             </div>
         </div>
     </div>
