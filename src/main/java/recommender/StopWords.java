@@ -585,5 +585,9 @@ public class StopWords {
         add("heres");
         add("im");
         add("belong");
+        add("wont");
+        add("ha");
+        add("feel");
+        add("youre");
     }
 }

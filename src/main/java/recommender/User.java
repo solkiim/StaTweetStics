@@ -27,39 +27,8 @@ import edu.brown.cs.suggest.Graph.Vertex;
 import edu.brown.cs.suggest.Graph.Edge;
 import edu.brown.cs.suggest.ORM.*;
 import edu.brown.cs.OAuth.Oauth;
-public class User {
-	private String handle;
-	private Set<Tweet> tweets;
-	public User(String handle) {
-		this.handle = handle;
-		tweets = TweetProxy.fromUserHandle(handle);
-		Set<Tweet> tweets2 = new HashSet<>();
-		if (tweets == null || tweets.size() == 0) {
-			try {
-				//Set<Tweet> tweets2 = new HashSet<>();
-				System.out.println("Querying Twitter for @"+handle+"...");
-				Oauth oa = new Oauth(handle,new ArrayList<>(),Db.getURL());
-				oa.run();
-				tweets = TweetProxy.fromUserHandle(handle);
-			} catch (Exception e) {
-				//System.out.println("ERROR: an error has occured");
-				throw new RuntimeException(e);
-			}
-		}
-		for (Tweet t : tweets) {
-			if (!t.text().contains("@")) {
-				tweets2.add(t);
-			}
-		}
-		tweets = tweets2;
-		TweetStringParser tsp = new TweetStringParser();
-		for (Tweet twt : tweets) {
-			twt.parse(tsp);
-		}
-	}
-	public int size() {
-		return tweets.size();
-	}
-	public String getHandle() { return handle; }
-	public Set<Tweet> getTweets() { return tweets; }
+public interface User {
+	int size();
+	String getHandle();
+	Set<Tweet> getTweets();
 }
