@@ -1,425 +1,209 @@
-//<<<<<<< HEAD
-//package edu.brown.cs.StaTweetStics;
-//
-//import java.util.Arrays;
-//
-//import com.google.common.base.Splitter;
-//import com.google.common.base.CharMatcher;
-//
-//import java.util.List;
-//import java.util.ArrayList;
-//import java.sql.SQLException;
-//import java.io.File;
-////TODO REMOVE
-//import java.net.InetAddress;
-//import java.util.LinkedHashMap;
-//import java.util.HashMap;
-//import java.sql.Connection;
-//
-//import spark.ModelAndView;
-//import spark.QueryParamsMap;
-//import spark.Request;
-//import spark.Response;
-//import spark.Route;
-//import spark.Spark;
-//import spark.TemplateViewRoute;
-//import spark.template.freemarker.FreeMarkerEngine;
-//
-//import java.io.IOException;
-//import java.net.URLDecoder;
-//
-//import freemarker.template.Configuration;
-//import spark.ExceptionHandler;
-//
-//import com.google.common.collect.ImmutableMap;
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
-//
-//import java.util.Map;
-//import java.io.PrintWriter;
-//import java.io.StringWriter;
-//import java.net.UnknownHostException;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//
-//import edu.brown.cs.OAuth.Data;
-//import edu.brown.cs.OAuth.Oauth;
-////import edu.brown.cs.suggest.WordSerializer;
-//import edu.brown.cs.suggest.*;
-//import edu.brown.cs.suggest.Graph.*;
-//import edu.brown.cs.suggest.ORM.Tweet;
-//
-//
-///**
-//* this is the class that is responsible for all of the GUI
-//* interations for the server.
-//*/
-//public abstract class GUIServer {
-//  private static final Gson GSON = new GsonBuilder()
-//    .registerTypeAdapter(Word.class, new WordSerializer()).create();
-//  private static final Splitter MY_SPLITTER = 
-//  Splitter.on(CharMatcher.WHITESPACE).trimResults().omitEmptyStrings();
-//  private static int port = 4242;
-//  /**
-//  * this sets the serverport for the spark server.
-//  * @param serverPort the port for the server
-//  */
-//  public static void run(int serverPort) {
-//    port = serverPort;
-//    runSparkServer();
-//  }
-//  /** this runs the server. */
-//  public static void run() {
-//    runSparkServer();
-//  }
-//  /**
-//  * this runs the spark server.
-//  */
-//  private static void runSparkServer() {
-//    // We need to serve some simple static files containing CSS and
-//    // JavaScript.
-//    // This tells Spark where to look for urls of the form "/static/*".
-//    Spark.setPort(port);
-//    Spark.externalStaticFileLocation("src/main/resources/static");
-//    Spark.exception(Exception.class, new ExceptionPrinter());
-//    FreeMarkerEngine freeMarker = createEngine();
-//    Spark.get("/StaTweetStics", new HomeHandler(), freeMarker);
-//    Spark.get("/userTweets", new UserHandler());
-//    Spark.get("/topTweets", new topTweetHandler());
-//  }
-//  /**
-//  * this handels the inital home site.
-//  */
-//  private static class HomeHandler implements TemplateViewRoute {
-//    /**
-//    * spark server handler.
-//    * @param req the request
-//    * @param res the response
-//    * @return model and view
-//    */
-//    @Override
-//    public ModelAndView handle(final Request req, final Response res) {
-//      
-//      Map<String, Object> variables = ImmutableMap.of("title", "StaTweetStics");
-//
-//      return new ModelAndView(variables, "index.ftl");
-//    }
-//  }
-//
-//
-//  /**
-//  * this creates the freemarker engine when it is needed
-//  * with all important arguments.
-//  * @return a new freemarkerengine
-//  */
-//  private static FreeMarkerEngine createEngine() {
-//    Configuration config = new Configuration();
-//    File templates = new File("src/main/resources/spark/template/freemarker");
-//    try {
-//      config.setDirectoryForTemplateLoading(templates);
-//    } catch (IOException ioe) {
-//      System.out.printf("ERROR: Unable use %s for template loading.\n",
-//                        templates);
-//      System.exit(1);
-//    }
-//    return new FreeMarkerEngine(config);
-//  }
-//  /** this represents a server error. */
-//  private static final int INTERNAL_SERVER_ERROR = 500;
-//  /** 
-//  *this is the class that returns the exception handler for the 
-//  *website.
-//  */
-//  private static class ExceptionPrinter implements ExceptionHandler {
-//    /**
-//    * spark server handler.
-//    * @param req the request
-//    * @param res the response
-//    */
-//    @Override
-//    public void handle(Exception e, Request req, Response res) {
-//      res.status(INTERNAL_SERVER_ERROR);
-//      StringWriter stacktrace = new StringWriter();
-//      try (PrintWriter pw = new PrintWriter(stacktrace)) {
-//        pw.println("<pre>");
-//        e.printStackTrace(pw);
-//        pw.println("</pre>");
-//      }
-//      res.body(stacktrace.toString());
-//    }
-//  }
-//
-//  /**
-//  * 
-//  */
-//  private static class UserHandler implements Route {
-//    /**
-//    * spark server handler.
-//    * @param req the request
-//    * @param res the response
-//    * @return the json response object
-//    */
-//    @Override
-//    public Object handle(final Request req, final Response res) {
-//      try {
-//        QueryParamsMap qm = req.queryMap();
-//        String input = qm.value("user");
-//
-//        // TODO: 1. Get a list of Tweets from OAuth
-//        //Oauth oa = new Oauth(input, new ArrayList<String>());
-//        Oauth.setUser(input);
-//        Oauth.setCompetitors(new ArrayList<String>());
-//        Parser<List<Tweet>, Data> par = new TweetDataParser();
-//
-//        List<Data> result = Oauth.run();
-//        // TODO: 2. Pass the list of Tweets to Suggest, return top five words
-//        Ranker<Word> rank = new TweetRanker(par.parse(result.get(0)));
-//        List<Word> ranks = rank.rank();
-//        NERanker<Word, Tweet> pr = new NERanker<>();
-//        pr.init(ranks);
-//        ranks = pr.rank(5);
-//        // TODO: 3. For each word, pass the word into Suggest to get an arrayList of daily likes over the past three months
-//        // TODO: 4. Produce a HashMap of each word to its arrayList, to return.
-//
-//        Map<String, Object> variables = new HashMap<>();
-//        variables.put("yourTrending",ranks.toArray());
-//        return GSON.toJson(variables);
-//      } catch (Exception e) {
-//        throw new RuntimeException(e);
-//      }
-//    }
-//  }
-//  
-//  /**
-//=======
-// package edu.brown.cs.StaTweetStics;
+package edu.brown.cs.StaTweetStics;
 
-// import java.util.Arrays;
-// import com.google.common.base.Splitter;
-// import com.google.common.base.CharMatcher;
-// import java.util.List;
-// import java.util.ArrayList;
-// import java.sql.SQLException;
-// import java.io.File;
-// //TODO REMOVE
-// import java.net.InetAddress;
+import java.util.Arrays;
+import com.google.common.base.Splitter;
+import com.google.common.base.CharMatcher;
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.SQLException;
+import java.io.File;
+//TODO REMOVE
+import java.net.InetAddress;
 
-// import java.util.LinkedHashMap;
-// import java.util.HashMap;
-// import java.sql.Connection;
-// import spark.ModelAndView;
-// import spark.QueryParamsMap;
-// import spark.Request;
-// import spark.Response;
-// import spark.Route;
-// import spark.Spark;
-// import spark.TemplateViewRoute;
-// import spark.template.freemarker.FreeMarkerEngine;
-// import java.io.IOException;
-// import java.net.URLDecoder;
-// import freemarker.template.Configuration;
-// import spark.ExceptionHandler;
+import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.sql.Connection;
+import spark.ModelAndView;
+import spark.QueryParamsMap;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.Spark;
+import spark.TemplateViewRoute;
+import spark.template.freemarker.FreeMarkerEngine;
+import java.io.IOException;
+import java.net.URLDecoder;
+import freemarker.template.Configuration;
+import spark.ExceptionHandler;
 
-// import com.google.common.collect.ImmutableMap;
-// import com.google.gson.Gson;
-// import com.google.gson.GsonBuilder;
-// import java.util.Map;
-// import java.io.PrintWriter;
-// import java.io.StringWriter;
-// import java.net.UnknownHostException;
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.util.Map;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.UnknownHostException;
 
-// import java.sql.PreparedStatement;
-// import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-// //import edu.brown.cs.suggest.WordSerializer;
-// import edu.brown.cs.suggest.*;
-// import edu.brown.cs.suggest.ORM.*;
-// import edu.brown.cs.suggest.Graph.*;
-// import edu.brown.cs.OAuth.*;
+//import edu.brown.cs.suggest.WordSerializer;
+import edu.brown.cs.suggest.*;
+import edu.brown.cs.suggest.ORM.*;
+import edu.brown.cs.suggest.Graph.*;
+import edu.brown.cs.OAuth.*;
 
 
-// /**
-// * this is the class that is responsible for all of the GUI
-// * interations for the server.
-// */
-// public abstract class GUIServer {
-//   private static final int TOP_WORDS = 5;
-//   private static final int topTopics = 6;
-//   private static final Gson GSON = new GsonBuilder()
-//     .registerTypeAdapter(Word.class, new WordSerializer()).create();
-//   private static final Splitter MY_SPLITTER = 
-//   Splitter.on(CharMatcher.WHITESPACE).trimResults().omitEmptyStrings();
-//   private static int port = 4242;
-//   /**
-//   * this sets the serverport for the spark server.
-//   * @param serverPort the port for the server
-//   */
-//   public static void run(int serverPort) {
-//     port = serverPort;
-//     runSparkServer();
-//   }
-//   /** this runs the server. */
-//   public static void run() {
-//     runSparkServer();
-//   }
-//   /**
-//   * this runs the spark server.
-//   */
-//   private static void runSparkServer() {
-//     // We need to serve some simple static files containing CSS and
-//     // JavaScript.
-//     // This tells Spark where to look for urls of the form "/static/*".
-//     Spark.setPort(port);
-//     Spark.externalStaticFileLocation("src/main/resources/static");
-//     Spark.exception(Exception.class, new ExceptionPrinter());
-//     FreeMarkerEngine freeMarker = createEngine();
-//     Spark.get("/StaTweetStics", new HomeHandler(), freeMarker);
-//     Spark.get("/userTweets", new UserHandler());
-//   }
-//   /**
-//   * this handels the inital home site.
-//   */
-//   private static class HomeHandler implements TemplateViewRoute {
-//     /**
-//     * spark server handler.
-//     * @param req the request
-//     * @param res the response
-//     * @return model and view
-//     */
-//     @Override
-//     public ModelAndView handle(final Request req, final Response res) {
+/**
+* this is the class that is responsible for all of the GUI
+* interations for the server.
+*/
+public abstract class GUIServer {
+  private static final int TOP_WORDS = 5;
+  private static final int topTopics = 6;
+  private static final Gson GSON = new GsonBuilder()
+    .registerTypeAdapter(Word.class, new WordSerializer()).create();
+  private static final Splitter MY_SPLITTER = 
+  Splitter.on(CharMatcher.WHITESPACE).trimResults().omitEmptyStrings();
+  private static int port = 4242;
+  /**
+  * this sets the serverport for the spark server.
+  * @param serverPort the port for the server
+  */
+  public static void run(int serverPort) {
+    port = serverPort;
+    runSparkServer();
+
+  }
+  /** this runs the server. */
+  public static void run() {
+    runSparkServer();
+  }
+  /**
+  * this runs the spark server.
+  */
+  private static void runSparkServer() {
+    // We need to serve some simple static files containing CSS and
+    // JavaScript.
+    // This tells Spark where to look for urls of the form "/static/*".
+    StopWords.init();
+    Spark.setPort(port);
+    Spark.externalStaticFileLocation("src/main/resources/static");
+    Spark.exception(Exception.class, new ExceptionPrinter());
+    FreeMarkerEngine freeMarker = createEngine();
+    Spark.get("/StaTweetStics", new HomeHandler(), freeMarker);
+    Spark.get("/userTweets", new UserHandler());
+  }
+  /**
+  * this handels the inital home site.
+  */
+  private static class HomeHandler implements TemplateViewRoute {
+    /**
+    * spark server handler.
+    * @param req the request
+    * @param res the response
+    * @return model and view
+    */
+    @Override
+    public ModelAndView handle(final Request req, final Response res) {
       
-//       Map<String, Object> variables = ImmutableMap.of("title", "StaTweetStics");
+      Map<String, Object> variables = ImmutableMap.of("title", "StaTweetStics");
 
-//       return new ModelAndView(variables, "index.ftl");
-//     }
-//   }
+      return new ModelAndView(variables, "index.ftl");
+    }
+  }
 
 
-//   /**
-//   * this creates the freemarker engine when it is needed
-//   * with all important arguments.
-//   * @return a new freemarkerengine
-//   */
-//   private static FreeMarkerEngine createEngine() {
-//     Configuration config = new Configuration();
-//     File templates = new File("src/main/resources/spark/template/freemarker");
-//     try {
-//       config.setDirectoryForTemplateLoading(templates);
-//     } catch (IOException ioe) {
-//       System.out.printf("ERROR: Unable use %s for template loading.\n",
-//                         templates);
-//       System.exit(1);
-//     }
-//     return new FreeMarkerEngine(config);
-//   }
-//   /** this represents a server error. */
-//   private static final int INTERNAL_SERVER_ERROR = 500;
-//   /** 
-//   *this is the class that returns the exception handler for the 
-//   *website.
-//   */
-//   private static class ExceptionPrinter implements ExceptionHandler {
-//     /**
-//     * spark server handler.
-//     * @param req the request
-//     * @param res the response
-//     */
-//     @Override
-//     public void handle(Exception e, Request req, Response res) {
-//       res.status(INTERNAL_SERVER_ERROR);
-//       StringWriter stacktrace = new StringWriter();
-//       try (PrintWriter pw = new PrintWriter(stacktrace)) {
-//         pw.println("<pre>");
-//         e.printStackTrace(pw);
-//         pw.println("</pre>");
-//       }
-//       res.body(stacktrace.toString());
-//     }
-//   }
+  /**
+  * this creates the freemarker engine when it is needed
+  * with all important arguments.
+  * @return a new freemarkerengine
+  */
+  private static FreeMarkerEngine createEngine() {
+    Configuration config = new Configuration();
+    File templates = new File("src/main/resources/spark/template/freemarker");
+    try {
+      config.setDirectoryForTemplateLoading(templates);
+    } catch (IOException ioe) {
+      System.out.printf("ERROR: Unable use %s for template loading.\n",
+                        templates);
+      System.exit(1);
+    }
+    return new FreeMarkerEngine(config);
+  }
+  /** this represents a server error. */
+  private static final int INTERNAL_SERVER_ERROR = 500;
+  /** 
+  *this is the class that returns the exception handler for the 
+  *website.
+  */
+  private static class ExceptionPrinter implements ExceptionHandler {
+    /**
+    * spark server handler.
+    * @param req the request
+    * @param res the response
+    */
+    @Override
+    public void handle(Exception e, Request req, Response res) {
+      res.status(INTERNAL_SERVER_ERROR);
+      StringWriter stacktrace = new StringWriter();
+      try (PrintWriter pw = new PrintWriter(stacktrace)) {
+        pw.println("<pre>");
+        e.printStackTrace(pw);
+        pw.println("</pre>");
+      }
+      res.body(stacktrace.toString());
+    }
+  }
 
-//   /**
-//>>>>>>> 50a9804a1827a28f75ca640b06c681d2c6a47270
-//   * 
-//   */
-//   private static class topTweetHandler implements Route {
-//     /**
-//     * spark server handler.
-//     * @param req the request
-//     * @param res the response
-//     * @return the json response object
-//     */
-//     @Override
-//     public Object handle(final Request req, final Response res) {
-//       try {
-//<<<<<<< HEAD
-//         QueryParamsMap qm = req.queryMap();
-//
-//         // TODO: 1. Get a list of Tweets from OAuth
-//         //Oauth oa = new Oauth("wflotte",new ArrayList<String>());
-//         Oauth.setUser("wflotte");
-//         Oauth.setCompetitors(new ArrayList<String>());
-//         Parser<List<Tweet>, Data> par = new TweetDataParser();
-//
-//         List<Data> result = Oauth.run();
-//
-//         Map<String, Object> variables = new HashMap<>();
-//         variables.put("twitterTrending",result.get(0).getTrendingData().toArray());
-//=======
-// 	      QueryParamsMap qm = req.queryMap();
-// 	      String input = qm.value("user");
+  /**
+  * 
+  */
+  private static class UserHandler implements Route {
+    /**
+    * spark server handler.
+    * @param req the request
+    * @param res the response
+    * @return the json response object
+    */
+    @Override
+    public Object handle(final Request req, final Response res) {
+      try(Db db = new Db()) {
+      	Map<String, Object> variables = new HashMap<>();
+	    QueryParamsMap qm = req.queryMap();
+	    String input = qm.value("user");
+	    List<Word> results = new ArrayList<>();
+	      //System.out.println("willtest:"+Arrays.asList(args));
+				
+		List<User> userList = new ArrayList<>();
+		List<String> usrHandle = new ArrayList<>();
+		usrHandle.add(input);
+		// for (int l = 4;l < args.length; l++) {
+		// 	usrHandle.add(args[l]);
+		// }
+		userList.add(new UserMulti(usrHandle));
+		int topWords = 5;
+		int topTopics = 5;
+		int displayWords = 1;
+		// try {
+		// 	topTopics = Integer.parseInt(args[0]);
+		// 	topWords = Integer.parseInt(args[1]);
+		// } catch (Exception e) {
+		// 	System.out.println("Error: args <user> <alpha|d> <beta|d> <topics|int> <iter|int>");
+		// }
+		//User usr = new UserSingle(args[2]);
+		//Word.reset(SimilarWords.combineSimilar(Word.cache()));
+		//List<User> userList = new ArrayList();
+		//userList.add(usr);
+		System.out.println("ranking - part 1");
 
-// 	      User usr = new User(input);
-// 				List<User> userList = new ArrayList();
-// 				userList.add(usr);
-// 				System.out.println("ranking - part 1");
-// 				Word.reset(SimilarWords.combineSimilar(Word.cache()));
-// 				MyLDA4 lda = new MyLDA4(TOP_WORDS,userList);
-// 				//System.out.println("ranking - part 2");
-// 				lda.inference();
-// 				System.out.println("Results");
-// 				int i = 0;
-// 				int u = -1;
-// 				int d = -1;
-// 				int w = -1;
-// 				Word[][][] rankResult = new Word[usrResults.size()][][];
-// 				List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
-// 				for (List<List<Tweet>> topics : usrResults) {
-// 					for (List<Tweet> topic : topics) {
-// 						if (i > topTopics) {
-// 							continue;
-// 						}
-// 						System.out.println("Topic "+i+": ");
-// 						i++;
-// 						Ranker<Word> rank = new TweetRanker(topic);
-						
-// 						List<Word> ranks = rank.rank();
-// 						NERanker<Word, Tweet> pr = new NERanker<>();
-// 						pr.init(ranks);
-// 						ranks = pr.rank();
-// 						int w = 0;
-// 						for (Word s : ranks) {
-// 							if (w >= TOP_WORDS) {
-// 								continue;
-// 							}
-// 							w++;
-// 							System.out.print("  ");
-// 							System.out.println(s.printWordData());
-// 						}
-// 					}
-// 				}
-// 				//System.out.println("printFB");
-// 				//lda.printFB(topTopics);
-//         variables.put("yourTrending",ranks.toArray());
-//>>>>>>> 50a9804a1827a28f75ca640b06c681d2c6a47270
-//         return GSON.toJson(variables);
-//       } catch (Exception e) {
-//         throw new RuntimeException(e);
-//       }
-//     }
-//   }
-//}
-//=======
+		MyLDA4 lda = new MyLDA4(6,userList);//docs);
+		//System.out.println("ranking - part 2");
+		lda.inference();
+		System.out.println("Results");
+		int u = -1;
+		int i = 0;
+		List<List<List<Word>>> wordsUser = new ArrayList<>();
+		List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
+		for (List<List<Tweet>> topics : usrResults) {
+			List<List<Word>> wordsTopic = new ArrayList<>();
+			u++;
+			System.out.println("User "+userList.get(u).getHandle()+": ");
+			for (List<Tweet> topic : topics) {
+				if (i > topTopics) {
+					continue;
+				}
+
  package edu.brown.cs.StaTweetStics;
 
  import java.util.Arrays;
@@ -634,3 +418,39 @@
    }
  }
 //>>>>>>> be200a1584989a2766eaa713c74e45ab66121350
+//=======
+				System.out.println("Topic "+i+": ");
+				i++;
+				Ranker<Word> rank = new TweetRanker(topic);
+				Word.reset(SimilarWords.combineSimilar(Word.cache()));
+				List<Word> ranks = rank.rank();
+				NERanker<Word, Tweet> pr = new NERanker<>();
+				pr.init(ranks);
+				ranks = pr.rank();
+				int w = 0;
+				for (Word s : ranks) {
+					if (w < displayWords) {
+						results.add(s);
+					}
+					if (w >= topWords) {
+						continue;
+					}
+					w++;
+					System.out.print("  ");
+					System.out.println(s.printWordData());
+				}
+				wordsTopic.add(ranks);
+			}
+			wordsUser.add(wordsTopic);
+		}
+		System.out.println("MyLDA4");
+        variables.put("yourTrending",results.toArray());
+        return GSON.toJson(variables);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+
+    }
+  }
+}
+//>>>>>>> 250a4e77a2dc218ac9be44c01452a66e79083f54

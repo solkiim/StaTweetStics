@@ -1,5 +1,4 @@
 package edu.brown.cs.suggest;
-
 import java.util.Arrays;
 import com.google.common.base.Splitter;
 import com.google.common.base.CharMatcher;
@@ -28,12 +27,10 @@ import edu.brown.cs.suggest.Graph.Vertex;
 import edu.brown.cs.suggest.Graph.Edge;
 import edu.brown.cs.suggest.ORM.*;
 import edu.brown.cs.OAuth.Oauth;
-<<<<<<< HEAD
-
-public class User {
+public class UserSingle implements User {
 	private String handle;
 	private Set<Tweet> tweets;
-	public User(String handle) {
+	public UserSingle(String handle) {
 		this.handle = handle;
 		tweets = TweetProxy.fromUserHandle(handle);
 		Set<Tweet> tweets2 = new HashSet<>();
@@ -41,11 +38,8 @@ public class User {
 			try {
 				//Set<Tweet> tweets2 = new HashSet<>();
 				System.out.println("Querying Twitter for @"+handle+"...");
-//				Oauth oa = new Oauth(handle,new ArrayList<>(),Db.getURL());
-//				oa.run();
-				Oauth.setUser(handle);
-				Oauth.setCompetitors(new ArrayList<>());
-				Oauth.run();
+				Oauth oa = new Oauth(handle,new ArrayList<>(),Db.getURL());
+				oa.run();
 				tweets = TweetProxy.fromUserHandle(handle);
 			} catch (Exception e) {
 				//System.out.println("ERROR: an error has occured");
@@ -63,15 +57,30 @@ public class User {
 			twt.parse(tsp);
 		}
 	}
+	@Override
 	public int size() {
 		return tweets.size();
 	}
+	@Override
 	public String getHandle() { return handle; }
+	@Override
 	public Set<Tweet> getTweets() { return tweets; }
-=======
-public interface User {
-	int size();
-	String getHandle();
-	Set<Tweet> getTweets();
->>>>>>> 250a4e77a2dc218ac9be44c01452a66e79083f54
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

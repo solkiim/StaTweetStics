@@ -72,6 +72,7 @@ public class MyLDA4 {
 	public Random random = new Random();
 
 	public double[][] theta_general;
+	public double[] theta_all;
 	public float[][] phi_word;
 	public double[] phi_background;
 	public double[] rho;
@@ -81,7 +82,7 @@ public class MyLDA4 {
 	// Double array used to sample a topic
 	public double[] multiPros;
 	public MyLDA4(int inTopWords, List<User> _users) {
-		this(0.25,0.01,0.01,20.0,20.0,100,800,inTopWords,_users);
+		this(0.25,0.01,0.01,20.0,20.0,20,1000,inTopWords,_users);
 	}
 	public MyLDA4(double inAlpha, double inBeta, double inBetaB,
 		double inGamma0,double inGamma1,  int inNumTopics, 
@@ -145,6 +146,7 @@ public class MyLDA4 {
 		phi_background = new double[vocabularySize];
 		phi_word = new float[numTopics][vocabularySize];
 		theta_general = new double[numUsers][numTopics];
+		theta_all = new double[numTopics];
 		
 		for (int i = 0; i < numTopics; i++) {
 			multiPros[i] = 1.0 / numTopics;
@@ -385,53 +387,6 @@ public class MyLDA4 {
 		}
 		return probs.length - 1;
 	}
-		
-	 private void printTopicAssignmentRankWords() {
-		for (int tIndex = 0; tIndex < numTopics; tIndex++) {
-			System.out.println("Topic" + tIndex + ":");
-
-			Map<Integer, Integer> wordCount = new TreeMap<Integer, Integer>();
-			for (int wIndex = 0; wIndex < vocabularySize; wIndex++) {
-				wordCount.put(wIndex, topicWordCount[tIndex][wIndex]);
-			}
-			wordCount = sortByValueDescending(wordCount);
-
-			Set<Integer> mostLikelyWords = wordCount.keySet();
-			int count = 0;
-			for (Integer index : mostLikelyWords) {
-				if (count < topWords) {
-					double pro = (topicWordCount[tIndex][index] + beta) / (sumTopicWordCount[tIndex] + betaSum);
-					pro = Math.round(pro * 1000000.0) / 1000000.0;
-					System.out.println(" " + id2WordVocabulary.get(index) + "(" + pro + ")");
-					count += 1;
-				} else {
-					System.out.print("\n\n");
-					break;
-				}
-			}
-		}
-	}
-	public void print() {
-		printTopicAssignmentRankWords();
-	}
-
-	private static <K, V extends Comparable<? super V>> Map<K, V> sortByValueDescending(Map<K, V> map) {
-		List<Map.Entry<K, V>> list = new LinkedList<Map.Entry<K, V>>(map.entrySet());
-		Collections.sort(list, new Comparator<Map.Entry<K, V>>(){
-			@Override
-			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
-			{
-					int compare = (o1.getValue()).compareTo(o2.getValue());
-					return -compare;
-			}
-		});
-
-		Map<K, V> result = new LinkedHashMap<K, V>();
-		for (Map.Entry<K, V> entry : list) {
-				result.put(entry.getKey(), entry.getValue());
-		}
-		return result;
-	}
 	public static List<Integer> getTop(double[] array, int i) {
 		int index = 0;
 		List<Integer> rankList = new ArrayList<Integer>();
@@ -579,7 +534,7 @@ public class MyLDA4 {
 				String name = users.get(u).getHandle();
 				writer.write(name + "\n");
 				for (int a = 0; a < numTopics; a++) {
-					bufferline1.append("\t"+a+":"+theta_general[u][a]+"\n");
+					bufferline1.append(" "+theta_general[u][a]+" ");
 				}
 				writer.write(bufferline1.toString() + "\n");
 			}
@@ -593,7 +548,7 @@ public class MyLDA4 {
 				String name = users.get(u).getHandle();
 				writer.write(name + "\n");
 				for (int a = 0; a < numTopics; a++) {
-					bufferline1.append("\t"+a+":"+docTopicCount[u][a]+"\n");
+					bufferline1.append(" "+docTopicCount[u][a]+" ");
 				}
 				writer.write(bufferline1.toString() + "\n");
 			}
