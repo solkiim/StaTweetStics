@@ -44,14 +44,17 @@
                 <p id="topsugsslide"></p>
                 
                 <div id="usernameDisplay">
+                    <input type="checkbox" name="one-or-many-users" checked data-on-color="success" data-off-color="success" data-handle-width="40" data-on-text="1 user" data-off-text="">
+
                     <p>suggestions for</p>
                     <h3>@</h3>
                     <input type="text" id="usernameInput" placeholder="username" autocomplete="off" readonly="true">
                     <i class="fa fa-pencil" id="usernameEdit"></i>
                 </div>
                 
-                <input type="checkbox" name="my-checkbox" checked data-on-color="success" data-off-color="success" data-handle-width="31" data-on-text="slide" data-off-text="list">
-                
+                <input type="checkbox" name="list-or-slide" checked data-on-color="success" data-off-color="success" data-handle-width="31" data-on-text="slide" data-off-text="list" style="margin-left: 20px">
+                                
+<!--
                 <br>
                 <div id="sortby" class="radiogroup">
                     <ul>
@@ -65,6 +68,7 @@
                         </li>
                     </ul>
                 </div>
+-->
                 
                 <br>
                 <div id="sugsgroup" class="radiogroup">
@@ -92,7 +96,7 @@
                 <br>
                 <div>
                     <h5>Top Tweet:</h5>
-                    <p>'I'm all yours tonight!' she cried, 'Do something to me you'd never normally dare do to a woman!' 'All right' he said, and made eye contact.</p>
+                    <p>'I'm all yours tonight!' she cried, 'Do something to me you'd never normally dare do to a woman!' 'All right' he said, and made eye contact. With this it's 160.</p>
                 </div>
             </div>
         </div>

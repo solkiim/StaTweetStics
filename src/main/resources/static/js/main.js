@@ -99,8 +99,7 @@ changeURL = function(e) {
 var statsOut = false;
 
 $(document).on("click", "#topsugslist li, #topsugsslide", function() { 
-    $("#statsTitle").html($(this).text() + " Stats:");
-    
+    $("#statsTitle").html($(this).text() + " Stats:");    
     if (!statsOut) {
         $("#tweetStats").slideToggle(400);
         $("#suggestions").attr("class", "col col-sm-7");
@@ -174,18 +173,40 @@ $(".fa").click(function() {
 
 
 /*------------------ SLIDE OR LIST ------------------*/
-$("[name='my-checkbox']").bootstrapSwitch();
+$("[name='list-or-slide']").bootstrapSwitch();
 $(".bootstrap-switch-label").html("<div></div>");
 $(".bootstrap-switch").css("background","#162252");
 
-$("input[name='my-checkbox']").on("switchChange.bootstrapSwitch", function(event, state) {
+$("input[name='list-or-slide']").on("switchChange.bootstrapSwitch", function(event, state) {
     if (state) {    // if switched to slides
         topSugSlide();
+        $("#tweetStats").css("top", "0px");
     } else {        // if switched to lists
         topSugList();
+        $("#tweetStats").css("top", "25px");
     }
     $("#topsugslist").slideToggle(500);
     $("#topsugsslide").slideToggle(500);
+});
+
+
+/*------------------ 1 USER OR COMPARE ------------------*/
+$("[name='one-or-many-users']").bootstrapSwitch();
+$(".bootstrap-switch-label").html("<div></div>");
+$(".bootstrap-switch").css("background","#162252");
+
+$("input[name='one-or-many-users']").on("switchChange.bootstrapSwitch", function(event, state) {
+    alert($("input[name='one-or-many-users']").attr("data-handle-width"));
+    alert($("input[name='one-or-many-users']").attr("data-off-text"));
+    if (state) {    // if switched to 1 user
+        $("input[name='one-or-many-users']").attr("data-handle-width", 40);
+        $("input[name='one-or-many-users']").attr("data-off-text", "")
+        alert("switched to 1 user");
+    } else {        // if switched to compare
+        $("input[name='one-or-many-users']").attr("data-handle-width", 55);
+        $("input[name='one-or-many-users']").attr("data-off-text", "compare")
+        alert("switched to compare");
+    }
 });
 
 
