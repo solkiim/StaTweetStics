@@ -77,10 +77,18 @@ function getCompareUsers() {
         }
         
         for (var i = 0; i < parsedCompRetweets.length; i++) {
-            compareusersretweets[parsedCompRetweets[i].text] = parsedCompRetweets[i].data;
+            var dataArray = [];
+            for (var j = 0; j < parsedCompRetweets[i].data.length; j++) {
+                dataArray.push(parsedCompRetweets[i].data[j].retweets);
+            }
+            compareusersretweets[parsedCompRetweets[i].text] = dataArray;
         }
         for (var i = 0; i < parsedCompLikes.length; i++) {
-            compareuserslikes[parsedCompLikes[i].text] = parsedCompLikes[i].data;
+            var dataArray = [];
+            for (var j = 0; j < parsedCompLikes[i].data.length; j++) {
+                dataArray.push(parsedCompLikes[i].data[j].likes);
+            }
+            compareuserslikes[parsedCompLikes[i].text] = dataArray;
         }
         
         if (RTnotLike) {
@@ -100,7 +108,8 @@ function getIndivUser() {
     // sending the username to the backend
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
-        var parsedResponse = JSON.parse(responseJSON);        
+        var parsedResponse = JSON.parse(responseJSON); 
+        console.log(parsedResponse);
         var parsedIndivRetweets = parsedResponse.indivRetweets;
         var parsedIndivLikes = parsedResponse.indivLikes;
         
@@ -111,10 +120,18 @@ function getIndivUser() {
         
         // populating individual lists        
         for (var i = 0; i < parsedIndivRetweets.length; i++) {
-            indivuserretweets[parsedIndivRetweets[i].text] = parsedIndivRetweets[i].data;
+            var dataArray = [];
+            for (var j = 0; j < parsedIndivRetweets[i].data.length; j++) {
+                dataArray.push(parsedIndivRetweets[i].data[j].retweets);
+            }
+            indivuserretweets[parsedIndivRetweets[i].text] = dataArray;
         }
         for (var i = 0; i < parsedIndivLikes.length; i++) {
-            indivuserlikes[parsedIndivLikes[i].text] = parsedIndivLikes[i].data;
+            var dataArray = [];
+            for (var j = 0; j < parsedIndivLikes[i].data.length; j++) {
+                dataArray.push(parsedIndivLikes[i].data[j].likes);
+            }
+            indivuserlikes[parsedIndivLikes[i].text] = dataArray;
         }
         
         if (RTnotLike) {
