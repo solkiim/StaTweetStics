@@ -84,6 +84,12 @@ public class TweetBean extends EntityBean<Tweet> implements Tweet {
   public double getWeight() { return retweet; }
   public Map<String, Double> tf() { return tf; }
   public String handle() { return handle; }
+  public void setLikes() {
+    retweet = (double) rawLikes;
+  }
+  public void setRT() {
+    retweet = (double) rawRetweet;
+  }
   // @Override
   // public int compareTo(Tweet obj) {
   //   return text.compareTo(obj.text());

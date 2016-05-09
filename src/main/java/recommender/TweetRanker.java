@@ -33,10 +33,15 @@ public class TweetRanker implements Ranker<Word> {
     
     double docSize;
     public TweetRanker(List<Tweet> tweets) {
+        this(tweets, false);
+    }
+    public TweetRanker(List<Tweet> tweets,boolean likesRT) {
         docSize = Integer.valueOf(tweets.size()).doubleValue();
         double average = 0;
         //pass 1
         for (Tweet t : tweets) {
+            if(likesRT) { t.setLikes(); }
+            else { t.setRT(); }
             for (Word word : t.words()) {
                 words.add(word);
                 List<Tweet> tweetList = tweetwords.getOrDefault(word, new ArrayList<Tweet>());
