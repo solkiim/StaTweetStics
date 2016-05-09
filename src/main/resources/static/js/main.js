@@ -20,8 +20,8 @@ $(document).ready(function() {
     
     // particle background setup
     $('#particles').particleground({
-        dotColor: '#F0F4FF',
-        lineColor: '#F0F4FF' /*f5f7ff*/
+        dotColor: '#E1E9FF',
+        lineColor: '#E1E9FF' /*F0F4FF*/
     });
     
     dialogBoxes();
@@ -53,6 +53,14 @@ function dialogBoxes() {
                 topSugSlide();
             }
         }
+    });
+}
+
+function errorAlert() {
+    vex.dialog.buttons.YES.text = "try again!"
+    
+    vex.dialog.confirm({
+        message: 'Oops! That username does not exist.'
     });
 }
 

@@ -87,7 +87,7 @@
                     <h5>Top Tweet:</h5>
                     <h6 id="toptweetvalue"></h6>
                 </div>
-                <div id="div-chart"></div>
+                <div id="div-chart" style="display:none;"></div>
             </div>
         </div>
     </div>
