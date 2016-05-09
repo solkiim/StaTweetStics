@@ -363,8 +363,8 @@ ul {
     border-radius: 3px;
     border: 2px solid #162252;
     color: #162252;
-    top: calc(50% - 360px);
     right: 5%;
+    top: calc(50% - 360px);
     transform: translate(0%,25%);
 }
 #closeStats:hover {
@@ -389,6 +389,7 @@ ul {
     letter-spacing: 5px;
     font-size: 20px;
     text-transform: uppercase;
+    margin-top: 40px;
 }
 #tweetStats h1 {
     font-family: 'Proxima Nova Alt Regular';
@@ -434,4 +435,21 @@ ul {
     /* reduce the damage in FF3.0 */
     display:block;
     width:0;
+}
+
+
+/*------------------ COMPARISON GRAPH ------------------*/
+.axis path, .axis line {
+    fill: none;
+    stroke: #162252;
+    shape-rendering: crispEdges;
+}
+
+g.tick text, #div-chart text {
+    font-family: 'Proxima Nova Alt Regular';
+    color: #162252;
+    letter-spacing: 0.5px;
+}
+.axis {
+    stroke-width: 2.0!important;
 }

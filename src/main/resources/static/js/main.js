@@ -241,8 +241,20 @@ $("#usernameEdit").click(function() {
         username = $(".usernameInput").val();
         
         if (indiv) {
+            $("#div-chart").css("display","none");
+            $("#tweetStats h5").css("margin-top","40px");
+            $("#tweetStats h1").css("font-size","60px");
+            $("#tweetStats").css("max-height","470px");
+            $("#tweetStats").css("top","calc(50% - 360px)");
+                    
             getIndivUser();
         } else {
+            $("#div-chart").css("display","block");
+            $("#tweetStats h5").css("margin-top","30px");
+            $("#tweetStats h1").css("font-size","45px");
+            $("#tweetStats").css("max-height","680px");
+            $("#tweetStats").css("top","calc(50% - 500px)");
+            
             usersToCompare = [];
             $('#inputGroup > input').each(function () {
                 if (this.value != "") {

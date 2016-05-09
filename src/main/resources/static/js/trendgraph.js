@@ -21,11 +21,11 @@ function makeTrendGraph(word) {
         }
     }
     
-    var margin = {top: 20, right: 20, bottom: 50, left: 50},
-        width = 500
+    var margin = {top: 20, right: 20, bottom: 50, left: 80},
+        width = 300
         height = 200;
 
-    var padding = 25;
+    var padding = 100 - 15 * (names.length);
     var scale = height/Math.max.apply(null, dataset); // 4x scale
 
     $("#div-chart").html("");
@@ -49,9 +49,9 @@ function makeTrendGraph(word) {
       .attr("width", width/dataset.length - padding)
       .attr("height", function(d){return d*scale;})
       .attr("fill", function(d){
-        var r = 0;
-        var g = 225;
-        var b = 225;
+        var r = 22;
+        var g = 34;
+        var b = 82;
         return "rgb(" +r+ "," +g+ "," +b+ ")";
       });
 
@@ -89,7 +89,7 @@ function makeTrendGraph(word) {
     svg.append("text")
       .attr("transform", "rotate(-90)")
       .attr("x", -height/2)
-      .attr("y", -50)
+      .attr("y", -margin.left)
       .attr("dy", "1em")
       .style("text-anchor", "middle")
       .text("Number of Tweets");
