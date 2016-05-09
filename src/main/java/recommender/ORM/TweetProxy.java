@@ -51,6 +51,11 @@ public class TweetProxy extends EntityProxy<Tweet> implements Tweet {
     internal.parse(parser);
   }
   @Override
+  public int rawLikes() { 
+    fill();
+    return internal.rawLikes(); 
+  }
+  @Override
   public String handle() {
     fill();
     return internal.handle();

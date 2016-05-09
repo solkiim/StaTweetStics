@@ -169,7 +169,7 @@ public abstract class GUIServer {
 			}
 			return results;
 		}
-		private List<Word> rankRanked(List<Word> res, boolean likesRT) {
+		private List<Word> rankRanked(List<Word> res, List<Word> rset, boolean likesRT) {
 			List<Word> copy = new ArrayList<>();
 			for (Word w : res) {
 				copy.add(w);
@@ -178,6 +178,13 @@ public abstract class GUIServer {
 				return -Integer.compare(a.getTweets().size(),b.getTweets().size());
 			});
 			if (copy.size() > 0) {
+				for (Word w : copy) {
+					if (!rset.contains(w)) {
+						copy = new ArrayList<>();
+						copy.add(w);
+						return copy;
+					}
+				}
 				return copy.subList(0,1);
 			} else {
 				return copy;
@@ -207,8 +214,8 @@ public abstract class GUIServer {
 					}
 					List<Word> r0 = modelHelper(topic,false);
 					List<Word> r1 = modelHelper(topic,true);
-					r0 = rankRanked(r0,false);
-					r1 = rankRanked(r1,true);
+					r0 = rankRanked(r0,results.get(0),false);
+					r1 = rankRanked(r1,results.get(1),true);
 					results.get(0).addAll(r0);
 					results.get(1).addAll(r1);
 				}

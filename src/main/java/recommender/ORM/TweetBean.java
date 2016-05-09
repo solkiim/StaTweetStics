@@ -75,6 +75,7 @@ public class TweetBean extends EntityBean<Tweet> implements Tweet {
   public String text() { return text; }
   public double retweets() { return retweet; }
   public int rawRetweets() { return rawRetweet; }
+  public int rawLikes() { return rawLikes; }
   public void setTweetScore(double average) {
     tweetScore = tweetScore/average;
   }
