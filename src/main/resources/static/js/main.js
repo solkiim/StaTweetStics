@@ -70,28 +70,12 @@ function getCompareUsers() {
         compareusers = {};
         compareuserslikes = {};
         compareusersretweets = {};
-        
-        var parsedTTrending = parsedResponse.twitterTrending;
-        
-        for (var i = 0; i < 5; i++) {
-            compareusers[parsedTTrending[i]] = parsedTTrending[i];
-        }
-        
+                
         for (var i = 0; i < parsedCompRetweets.length; i++) {
-            var avgRetweet = 0;
-            for (var j = 0; j < parsedCompRetweets[i].data.length; j++) {
-                avgRetweet += parsedCompRetweets[i].data[j].retweets;
-            }
-            avgRetweet /= parsedCompRetweets[i].data.length;
-            compareusersretweets[parsedCompRetweets[i].text] = avgRetweet;
+            compareusersretweets[parsedCompRetweets[i].text] = parsedCompRetweets[i];
         }
         for (var i = 0; i < parsedCompLikes.length; i++) {
-            var avgRetweet = 0;
-            for (var j = 0; j < parsedCompLikes[i].data.length; j++) {
-                avgRetweet += parsedCompLikes[i].data[j].likes;
-            }
-            avgRetweet /= parsedCompLikes[i].data.length;
-            compareuserslikes[parsedCompLikes[i].text] = avgRetweet;
+            compareuserslikes[parsedCompLikes[i].text] = parsedCompLikes[i];
         }
         
         if (RTnotLike) {
@@ -123,12 +107,10 @@ function getIndivUser() {
         
         // populating individual lists        
         for (var i = 0; i < parsedIndivRetweets.length; i++) {
-            var avg = findAvg(parsedIndivRetweets[i].data, true)
-            indivuserretweets[parsedIndivRetweets[i].text] = avg;
+            indivuserretweets[parsedIndivRetweets[i].text] = parsedIndivRetweets[i];
         }
         for (var i = 0; i < parsedIndivLikes.length; i++) {
-            var avg = findAvg(parsedIndivLikes[i].data, false)
-            indivuserlikes[parsedIndivLikes[i].text] = avg;
+            indivuserlikes[parsedIndivLikes[i].text] = parsedIndivLikes[i];
         }
         
         if (RTnotLike) {
@@ -143,19 +125,6 @@ function getIndivUser() {
     })
 }
 
-// input: array of data, boolean of whether RT or likes
-function findAvg(arr, gettingRT) {
-    var avg = 0;
-    for (var i = 0; i < arr.length; i++) {
-        if (gettingRT) {
-            avg += arr[i].retweets;
-        } else {
-            avg += arr[i].likes;
-        }
-    }
-    avg /= arr.length;
-    return (Math.round(avg * 100) / 100);
-}
 
 /*------------------ TWEET COMPOSITION ------------------*/
 changeURL = function(e) {
@@ -171,12 +140,19 @@ var statsOut = false;
 
 $(document).on("click", "#topsugslist li, #topsugsslide", function() { 
     $("#statsTitle").html($(this).text() + " Stats:");
-    $("#avgretweets").html(displayedSugs[$(this).text()]);
     
     if (RTnotLike) {
-        $("#avgrttitle").html("avg retweets:");
+        $("#avgtitle").html("avg retweets:");
+        var avgrt = displayedSugs[$(this).text()].avgRT;
+        avgrt = Math.round(avgrt * 100) / 100;
+        $("#avgvalue").html(avgrt);
+        $("#toptweetvalue").html(displayedSugs[$(this).text()].tweetTextRT);
     } else {
-        $("#avgrttitle").html("avg likes:");
+        $("#avgtitle").html("avg likes:");
+        var avglk = displayedSugs[$(this).text()].avgLK;
+        avglk = Math.round(avglk * 100) / 100;
+        $("#avgvalue").html(avglk);
+        $("#toptweetvalue").html(displayedSugs[$(this).text()].tweetTextLK);
     }
     
     if (!statsOut) {

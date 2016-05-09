@@ -81,13 +81,13 @@
                 <h3 id="statsTitle">Stats:</h3>
                 <br>
                 <div>
-                    <h5 id="avgrttitle">Avg Retweets:</h5>
-                    <h1 id="avgretweets">38</h1>
+                    <h5 id="avgtitle">Avg Retweets:</h5>
+                    <h1 id="avgvalue">38</h1>
                 </div>
                 <br>
                 <div>
                     <h5>Top Tweet:</h5>
-                    <h6>'I'm all yours tonight!' she cried, 'Do something to me you'd never normally dare do to a woman!' 'All right' he said, and made eye contact. With this it's 160.</h6>
+                    <h6 id="toptweetvalue">'I'm all yours tonight!' she cried, 'Do something to me you'd never normally dare do to a woman!' 'All right' he said, and made eye contact. With this it's 160.</h6>
                 </div>
             </div>
         </div>
