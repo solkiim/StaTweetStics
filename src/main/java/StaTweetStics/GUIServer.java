@@ -84,6 +84,7 @@ public abstract class GUIServer {
 		FreeMarkerEngine freeMarker = createEngine();
 		Spark.get("/StaTweetStics", new HomeHandler(), freeMarker);
 		Spark.get("/userTweets", new UserHandler());
+		Spark.get("/compareUserTweets", new MultipleHandler());
 	}
 	/**
 	 * this handels the inital home site.
@@ -167,6 +168,7 @@ public abstract class GUIServer {
 				results.add(s);
 				w++;
 			}
+			System.out.println("Single: "+results);
 			return results;
 		}
 		private List<Word> rankRanked(List<Word> res, List<Word> rset, boolean likesRT) {
@@ -234,11 +236,131 @@ public abstract class GUIServer {
 				Map<String, Object> variables = new HashMap<>();
 				QueryParamsMap qm = req.queryMap();
 				String input = qm.value("user");
+				System.out.println("user handle: "+input);
 				List<String> usrHandle = new ArrayList();
 				usrHandle.add(input);
 				List<List<Word>> results = model(usrHandle);
 				variables.put("indivRetweets",results.get(0).toArray());
 				variables.put("indivLikes",results.get(1).toArray());
+				return GSON.toJson(variables);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+/**
+	 * 
+	 */
+	private static class MultipleHandler implements Route {
+		private List<Word> modelHelper(List<Tweet> topic, boolean likesRT) {
+			List<Word> results = new ArrayList<>();
+			Ranker<Word> rank = new TweetRanker(topic,likesRT);
+			Word.reset(SimilarWords.combineSimilar(Word.cache()));
+			List<Word> ranks = rank.rank();
+			NERanker<Word, Tweet> pr = new NERanker<>();
+			pr.init(ranks);
+			ranks = pr.rank();
+			int w = 0;
+			for (Word s : ranks) {
+				if (w >= topWords) {
+					continue;
+				}
+				results.add(s);
+				// if (w < displayWords) {
+				// 	if(!results.contains(s)){
+				// 		results.add(s);
+				// 		break;
+				// 	}
+				// }
+				
+				w++;
+				//System.out.print("  ");
+				//System.out.println(s.printWordData());
+			}
+			System.out.println("Multi: "+results);
+			return results;
+		}
+		private List<Word> rankRanked(List<Word> res, List<Word> rset, boolean likesRT) {
+			List<Word> copy = new ArrayList<>();
+			for (Word w : res) {
+				copy.add(w);
+			}
+			Collections.sort(copy, (a, b) -> {
+				return -Integer.compare(a.getTweets().size(),b.getTweets().size());
+			});
+			if (copy.size() > 0) {
+				for (Word w : copy) {
+					if (!rset.contains(w)) {
+						copy = new ArrayList<>();
+						copy.add(w);
+						return copy;
+					}
+				}
+				return copy.subList(0,1);
+			} else {
+				return copy;
+			}
+		}
+		public List<List<Word>> model(List<String> usrHandle) {
+			List<List<Word>> results = new ArrayList<>(2);
+			results.add(new ArrayList<>());
+			results.add(new ArrayList<>());
+			List<User> userList = new ArrayList<>();
+			userList.add(new UserMulti(usrHandle));
+			
+			System.out.println("ranking - part 1");
+
+			MyLDA4 lda = new MyLDA4(topWords,userList);
+			lda.inference();
+			lda.printFB();
+			//System.out.println("Results");
+			int u = -1;
+			//int i = -1;
+			//List<List<List<Word>>> wordsUser = new ArrayList<>();
+			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
+			for (List<List<Tweet>> topics : usrResults) {
+				//List<List<Word>> wordsTopic = new ArrayList<>();
+				u++;
+				int t = -1;
+				//System.out.println("User "+userList.get(u).getHandle()+": ");
+				for (List<Tweet> topic : topics) {
+					t++;
+					if (t >= topTopics) {
+						return results;
+					}
+					List<Word> r0 = modelHelper(topic,false);
+					List<Word> r1 = modelHelper(topic,true);
+					r0 = rankRanked(r0,results.get(0),false);
+					r1 = rankRanked(r1,results.get(1),true);
+					//System.out.println(h0);
+					results.get(0).addAll(r0);
+					results.get(1).addAll(r1);
+					//wordsTopic.add(ranks);
+				}
+				//wordsUser.add(wordsTopic);
+			}
+			//System.out.println("MyLDA4");
+			return results;
+		}
+		/**
+		 * spark server handler.
+		 * @param req the request
+		 * @param res the response
+		 * @return the json response object
+		 */
+		@Override
+		public Object handle(final Request req, final Response res) {
+			try(Db db = new Db()) {
+				Map<String, Object> variables = new HashMap<>();
+				QueryParamsMap qm = req.queryMap();
+				System.out.println("testVar");
+				System.out.println(qm.value("usernames"));
+				//List<String> usrHandle = qm.value("usernames");
+				// //usrHandle.add(input);
+				// List<List<Word>> results = model(usrHandle);
+				// variables.put("indivRetweets",results.get(0).toArray());
+				// variables.put("indivLikes",results.get(1).toArray());
 				return GSON.toJson(variables);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
