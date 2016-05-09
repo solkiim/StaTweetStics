@@ -199,6 +199,9 @@ ul {
     margin-top: -5px!important;
     display: none;
 }
+#topsugslist {
+    margin-bottom: 30px;
+}
 #topsugslist li:hover, #top li:hover, #topsugsslide:hover {
     color: #ccd6dd;
     cursor: pointer;
@@ -409,7 +412,7 @@ ul {
 .triangle-border.left:before {
     content:"";
     position: absolute;
-    top: 50px; /* controls vertical position */
+    top: calc(430px / 2 - 6px); /* controls vertical position */
     bottom: auto;
     left:-30px; /* value = - border-left-width - border-right-width */
     border-width:15px 30px 15px 0;
@@ -421,7 +424,7 @@ ul {
 .triangle-border.left:after {
     content:"";
     position:absolute;
-    top:53px; /* value = (:before top) + (:before border-top) - (:after border-top) */
+    top:212px; /* value = (:before top) + (:before border-top) - (:after border-top) */
     bottom:auto;
     left:-25px; /* value = - border-left-width - border-right-width */
     border-width:12px 25px 12px 0;

@@ -73,7 +73,6 @@ function getCompareUsers() {
 // updating username in back end and getting new data
 function getIndivUser() {    
     // sending the username to the backend
-    console.log(username);
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
@@ -88,6 +87,9 @@ function getIndivUser() {
         
         // populating your trending list
         var parsedYourTrending = parsedResponse.yourTrending;
+        
+        console.log(parsedYourTrending);
+        
         for (var i = 0; i < parsedYourTrending.length; i++) {
             indivuser[parsedYourTrending[i].text] = parsedYourTrending[i].data;
         }
