@@ -1,6 +1,8 @@
 var username;
 var indivuser = {};
 var compareusers = {};
+var usersToCompare = [];
+var userCount = 0;
 var displayedSugs;    // sugs displayed currently
 var indiv;
 
@@ -32,7 +34,7 @@ function dialogBoxes() {
         callback: function(value) {
             if (value !== false) {  // if valid username was entered
                 username = value;
-                $("#usernameInput").val(value); // set username
+                $(".usernameInput").val(value); // set username
                 getIndivUser();
             } else {
                 indivuser = {"enter":[], "a twitter handle":[], "to see":[], "super cool":[], "stats!":[]};
@@ -103,7 +105,7 @@ changeURL = function(e) {
 var statsOut = false;
 
 $(document).on("click", "#topsugslist li, #topsugsslide", function() { 
-    $("#statsTitle").html($(this).text() + " Stats:");    
+    $("#statsTitle").html($(this).text() + " Stats:");
     if (!statsOut) {
         $("#tweetStats").slideToggle(400);
         $("#suggestions").attr("class", "col col-sm-7");
@@ -159,24 +161,51 @@ function cycle() {
 var editingUsername = false;
 
 // editing username via page form
-$(".fa").click(function() {
+$("#usernameEdit").click(function() {
     if (editingUsername) {  // done editing username
+        console.log("done editing");
         editingUsername = false;
         $("#usernameEdit").attr("class", "fa fa-pencil");
-        $("#usernameInput").prop("readonly", true);
-        $("#usernameInput").css("border-bottom","none");
-        username = $("#usernameInput").val();
+        $(".usernameInput").prop("readonly", true);
+        $(".usernameInput").css("border-bottom","none");
+        $("#usernameAdd").css("display", "none");
+        username = $(".usernameInput").val();
         
         if (indiv) {
             getIndivUser();
         } else {
-            getCompareUsers();
+            $('#inputGroup > input').each(function () {
+                if (this.value != "") {
+                    console.log(this.value);
+                }
+                
+            });
+            console.log("get compare users");
+            //getCompareUsers();
         }
     } else {
-         editingUsername = true;
+        console.log("editingusername");
+        editingUsername = true;
         $("#usernameEdit").attr("class", "fa fa-check");
-        $("#usernameInput").prop("readonly", false);
-        $("#usernameInput").css("border-bottom","1px solid #162252");
+        $(".usernameInput").prop("readonly", false);
+        $(".usernameInput").css("border-bottom","1px solid #162252");
+        
+        userCount = 0;
+        if (!indiv) {
+            $("#usernameAdd").css("display", "inline-block");
+        }
+    }
+});
+
+
+/*------------------ SLIDE OR LIST ------------------*/
+$("#usernameAdd").click(function(e) { //on add input button click
+    console.log("usercount: " + userCount);
+    e.preventDefault();
+    if (userCount < 5) {
+        userCount = userCount + 1;
+        $("#inputGroup").append('<h3>, </h3>');
+        $("#inputGroup").append('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" style="border-bottom: 1px solid #162252">'); //add input box
     }
 });
 
@@ -219,20 +248,27 @@ $(".bootstrap-switch").css("background","#162252");
 $("input[name='indiv-or-compare']").on("switchChange.bootstrapSwitch", function(event, state) {
     if (state) {    // if switched to individual
         indiv = true;
+        console.log("only1");
+        $("#inputGroup").html('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" readonly="true">');
+        displayedSugs = indivuser;
+        $(".fa").click();
     } else {        // if switched to compare
         indiv = false;
+        displayedSugs = compareusers;
+        $(".fa").click();
     }
 });
 
 
 /*------------------ SUGGESTION TYPE ------------------*/
-$("input[name='trendtype']").click(function(){
-    $(this).prop("checked", true);
-    if ($(this).val() === "indivuser") {
-        displayedSugs = indivuser;
-    } else if ($(this).val() === "compareusers") {
-        displayedSugs = compareusers;
-    }
-    topSugList();
-    topSugSlide();
-});
+//$("input[name='trendtype']").click(function(){
+//    $(this).prop("checked", true);
+//    if ($(this).val() === "indivuser") {
+//        displayedSugs = indivuser;
+//    } else if ($(this).val() === "compareusers") {
+//        console.log("compareusers");
+//        displayedSugs = compareusers;
+//    }
+//    topSugList();
+//    topSugSlide();
+//});
