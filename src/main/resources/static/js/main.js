@@ -111,6 +111,7 @@ function getIndivUser() {
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON); 
+        console.log(parsedResponse);
         var parsedIndivRetweets = parsedResponse.indivRetweets;
         var parsedIndivLikes = parsedResponse.indivLikes;
         

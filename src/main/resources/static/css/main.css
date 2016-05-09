@@ -168,7 +168,7 @@ ul {
 /*------------------ CONTENT: SUGGESTIONS ------------------*/
 .centerthis {
     position: absolute;
-    top: calc(50% - 50px);
+    top: calc(50% - 25px);
     transform: translate(0%,-50%);
     display: inline-block;
 }
@@ -357,13 +357,14 @@ ul {
     width: 430px;
     height: inherit;
     max-height: 470px;
-    position: relative;
+    position: absolute;
     padding: 25px;
     background: #fff;
     border-radius: 3px;
     border: 2px solid #162252;
     color: #162252;
-    top: calc(50% - 215px);
+    top: calc(50% - 360px);
+    right: 5%;
     transform: translate(0%,25%);
 }
 #closeStats:hover {
