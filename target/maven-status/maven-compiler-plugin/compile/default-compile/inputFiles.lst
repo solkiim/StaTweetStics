@@ -4,7 +4,6 @@
 /Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/MyLDA4.java
 /Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/TweetRanker.java
 /Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Graph/NERanker.java
-/Users/solkim/Desktop/StaTweetstics/src/main/java/Suggest/similarWords.java
 /Users/solkim/Desktop/StaTweetstics/src/main/java/OAuth/Oauth.java
 /Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/ORM/Tweet.java
 /Users/solkim/Desktop/StaTweetstics/src/main/java/recommender/Graph/package-info.java

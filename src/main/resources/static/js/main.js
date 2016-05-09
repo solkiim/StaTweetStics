@@ -1,10 +1,17 @@
 var username;
-var indivuser = {};
+
+var indivuser;
+var indivuserlikes = {};
+var indivuserretweets = {};
+
 var compareusers = {};
 var usersToCompare = [];
-var userCount = 0;
+var userCount = 1;
+
+var indiv = true;
+var RTnotLike = true;
+
 var displayedSugs;    // sugs displayed currently
-var indiv;
 
 $(document).ready(function() {
     indiv = true;
@@ -68,6 +75,7 @@ function getCompareUsers() {
 // updating username in back end and getting new data
 function getIndivUser() {    
     // sending the username to the backend
+    console.log(username);
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
@@ -163,7 +171,6 @@ var editingUsername = false;
 // editing username via page form
 $("#usernameEdit").click(function() {
     if (editingUsername) {  // done editing username
-        console.log("done editing");
         editingUsername = false;
         $("#usernameEdit").attr("class", "fa fa-pencil");
         $(".usernameInput").prop("readonly", true);
@@ -184,13 +191,12 @@ $("#usernameEdit").click(function() {
             //getCompareUsers();
         }
     } else {
-        console.log("editingusername");
         editingUsername = true;
         $("#usernameEdit").attr("class", "fa fa-check");
         $(".usernameInput").prop("readonly", false);
         $(".usernameInput").css("border-bottom","1px solid #162252");
         
-        userCount = 0;
+        userCount = 1;
         if (!indiv) {
             $("#usernameAdd").css("display", "inline-block");
         }
@@ -198,14 +204,18 @@ $("#usernameEdit").click(function() {
 });
 
 
-/*------------------ SLIDE OR LIST ------------------*/
-$("#usernameAdd").click(function(e) { //on add input button click
+/*------------------ USERNAME ADD ------------------*/
+$("#usernameAdd").click(function() { //on add input button click
     console.log("usercount: " + userCount);
-    e.preventDefault();
-    if (userCount < 5) {
+    if (userCount < 4 && !indiv) {
         userCount = userCount + 1;
         $("#inputGroup").append('<h3>, </h3>');
         $("#inputGroup").append('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" style="border-bottom: 1px solid #162252">'); //add input box
+    }
+    if (userCount == 4) {
+        $("#usernameAdd").css("display", "none");
+    } else {
+        $("#usernameAdd").css("display", "inline-block");
     }
 });
 
@@ -233,9 +243,11 @@ $(".bootstrap-switch").css("background","#162252");
 
 $("input[name='like-or-retweet']").on("switchChange.bootstrapSwitch", function(event, state) {
     if (state) {    // if switched to retweets
-        alert("switched to retweets");
+        RTnotLike = true;
+        indivuser = indivuserretweets;
     } else {        // if switched to likes
-        alert("switched to likes");
+        RTnotLike = false;
+        indivuser = indivuserlikes;
     }
 });
 
