@@ -172,8 +172,6 @@ public abstract class GUIServer {
 				}
 				
 				w++;
-				//System.out.print("  ");
-				//System.out.println(s.printWordData());
 			}
 			return results;
 		}
@@ -191,28 +189,20 @@ public abstract class GUIServer {
 			lda.printFB();
 			System.out.println("Results");
 			int u = -1;
-			//int i = -1;
-			//List<List<List<Word>>> wordsUser = new ArrayList<>();
 			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
 			for (List<List<Tweet>> topics : usrResults) {
-				//List<List<Word>> wordsTopic = new ArrayList<>();
 				u++;
 				int t = -1;
-				//System.out.println("User "+userList.get(u).getHandle()+": ");
 				for (List<Tweet> topic : topics) {
 					t++;
 					if (t >= topTopics) {
 						return results;
 					}
 					List<Word> h0 = modelHelper(topic,false);
-					//System.out.println(h0);
 					results.get(0).addAll(h0);
 					results.get(1).addAll(modelHelper(topic,true));
-					//wordsTopic.add(ranks);
 				}
-				//wordsUser.add(wordsTopic);
 			}
-			//System.out.println("MyLDA4");
 			return results;
 		}
 		/**
