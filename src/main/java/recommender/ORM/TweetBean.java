@@ -54,7 +54,7 @@ public class TweetBean extends EntityBean<Tweet> implements Tweet {
     this.rawRetweet = rtCount;
   }
   public void parse(Parser<List<String>,String> parser){
-    postParse(parser.parse(text),text, rawLikes);
+    postParse(parser.parse(text),text, rawRetweet);
   }
   private void postParse(List<String> splitWords,String text,int retweet) {
     this.rawRetweet = retweet;
@@ -70,13 +70,13 @@ public class TweetBean extends EntityBean<Tweet> implements Tweet {
         tf.put(word, tf.get(word)/wordTotal);
         
       }
-      this.tweetScore = retweet;
+      //this.tweetScore = retweet;
   }
   public String text() { return text; }
   public double retweets() { return retweet; }
   public int rawRetweets() { return rawRetweet; }
   public void setTweetScore(double average) {
-    tweetScore = retweet/average;
+    tweetScore = tweetScore/average;
   }
   public double tweetScore() { return tweetScore; }
   public Set<Word> words() { return words; }
@@ -86,8 +86,10 @@ public class TweetBean extends EntityBean<Tweet> implements Tweet {
   public String handle() { return handle; }
   public void setLikes() {
     retweet = (double) rawLikes;
+    this.tweetScore = (double) rawLikes;
   }
   public void setRT() {
+    this.tweetScore = (double) rawRetweet;
     retweet = (double) rawRetweet;
   }
   // @Override
