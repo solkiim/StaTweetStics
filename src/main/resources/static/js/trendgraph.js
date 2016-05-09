@@ -28,6 +28,8 @@ function makeTrendGraph(word) {
     var padding = 25;
     var scale = height/Math.max.apply(null, dataset); // 4x scale
 
+    $("#div-chart").html("");
+    
     // create svg element
     var svg = d3.select("#div-chart")
       .append("svg")
