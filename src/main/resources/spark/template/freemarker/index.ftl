@@ -81,8 +81,8 @@
                 <h3 id="statsTitle">Stats:</h3>
                 <br>
                 <div>
-                    <h5>Avg Retweets:</h5>
-                    <h1>38</h1>
+                    <h5 id="avgrttitle">Avg Retweets:</h5>
+                    <h1 id="avgretweets">38</h1>
                 </div>
                 <br>
                 <div>
