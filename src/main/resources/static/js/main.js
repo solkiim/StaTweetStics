@@ -1,9 +1,12 @@
 var username;
-var yourtrending = {};
-var twittertrending = {};
+var indivuser = {};
+var compareusers = {};
 var displayedSugs;    // sugs displayed currently
+var indiv;
 
 $(document).ready(function() {
+    indiv = true;
+    
     // particle background setup
     $('#particles').particleground({
         dotColor: '#F0F4FF',
@@ -22,9 +25,7 @@ function dialogBoxes() {
     });
     
     vex.dialog.buttons.YES.text = "i'm ready!"
-    
-    getTopTrending();
-    
+        
     vex.dialog.prompt({
         message: 'What twitter handle do you wanna search?',
         placeholder: 'username',
@@ -32,35 +33,38 @@ function dialogBoxes() {
             if (value !== false) {  // if valid username was entered
                 username = value;
                 $("#usernameInput").val(value); // set username
-                getYourTrending();
+                getIndivUser();
             } else {
-                yourtrending = {"enter":[], "a twitter handle":[], "to see":[], "cool stats!":[]};
-                $("#yourtrending").prop("checked", false);
-                $("#twittertrending").prop("checked", true);
+                indivuser = {"enter":[], "a twitter handle":[], "to see":[], "super cool":[], "stats!":[]};
+                compareusers = indivuser;
+                displayedSugs = indivuser;
+                topSugList();
+                $("#indivuser").prop("checked", false);
+                $("#compareusers").prop("checked", false);
             }
         }
     });
 }
 
 /*------------------ GETTING TRENDING LISTS ------------------*/
-function getTopTrending() {
+function getCompareUsers() {
     $.get("/topTweets", {}, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
-        twittertrending = {};
+        compareusers = {};
         var parsedTTrending = parsedResponse.twitterTrending;
         
         for (var i = 0; i < 5; i++) {
-            twittertrending[parsedTTrending[i]] = parsedTTrending[i];
+            compareusers[parsedTTrending[i]] = parsedTTrending[i];
         }
 
-        displayedSugs = twittertrending;
+        displayedSugs = compareusers;
         topSugList();
         topSugSlide();
     })
 }
 
 // updating username in back end and getting new data
-function getYourTrending() {    
+function getIndivUser() {    
     // sending the username to the backend
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
@@ -68,19 +72,19 @@ function getYourTrending() {
         console.log(parsedResponse);
         
         // clear data for previous username
-        yourtrending = {};
+        indivuser = {};
         
         // switch the suggestion type to your trending
-        $("#yourtrending").prop("checked", true);
-        $("#twittertrending").prop("checked", false);
+        $("#indivuser").prop("checked", true);
+        $("#compareusers").prop("checked", false);
         
         // populating your trending list
         var parsedYourTrending = parsedResponse.yourTrending;
         for (var i = 0; i < parsedYourTrending.length; i++) {
-            yourtrending[parsedYourTrending[i].text] = parsedYourTrending[i].data;
+            indivuser[parsedYourTrending[i].text] = parsedYourTrending[i].data;
         }
         
-        displayedSugs = yourtrending;
+        displayedSugs = indivuser;
         topSugList();
         topSugSlide();
     })
@@ -162,7 +166,12 @@ $(".fa").click(function() {
         $("#usernameInput").prop("readonly", true);
         $("#usernameInput").css("border-bottom","none");
         username = $("#usernameInput").val();
-        getYourTrending();
+        
+        if (indiv) {
+            getIndivUser();
+        } else {
+            getCompareUsers();
+        }
     } else {
          editingUsername = true;
         $("#usernameEdit").attr("class", "fa fa-check");
@@ -178,34 +187,40 @@ $(".bootstrap-switch-label").html("<div></div>");
 $(".bootstrap-switch").css("background","#162252");
 
 $("input[name='list-or-slide']").on("switchChange.bootstrapSwitch", function(event, state) {
-    if (state) {    // if switched to slides
-        topSugSlide();
-        $("#tweetStats").css("top", "0px");
-    } else {        // if switched to lists
+    if (state) {    // if switched to list
         topSugList();
-        $("#tweetStats").css("top", "25px");
+    } else {        // if switched to slide
+        topSugSlide();
     }
     $("#topsugslist").slideToggle(500);
     $("#topsugsslide").slideToggle(500);
 });
 
 
-/*------------------ 1 USER OR COMPARE ------------------*/
-$("[name='one-or-many-users']").bootstrapSwitch();
+/*------------------ LIKE OR RETWEET ------------------*/
+$("[name='like-or-retweet']").bootstrapSwitch();
 $(".bootstrap-switch-label").html("<div></div>");
 $(".bootstrap-switch").css("background","#162252");
 
-$("input[name='one-or-many-users']").on("switchChange.bootstrapSwitch", function(event, state) {
-    alert($("input[name='one-or-many-users']").attr("data-handle-width"));
-    alert($("input[name='one-or-many-users']").attr("data-off-text"));
-    if (state) {    // if switched to 1 user
-        $("input[name='one-or-many-users']").attr("data-handle-width", 40);
-        $("input[name='one-or-many-users']").attr("data-off-text", "")
-        alert("switched to 1 user");
+$("input[name='like-or-retweet']").on("switchChange.bootstrapSwitch", function(event, state) {
+    if (state) {    // if switched to retweets
+        alert("switched to retweets");
+    } else {        // if switched to likes
+        alert("switched to likes");
+    }
+});
+
+
+/*------------------ INDIV OR COMPARE ------------------*/
+$("[name='indiv-or-compare']").bootstrapSwitch();
+$(".bootstrap-switch-label").html("<div></div>");
+$(".bootstrap-switch").css("background","#162252");
+
+$("input[name='indiv-or-compare']").on("switchChange.bootstrapSwitch", function(event, state) {
+    if (state) {    // if switched to individual
+        indiv = true;
     } else {        // if switched to compare
-        $("input[name='one-or-many-users']").attr("data-handle-width", 55);
-        $("input[name='one-or-many-users']").attr("data-off-text", "compare")
-        alert("switched to compare");
+        indiv = false;
     }
 });
 
@@ -213,10 +228,10 @@ $("input[name='one-or-many-users']").on("switchChange.bootstrapSwitch", function
 /*------------------ SUGGESTION TYPE ------------------*/
 $("input[name='trendtype']").click(function(){
     $(this).prop("checked", true);
-    if ($(this).val() === "yourtrending") {
-        displayedSugs = yourtrending;
-    } else if ($(this).val() === "twittertrending") {
-        displayedSugs = twittertrending;
+    if ($(this).val() === "indivuser") {
+        displayedSugs = indivuser;
+    } else if ($(this).val() === "compareusers") {
+        displayedSugs = compareusers;
     }
     topSugList();
     topSugSlide();
