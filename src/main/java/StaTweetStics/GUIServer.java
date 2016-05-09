@@ -230,9 +230,8 @@ public abstract class GUIServer {
 				List<String> usrHandle = new ArrayList();
 				usrHandle.add(input);
 				List<List<Word>> results = model(usrHandle);
-				System.out.println(results.get(0));
-				variables.put("yourTrendingRetweets",results.get(0).toArray());
-				variables.put("yourTrendingLikes",results.get(1).toArray());
+				variables.put("indivRetweets",results.get(0).toArray());
+				variables.put("indivLikes",results.get(1).toArray());
 				return GSON.toJson(variables);
 			} catch (Exception e) {
 				throw new RuntimeException(e);

@@ -52,7 +52,10 @@
                     <input type="checkbox" name="indiv-or-compare" checked data-on-color="success" data-off-color="success" data-handle-width="95" data-on-text="individual user" data-off-text="compare users" style="margin-left: 20px">
                     <p>for</p>
                     <h3>@</h3>
-                    <input type="text" id="usernameInput" placeholder="username" autocomplete="off" readonly="true">
+                    <div id="inputGroup">
+                        <input type="text" class="usernameInput" placeholder="username" autocomplete="off" readonly="true">
+                    </div>
+                    <i class="fa fa-plus" id="usernameAdd"></i>
                     <i class="fa fa-pencil" id="usernameEdit"></i>
                 </div>
 
