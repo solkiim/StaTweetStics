@@ -166,17 +166,9 @@ public abstract class GUIServer {
 					continue;
 				}
 				results.add(s);
-				// if (w < displayWords) {
-				// 	if(!results.contains(s)){
-				// 		results.add(s);
-				// 		break;
-				// 	}
-				// }
-				
 				w++;
-				//System.out.print("  ");
-				//System.out.println(s.printWordData());
 			}
+			System.out.println("Single: "+results);
 			return results;
 		}
 		private List<Word> rankRanked(List<Word> res, List<Word> rset, boolean likesRT) {
@@ -212,16 +204,11 @@ public abstract class GUIServer {
 			MyLDA4 lda = new MyLDA4(topWords,userList);
 			lda.inference();
 			lda.printFB();
-			//System.out.println("Results");
 			int u = -1;
-			//int i = -1;
-			//List<List<List<Word>>> wordsUser = new ArrayList<>();
 			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
 			for (List<List<Tweet>> topics : usrResults) {
-				//List<List<Word>> wordsTopic = new ArrayList<>();
 				u++;
 				int t = -1;
-				//System.out.println("User "+userList.get(u).getHandle()+": ");
 				for (List<Tweet> topic : topics) {
 					t++;
 					if (t >= topTopics) {
@@ -231,14 +218,10 @@ public abstract class GUIServer {
 					List<Word> r1 = modelHelper(topic,true);
 					r0 = rankRanked(r0,results.get(0),false);
 					r1 = rankRanked(r1,results.get(1),true);
-					//System.out.println(h0);
 					results.get(0).addAll(r0);
 					results.get(1).addAll(r1);
-					//wordsTopic.add(ranks);
 				}
-				//wordsUser.add(wordsTopic);
 			}
-			//System.out.println("MyLDA4");
 			return results;
 		}
 		/**
@@ -284,17 +267,9 @@ public abstract class GUIServer {
 					continue;
 				}
 				results.add(s);
-				// if (w < displayWords) {
-				// 	if(!results.contains(s)){
-				// 		results.add(s);
-				// 		break;
-				// 	}
-				// }
-				
 				w++;
-				//System.out.print("  ");
-				//System.out.println(s.printWordData());
 			}
+			System.out.println("Multi: "+results);
 			return results;
 		}
 		private List<Word> rankRanked(List<Word> res, List<Word> rset, boolean likesRT) {
@@ -330,16 +305,12 @@ public abstract class GUIServer {
 			MyLDA4 lda = new MyLDA4(topWords,userList);
 			lda.inference();
 			lda.printFB();
-			//System.out.println("Results");
 			int u = -1;
 			//int i = -1;
-			//List<List<List<Word>>> wordsUser = new ArrayList<>();
 			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
 			for (List<List<Tweet>> topics : usrResults) {
-				//List<List<Word>> wordsTopic = new ArrayList<>();
 				u++;
 				int t = -1;
-				//System.out.println("User "+userList.get(u).getHandle()+": ");
 				for (List<Tweet> topic : topics) {
 					t++;
 					if (t >= topTopics) {
@@ -349,14 +320,10 @@ public abstract class GUIServer {
 					List<Word> r1 = modelHelper(topic,true);
 					r0 = rankRanked(r0,results.get(0),false);
 					r1 = rankRanked(r1,results.get(1),true);
-					//System.out.println(h0);
 					results.get(0).addAll(r0);
 					results.get(1).addAll(r1);
-					//wordsTopic.add(ranks);
 				}
-				//wordsUser.add(wordsTopic);
 			}
-			//System.out.println("MyLDA4");
 			return results;
 		}
 		/**
@@ -370,7 +337,7 @@ public abstract class GUIServer {
 			try(Db db = new Db()) {
 				Map<String, Object> variables = new HashMap<>();
 				QueryParamsMap qm = req.queryMap();
-				System.out.println("testVar");
+				//System.out.println("testVar");
 				String qmarr = qm.value("usernames");
 				String[] output = GSON.fromJson(qmarr , String[].class);
 				List<String> usrHandle = Arrays.asList(output);
