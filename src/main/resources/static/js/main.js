@@ -77,18 +77,20 @@ function getCompareUsers() {
         }
         
         for (var i = 0; i < parsedCompRetweets.length; i++) {
-            var dataArray = [];
+            var avgRetweet = 0;
             for (var j = 0; j < parsedCompRetweets[i].data.length; j++) {
-                dataArray.push(parsedCompRetweets[i].data[j].retweets);
+                avgRetweet += parsedCompRetweets[i].data[j].retweets;
             }
-            compareusersretweets[parsedCompRetweets[i].text] = dataArray;
+            avgRetweet /= parsedCompRetweets[i].data.length;
+            compareusersretweets[parsedCompRetweets[i].text] = avgRetweet;
         }
         for (var i = 0; i < parsedCompLikes.length; i++) {
-            var dataArray = [];
+            var avgRetweet = 0;
             for (var j = 0; j < parsedCompLikes[i].data.length; j++) {
-                dataArray.push(parsedCompLikes[i].data[j].likes);
+                avgRetweet += parsedCompLikes[i].data[j].likes;
             }
-            compareuserslikes[parsedCompLikes[i].text] = dataArray;
+            avgRetweet /= parsedCompLikes[i].data.length;
+            compareuserslikes[parsedCompLikes[i].text] = avgRetweet;
         }
         
         if (RTnotLike) {
@@ -109,7 +111,6 @@ function getIndivUser() {
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON); 
-        console.log(parsedResponse);
         var parsedIndivRetweets = parsedResponse.indivRetweets;
         var parsedIndivLikes = parsedResponse.indivLikes;
         
@@ -120,18 +121,12 @@ function getIndivUser() {
         
         // populating individual lists        
         for (var i = 0; i < parsedIndivRetweets.length; i++) {
-            var dataArray = [];
-            for (var j = 0; j < parsedIndivRetweets[i].data.length; j++) {
-                dataArray.push(parsedIndivRetweets[i].data[j].retweets);
-            }
-            indivuserretweets[parsedIndivRetweets[i].text] = dataArray;
+            var avg = findAvg(parsedIndivRetweets[i].data, true)
+            indivuserretweets[parsedIndivRetweets[i].text] = avg;
         }
         for (var i = 0; i < parsedIndivLikes.length; i++) {
-            var dataArray = [];
-            for (var j = 0; j < parsedIndivLikes[i].data.length; j++) {
-                dataArray.push(parsedIndivLikes[i].data[j].likes);
-            }
-            indivuserlikes[parsedIndivLikes[i].text] = dataArray;
+            var avg = findAvg(parsedIndivLikes[i].data, false)
+            indivuserlikes[parsedIndivLikes[i].text] = avg;
         }
         
         if (RTnotLike) {
@@ -144,6 +139,20 @@ function getIndivUser() {
         topSugList();
         topSugSlide();
     })
+}
+
+// input: array of data, boolean of whether RT or likes
+function findAvg(arr, gettingRT) {
+    var avg = 0;
+    for (var i = 0; i < arr.length; i++) {
+        if (gettingRT) {
+            avg += arr[i].retweets;
+        } else {
+            avg += arr[i].likes;
+        }
+    }
+    avg /= arr.length;
+    return (Math.round(avg * 100) / 100);
 }
 
 /*------------------ TWEET COMPOSITION ------------------*/
@@ -160,6 +169,14 @@ var statsOut = false;
 
 $(document).on("click", "#topsugslist li, #topsugsslide", function() { 
     $("#statsTitle").html($(this).text() + " Stats:");
+    $("#avgretweets").html(displayedSugs[$(this).text()]);
+    
+    if (RTnotLike) {
+        $("#avgrttitle").html("avg retweets:");
+    } else {
+        $("#avgrttitle").html("avg likes:");
+    }
+    
     if (!statsOut) {
         $("#tweetStats").slideToggle(400);
         $("#suggestions").attr("class", "col col-sm-7");
@@ -241,6 +258,7 @@ $("#usernameEdit").click(function() {
         $(".usernameInput").prop("readonly", true);
         $(".usernameInput").css("border-bottom","none");
         $("#usernameAdd").css("display", "none");
+        $("#closeStats").click();
         username = $(".usernameInput").val();
         
         if (indiv) {
@@ -270,7 +288,6 @@ $("#usernameEdit").click(function() {
 
 /*------------------ USERNAME ADD ------------------*/
 $("#usernameAdd").click(function() { //on add input button click
-    console.log("usercount: " + userCount);
     if (userCount < 4 && !indiv) {
         userCount = userCount + 1;
         $("#inputGroup").append('<h3>, </h3>');
@@ -290,6 +307,7 @@ $(".bootstrap-switch-label").html("<div></div>");
 $(".bootstrap-switch").css("background","#162252");
 
 $("input[name='list-or-slide']").on("switchChange.bootstrapSwitch", function(event, state) {
+    $("#closeStats").click();
     if (state) {    // if switched to list
         topSugList();
     } else {        // if switched to slide
@@ -306,6 +324,7 @@ $(".bootstrap-switch-label").html("<div></div>");
 $(".bootstrap-switch").css("background","#162252");
 
 $("input[name='like-or-retweet']").on("switchChange.bootstrapSwitch", function(event, state) {
+    $("#closeStats").click();
     if (state) {    // if switched to retweets
         RTnotLike = true;
         indivuser = indivuserretweets;
@@ -334,7 +353,6 @@ $(".bootstrap-switch").css("background","#162252");
 $("input[name='indiv-or-compare']").on("switchChange.bootstrapSwitch", function(event, state) {
     if (state) {    // if switched to individual
         indiv = true;
-        console.log("only1");
         $("#inputGroup").html('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" readonly="true"  onkeypress="$(this).autoresize({padding:0,minWidth:0,maxWidth:300});">');
         displayedSugs = indivuser;
         $(".fa").click();
