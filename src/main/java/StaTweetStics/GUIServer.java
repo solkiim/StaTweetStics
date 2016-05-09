@@ -48,10 +48,9 @@ import edu.brown.cs.OAuth.*;
  * interations for the server.
  */
 public abstract class GUIServer {
-	private static final int topWords = 5;
+	private static final int topWords = 10;
 	private static final int topTopics = 5;
 	private static final int displayWords = 1;
-	private static final int TOP_WORDS = 5;
 	private static final Gson GSON = new GsonBuilder()
 	.registerTypeAdapter(Word.class, new WordSerializer()).create();
 	private static final Splitter MY_SPLITTER = 
@@ -162,15 +161,16 @@ public abstract class GUIServer {
 			ranks = pr.rank();
 			int w = 0;
 			for (Word s : ranks) {
+				if (w >= topWords) {
+					continue;
+				}
 				if (w < displayWords) {
 					if(!results.contains(s)){
 						results.add(s);
 						break;
 					}
 				}
-				if (w >= topWords) {
-					continue;
-				}
+				
 				w++;
 				//System.out.print("  ");
 				//System.out.println(s.printWordData());
@@ -186,26 +186,33 @@ public abstract class GUIServer {
 			
 			System.out.println("ranking - part 1");
 
-			MyLDA4 lda = new MyLDA4(6,userList);
+			MyLDA4 lda = new MyLDA4(topWords,userList);
 			lda.inference();
 			lda.printFB();
 			System.out.println("Results");
 			int u = -1;
-			int i = 0;
+			//int i = -1;
 			//List<List<List<Word>>> wordsUser = new ArrayList<>();
 			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
 			for (List<List<Tweet>> topics : usrResults) {
 				//List<List<Word>> wordsTopic = new ArrayList<>();
 				u++;
-				System.out.println("User "+userList.get(u).getHandle()+": ");
+				int t = -1;
+				//System.out.println("User "+userList.get(u).getHandle()+": ");
 				for (List<Tweet> topic : topics) {
-					results.get(0).addAll(modelHelper(topic,false));
+					t++;
+					if (t >= topTopics) {
+						return results;
+					}
+					List<Word> h0 = modelHelper(topic,false);
+					//System.out.println(h0);
+					results.get(0).addAll(h0);
 					results.get(1).addAll(modelHelper(topic,true));
 					//wordsTopic.add(ranks);
 				}
 				//wordsUser.add(wordsTopic);
 			}
-			System.out.println("MyLDA4");
+			//System.out.println("MyLDA4");
 			return results;
 		}
 		/**
