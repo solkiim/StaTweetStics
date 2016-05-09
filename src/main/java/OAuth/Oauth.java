@@ -109,7 +109,6 @@ public class Oauth {
 			writeRequest(conn,"grant_type=client_credentials");
 
 			JSONObject o = (JSONObject)JSONValue.parse(readResponse(conn));
-
 			if(o != null){
 				String tokenType = (String) o.get("token_type");
 				String token = (String) o.get("access_token");
@@ -184,9 +183,9 @@ public class Oauth {
 			return str.toString();
 		} catch (IOException e) {
 			System.out.println("Please enter a valid Twitter handle");
-			 throw new IOException();
+			return new String();
 		}
-//		return new String();
+		
 	}
 	
 	/**
@@ -218,6 +217,7 @@ public class Oauth {
 				prep.setString(5,user);
 				prep.addBatch();
 			}
+			System.out.println(prep.toString());
 			prep.executeBatch();
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -249,6 +249,9 @@ public class Oauth {
 		}
 		String timeline1 = AE1+user+AE2;
 		JSONArray tweets = fetchTimelineTweet(timeline1);
+		if(tweets == null){
+			return;
+		}
 		oneCall(tweets,conn,timeLineData,favoriteCount,createdAt);
 		long lastId = Long.parseLong(((JSONObject)tweets.get(tweets.size()-1)).get("id_str").toString());
 		StringBuilder t2 = new StringBuilder();
@@ -259,10 +262,16 @@ public class Oauth {
 		t2.append(lastId);
 		String timeline2 = t2.toString();
 		JSONArray tweets2 = fetchTimelineTweet(timeline2);
+		if(tweets2 == null){
+			return;
+		}
 		oneCall(tweets2,conn,timeLineData,favoriteCount,createdAt);
 		lastId = Long.parseLong(((JSONObject)tweets.get(tweets2.size()-1)).get("id_str").toString());
 		t2.replace(timeline2.length()-(String.valueOf(lastId)).length(), timeline2.length(), String.valueOf(lastId));
 		JSONArray tweets3 = fetchTimelineTweet(timeline2);
+		if(tweets3 == null){
+			return;
+		}
 		oneCall(tweets3,conn,timeLineData,favoriteCount,createdAt);
 		
 		try{
@@ -295,6 +304,7 @@ public class Oauth {
 		Data compData = new Data(comptlData,compFaveCount,compCreatedAt);
 		
 		List<Data> ret = new ArrayList<Data>(2);
+		
 		ret.add(userData);
 		ret.add(compData);
 		return ret;

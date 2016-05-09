@@ -337,12 +337,9 @@ public abstract class GUIServer {
 			try(Db db = new Db()) {
 				Map<String, Object> variables = new HashMap<>();
 				QueryParamsMap qm = req.queryMap();
-				//System.out.println("testVar");
 				String qmarr = qm.value("usernames");
 				String[] output = GSON.fromJson(qmarr , String[].class);
 				List<String> usrHandle = Arrays.asList(output);
-				//System.out.println(usrHandle);
-				//usrHandle.add(input);
 				List<List<Word>> results = model(usrHandle);
 				variables.put("indivRetweets",results.get(0).toArray());
 				variables.put("indivLikes",results.get(1).toArray());
