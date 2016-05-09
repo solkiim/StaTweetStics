@@ -60,7 +60,7 @@ function errorAlert() {
     vex.dialog.buttons.YES.text = "try again!"
     
     vex.dialog.confirm({
-        message: 'Oops! That username does not exist.'
+        message: 'Oops! That username is invalid.'
     });
 }
 
