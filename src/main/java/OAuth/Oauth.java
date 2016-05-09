@@ -250,7 +250,7 @@ public class Oauth {
 	 * @throws IOException
 	 */
 	private static void execute(List<String> timeLineData, List<Integer> favoriteCount, List<String> createdAt, String db) 
-			throws ClassNotFoundException, IOException{
+			throws ClassNotFoundException, IOException {
 		Class.forName("org.sqlite.JDBC");
 		String urlToDb = "jdbc:sqlite:" + db;
 		Connection conn = null;
@@ -291,7 +291,7 @@ public class Oauth {
 	}
 
 
-	public static List<Data> run() throws IOException, ClassNotFoundException{
+	public static List<Data> run() throws IOException, ClassNotFoundException {
 		// *********************USER STUFF HAPPENING***************************
 		List<String> timeLineData = new ArrayList<String>();
 		List<Integer> favoriteCount = new ArrayList<Integer>();
