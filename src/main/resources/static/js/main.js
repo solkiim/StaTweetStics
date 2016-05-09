@@ -48,8 +48,6 @@ function dialogBoxes() {
                 compareusers = indivuser;
                 displayedSugs = indivuser;
                 topSugList();
-                $("#indivuser").prop("checked", false);
-                $("#compareusers").prop("checked", false);
             }
         }
     });
@@ -181,13 +179,12 @@ $("#usernameEdit").click(function() {
         if (indiv) {
             getIndivUser();
         } else {
+            usersToCompare = [];
             $('#inputGroup > input').each(function () {
                 if (this.value != "") {
-                    console.log(this.value);
-                }
-                
+                    usersToCompare.push(this.value);
+                }  
             });
-            console.log("get compare users");
             //getCompareUsers();
         }
     } else {
@@ -210,7 +207,7 @@ $("#usernameAdd").click(function() { //on add input button click
     if (userCount < 4 && !indiv) {
         userCount = userCount + 1;
         $("#inputGroup").append('<h3>, </h3>');
-        $("#inputGroup").append('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" style="border-bottom: 1px solid #162252">'); //add input box
+        $("#inputGroup").append('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" style="border-bottom: 1px solid #162252" onkeypress="this.style.width = ((this.value.length + 1) * 10) + \'px\';">'); //add input box
     }
     if (userCount == 4) {
         $("#usernameAdd").css("display", "none");
@@ -261,7 +258,7 @@ $("input[name='indiv-or-compare']").on("switchChange.bootstrapSwitch", function(
     if (state) {    // if switched to individual
         indiv = true;
         console.log("only1");
-        $("#inputGroup").html('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" readonly="true">');
+        $("#inputGroup").html('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" readonly="true"  onkeypress="this.style.width = ((this.value.length + 1) * 10) + \'px\';">');
         displayedSugs = indivuser;
         $(".fa").click();
     } else {        // if switched to compare

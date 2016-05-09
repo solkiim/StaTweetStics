@@ -53,7 +53,7 @@
                     <p>for</p>
                     <h3>@</h3>
                     <div id="inputGroup">
-                        <input type="text" class="usernameInput" placeholder="username" autocomplete="off" readonly="true">
+                        <input type="text" class="usernameInput" placeholder="username" autocomplete="off" readonly="true"  onkeypress="this.style.width = ((this.value.length + 1) * 10) + 'px';">
                     </div>
                     <i class="fa fa-plus" id="usernameAdd"></i>
                     <i class="fa fa-pencil" id="usernameEdit"></i>
