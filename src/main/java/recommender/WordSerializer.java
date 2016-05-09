@@ -44,7 +44,8 @@ public class WordSerializer implements JsonSerializer<Word> {
 
     int curMaxRT = -1;
     String tweetTextRT = "";
-    
+    Tweet twtRT = null;
+    Tweet twtLK = null;
     int curMaxLK = -1;
     String tweetTextLK= "";
     double avgRT = 0.0;
@@ -57,11 +58,13 @@ public class WordSerializer implements JsonSerializer<Word> {
       if (tweet.rawRetweets() > curMaxRT) {
         curMaxRT = tweet.rawRetweets();
         tweetTextRT = tweet.text();
+        twtRT = tweet;
       }
 
       if (tweet.rawLikes() > curMaxLK) {
         curMaxLK = tweet.rawLikes();
         tweetTextLK = tweet.text();
+        twtLK = tweet;
       }
       companiesRT.put(tweet.handle(), companiesRT.getOrDefault(tweet.handle(), 0.0) + tweet.retweets());
       companiesLK.put(tweet.handle(), companiesLK.getOrDefault(tweet.handle(), 0.0) + tweet.retweets()); 
@@ -86,6 +89,8 @@ public class WordSerializer implements JsonSerializer<Word> {
     obj.add("tweetTextLK", new JsonPrimitive(tweetTextLK));
     obj.add("companiesRT", GSON.toJsonTree(companiesRT));
     obj.add("companiesLK", GSON.toJsonTree(companiesLK));
+    obj.add("nameRT",new JsonPrimitive(twtRT.handle()));
+    obj.add("nameLK",new JsonPrimitive(twtLK.handle()));
     // Get a list of all the Twitter Handles
     //
 
