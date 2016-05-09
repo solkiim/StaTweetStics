@@ -34,7 +34,10 @@ public class WordSerializer implements JsonSerializer<Word> {
     obj.add("text", new JsonPrimitive(word.toString()));
     JsonArray jsonArray = new JsonArray();
     for (Tweet tweet : word.getTweets()) {
-        jsonArray.add(new JsonPrimitive(tweet.rawRetweets()));
+        JsonObject arrObj = new JsonObject();
+        arrObj.add("retweets",new JsonPrimitive(tweet.rawRetweets()));
+        arrObj.add("likes",new JsonPrimitive(tweet.rawLikes()));
+        jsonArray.add(arrObj);
     }
     obj.add("data", jsonArray);
     return obj;
