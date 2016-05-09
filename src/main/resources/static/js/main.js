@@ -271,7 +271,7 @@ $("#usernameEdit").click(function() {
                     usersToCompare.push(this.value);
                 }  
             });
-            //getCompareUsers();
+            getCompareUsers();
         }
     } else {
         editingUsername = true;
