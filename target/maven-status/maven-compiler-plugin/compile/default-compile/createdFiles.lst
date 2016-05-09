@@ -18,6 +18,7 @@ edu/brown/cs/suggest/WordSerializer.class
 edu/brown/cs/suggest/Word.class
 edu/brown/cs/suggest/ORM/Tweet.class
 edu/brown/cs/suggest/MyLDA4.class
+edu/brown/cs/StaTweetStics/GUIServer$MultipleHandler.class
 edu/brown/cs/StaTweetStics/Main.class
 edu/brown/cs/StaTweetStics/GUIServer$1.class
 edu/brown/cs/suggest/Graph/GraphSearch$SpecificCasesHandler.class
