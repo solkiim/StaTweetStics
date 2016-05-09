@@ -59,9 +59,10 @@ function dialogBoxes() {
 /*------------------ GETTING TRENDING LISTS ------------------*/
 function getCompareUsers() {
     // sending the usernames to the backend
-    var postParameters = {'usernames': usersToCompare};
+    var postParameters = {'usernames': JSON.stringify(usersToCompare)};
     $.get("/compareUserTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
+        console.log(parsedResponse);
         var parsedCompRetweets = parsedResponse.indivRetweets;
         var parsedCompLikes = parsedResponse.indivLikes;
         
