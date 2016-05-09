@@ -85,6 +85,7 @@
                     <h1 id="avgvalue">38</h1>
                 </div>
                 <br>
+                <div id="div-chart"></div>
                 <div>
                     <h5>Top Tweet:</h5>
                     <h6 id="toptweetvalue">'I'm all yours tonight!' she cried, 'Do something to me you'd never normally dare do to a woman!' 'All right' he said, and made eye contact. With this it's 160.</h6>
@@ -99,6 +100,8 @@
     <script src="js/jquery.particleground.min.js"></script>
     <script src="js/vex.combined.min.js"></script>
     <script>vex.defaultOptions.className = 'vex-theme-wireframe';</script>
+    <script src="js/d3.min.js"></script>
+    <script src="js/trendgraph.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

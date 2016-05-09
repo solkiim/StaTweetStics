@@ -70,7 +70,7 @@ function getCompareUsers() {
         compareusers = {};
         compareuserslikes = {};
         compareusersretweets = {};
-                
+
         for (var i = 0; i < parsedCompRetweets.length; i++) {
             compareusersretweets[parsedCompRetweets[i].text] = parsedCompRetweets[i];
         }
@@ -140,6 +140,7 @@ var statsOut = false;
 
 $(document).on("click", "#topsugslist li, #topsugsslide", function() { 
     $("#statsTitle").html($(this).text() + " Stats:");
+    makeTrendGraph($(this).text());
     
     if (RTnotLike) {
         $("#avgtitle").html("avg retweets:");
