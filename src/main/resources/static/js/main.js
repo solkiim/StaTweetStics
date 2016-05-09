@@ -20,8 +20,8 @@ $(document).ready(function() {
     
     // particle background setup
     $('#particles').particleground({
-        dotColor: '#F0F4FF',
-        lineColor: '#F0F4FF' /*f5f7ff*/
+        dotColor: '#E1E9FF',
+        lineColor: '#E1E9FF' /*F0F4FF*/
     });
     
     dialogBoxes();
@@ -56,13 +56,21 @@ function dialogBoxes() {
     });
 }
 
+function errorAlert() {
+    vex.dialog.buttons.YES.text = "try again!"
+    
+    vex.dialog.confirm({
+        message: 'Oops! That username does not exist.'
+    });
+}
+
 /*------------------ GETTING TRENDING LISTS ------------------*/
 function getCompareUsers() {
     // sending the usernames to the backend
     var postParameters = {'usernames': JSON.stringify(usersToCompare)};
     $.get("/compareUserTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
-        console.log(parsedResponse);
+        //console.log(parsedResponse);
         var parsedCompRetweets = parsedResponse.indivRetweets;
         var parsedCompLikes = parsedResponse.indivLikes;
         
@@ -96,7 +104,7 @@ function getIndivUser() {
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON); 
-        console.log(parsedResponse);
+        //console.log(parsedResponse);
         var parsedIndivRetweets = parsedResponse.indivRetweets;
         var parsedIndivLikes = parsedResponse.indivLikes;
         
@@ -147,13 +155,23 @@ $(document).on("click", "#topsugslist li, #topsugsslide", function() {
         var avgrt = displayedSugs[$(this).text()].avgRT;
         avgrt = Math.round(avgrt * 100) / 100;
         $("#avgvalue").html(avgrt);
+        
         $("#toptweetvalue").html(displayedSugs[$(this).text()].tweetTextRT);
+        if (!indiv) {
+            $("#toptweetvalue").append("<br>-@");
+            $("#toptweetvalue").append(displayedSugs[$(this).text()].nameRT);
+        }
     } else {
         $("#avgtitle").html("avg likes:");
         var avglk = displayedSugs[$(this).text()].avgLK;
         avglk = Math.round(avglk * 100) / 100;
         $("#avgvalue").html(avglk);
+        
         $("#toptweetvalue").html(displayedSugs[$(this).text()].tweetTextLK);
+        if (!indiv) {
+            $("#toptweetvalue").append("<br>-@");
+            $("#toptweetvalue").append(displayedSugs[$(this).text()].nameLK);
+        }
     }
     
     if (!statsOut) {

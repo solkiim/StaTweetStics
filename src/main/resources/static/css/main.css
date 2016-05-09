@@ -363,7 +363,7 @@ ul {
     border-radius: 3px;
     border: 2px solid #162252;
     color: #162252;
-    right: 5%;
+    right: 15%;
     top: calc(50% - 360px);
     transform: translate(0%,25%);
 }
