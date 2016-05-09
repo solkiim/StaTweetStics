@@ -2,8 +2,10 @@ function makeTrendGraph(word) {
     var names = usersToCompare;
     var worddata = displayedSugs[word];
     var dataset = [];
+    var yaxisname;
     
     if (RTnotLike) {
+        yaxisname = "Avg # Retweets";
         for (var i = 0; i < names.length; i++) {
             if (worddata.companiesRT[names[i]] !== undefined) {
                 dataset.push(worddata.companiesRT[names[i]]);
@@ -12,6 +14,7 @@ function makeTrendGraph(word) {
             }
         }
     } else {
+        yaxisname = "Avg # Likes";
         for (var i = 0; i < names.length; i++) {
             if (worddata.companiesLK[names[i]] !== undefined) {
                 dataset.push(worddata.companiesLK[names[i]]);
@@ -84,7 +87,7 @@ function makeTrendGraph(word) {
       .attr("x", width/2)
       .attr("y", height + 40)
       .style("text-anchor", "middle")
-      .text("Company Name");
+      .text("Twitter Handle");
 
     svg.append("text")
       .attr("transform", "rotate(-90)")
@@ -92,5 +95,5 @@ function makeTrendGraph(word) {
       .attr("y", -margin.left)
       .attr("dy", "1em")
       .style("text-anchor", "middle")
-      .text("Number of Tweets");
+      .text(yaxisname);
 }
