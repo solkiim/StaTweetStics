@@ -4,7 +4,9 @@ var indivuser;
 var indivuserlikes = {};
 var indivuserretweets = {};
 
-var compareusers = {};
+var compareusers;
+var compareuserslikes = {};
+var compareusersretweets = {};
 var usersToCompare = [];
 var userCount = 1;
 
@@ -48,6 +50,7 @@ function dialogBoxes() {
                 compareusers = indivuser;
                 displayedSugs = indivuser;
                 topSugList();
+                topSugSlide();
             }
         }
     });
@@ -55,13 +58,35 @@ function dialogBoxes() {
 
 /*------------------ GETTING TRENDING LISTS ------------------*/
 function getCompareUsers() {
-    $.get("/topTweets", {}, function(responseJSON) {
+    // sending the usernames to the backend
+    var postParameters = {'usernames': usersToCompare};
+    $.get("/compareUserTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
+        var parsedCompRetweets = parsedResponse.indivRetweets;
+        var parsedCompLikes = parsedResponse.indivLikes;
+        
+        // clear data for previous comparison
         compareusers = {};
+        compareuserslikes = {};
+        compareusersretweets = {};
+        
         var parsedTTrending = parsedResponse.twitterTrending;
         
         for (var i = 0; i < 5; i++) {
             compareusers[parsedTTrending[i]] = parsedTTrending[i];
+        }
+        
+        for (var i = 0; i < parsedCompRetweets.length; i++) {
+            compareusersretweets[parsedCompRetweets[i].text] = parsedCompRetweets[i].data;
+        }
+        for (var i = 0; i < parsedCompLikes.length; i++) {
+            compareuserslikes[parsedCompLikes[i].text] = parsedCompLikes[i].data;
+        }
+        
+        if (RTnotLike) {
+            compareusers = compareusersretweets;
+        } else {
+            compareusers = compareuserslikes;
         }
 
         displayedSugs = compareusers;
@@ -75,23 +100,27 @@ function getIndivUser() {
     // sending the username to the backend
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
-        var parsedResponse = JSON.parse(responseJSON);
-        console.log(parsedResponse);
+        var parsedResponse = JSON.parse(responseJSON);        
+        var parsedIndivRetweets = parsedResponse.indivRetweets;
+        var parsedIndivLikes = parsedResponse.indivLikes;
         
         // clear data for previous username
         indivuser = {};
+        indivuserretweets = {};
+        indivuserlikes = {};
         
-        // switch the suggestion type to your trending
-        $("#indivuser").prop("checked", true);
-        $("#compareusers").prop("checked", false);
+        // populating individual lists        
+        for (var i = 0; i < parsedIndivRetweets.length; i++) {
+            indivuserretweets[parsedIndivRetweets[i].text] = parsedIndivRetweets[i].data;
+        }
+        for (var i = 0; i < parsedIndivLikes.length; i++) {
+            indivuserlikes[parsedIndivLikes[i].text] = parsedIndivLikes[i].data;
+        }
         
-        // populating your trending list
-        var parsedYourTrending = parsedResponse.yourTrending;
-        
-        console.log(parsedYourTrending);
-        
-        for (var i = 0; i < parsedYourTrending.length; i++) {
-            indivuser[parsedYourTrending[i].text] = parsedYourTrending[i].data;
+        if (RTnotLike) {
+            indivuser = indivuserretweets;
+        } else {
+            indivuser = indivuserlikes;
         }
         
         displayedSugs = indivuser;
@@ -166,6 +195,25 @@ function cycle() {
 
 
 /*------------------ USERNAME INPUT ------------------*/
+function resizeInput() {
+    $("input").autoresize({padding:20,minWidth:40,maxWidth:300});
+}
+
+$.fn.textWidth = function(_text, _font){//get width of text with font.  usage: $("div").textWidth();
+    var fakeEl = $('<span>').hide().appendTo(document.body).text(_text || this.val() || this.text()).css('font', _font || this.css('font')),
+        width = fakeEl.width();
+    fakeEl.remove();
+    return width;
+};
+
+$.fn.autoresize = function(options){
+    options = $.extend({padding:10,minWidth:0,maxWidth:10000}, options||{});
+    $(this).on('input', function() {
+        $(this).css('width', Math.min(options.maxWidth,Math.max(options.minWidth,$(this).textWidth() + options.padding)));
+    }).trigger('input');
+    return this;
+}
+
 var editingUsername = false;
 
 // editing username via page form
@@ -209,7 +257,7 @@ $("#usernameAdd").click(function() { //on add input button click
     if (userCount < 4 && !indiv) {
         userCount = userCount + 1;
         $("#inputGroup").append('<h3>, </h3>');
-        $("#inputGroup").append('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" style="border-bottom: 1px solid #162252" onkeypress="this.style.width = ((this.value.length + 1) * 10) + \'px\';">'); //add input box
+        $("#inputGroup").append('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" style="border-bottom: 1px solid #162252" onkeypress="$(this).autoresize({padding:0,minWidth:0,maxWidth:300});">'); //add input box
     }
     if (userCount == 4) {
         $("#usernameAdd").css("display", "none");
@@ -244,10 +292,20 @@ $("input[name='like-or-retweet']").on("switchChange.bootstrapSwitch", function(e
     if (state) {    // if switched to retweets
         RTnotLike = true;
         indivuser = indivuserretweets;
+        compareusers = compareusersretweets;
     } else {        // if switched to likes
         RTnotLike = false;
         indivuser = indivuserlikes;
+        compareusers = compareuserslikes;
     }
+    
+    if (indiv) {
+        displayedSugs = indivuser;
+    } else {
+        displayedSugs = compareusers;
+    }
+    topSugList();
+    topSugSlide();
 });
 
 
@@ -260,7 +318,7 @@ $("input[name='indiv-or-compare']").on("switchChange.bootstrapSwitch", function(
     if (state) {    // if switched to individual
         indiv = true;
         console.log("only1");
-        $("#inputGroup").html('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" readonly="true"  onkeypress="this.style.width = ((this.value.length + 1) * 10) + \'px\';">');
+        $("#inputGroup").html('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" readonly="true"  onkeypress="$(this).autoresize({padding:0,minWidth:0,maxWidth:300});">');
         displayedSugs = indivuser;
         $(".fa").click();
     } else {        // if switched to compare
