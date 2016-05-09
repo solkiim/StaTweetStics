@@ -82,7 +82,7 @@ public class MyLDA4 {
 	// Double array used to sample a topic
 	public double[] multiPros;
 	public MyLDA4(int inTopWords, List<User> _users) {
-		this(0.25,0.01,0.01,20.0,20.0,20,1000,inTopWords,_users);
+		this(0.25,0.01,0.01,20.0,20.0,20,500,inTopWords,_users);
 	}
 	public MyLDA4(double inAlpha, double inBeta, double inBetaB,
 		double inGamma0,double inGamma1,  int inNumTopics, 

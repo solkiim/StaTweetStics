@@ -213,26 +213,37 @@ ul {
     line-height: 27px;
     letter-spacing: 1px;
 }
-#usernameDisplay h3, #usernameInput {
+#inputGroup {
+    display: inline!important;
+}
+#usernameDisplay h3, .usernameInput {
     font-family: 'Proxima Nova Alt Regular';
     margin-top: 0px;
     color: #162252;
     font-size: 17px;
 /*    letter-spacing: 1px;*/
-    border: 0px;
     display: inline!important;
+    border: 0px;
     line-height: 27px;
 }
-#usernameInput {
+.usernameInput {
     width: 90px;
     background: transparent;
+    padding: 0!important;
 }
-#usernameInput:focus {
+.usernameInput:focus {
     outline: none;
 }
-#usernameEdit {
+#usernameDisplay i {
     font-size: 16px;
+    margin-right: 10px;
     color: #162252;
+}
+#usernameDisplay i:hover {
+    cursor: pointer;
+}
+#usernameAdd {
+    display: none;
 }
 
 

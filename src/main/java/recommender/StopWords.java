@@ -593,5 +593,9 @@ public class StopWords {
         add("ha");
         add("feel");
         add("youre");
+        add("youve");
+        add("ask");
+        add("asked");
+        add("asks");
     }
 }
