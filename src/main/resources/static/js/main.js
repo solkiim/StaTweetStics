@@ -70,31 +70,37 @@ function getCompareUsers() {
     var postParameters = {'usernames': JSON.stringify(usersToCompare)};
     $.get("/compareUserTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON);
-        //console.log(parsedResponse);
-        var parsedCompRetweets = parsedResponse.indivRetweets;
-        var parsedCompLikes = parsedResponse.indivLikes;
         
-        // clear data for previous comparison
-        compareusers = {};
-        compareuserslikes = {};
-        compareusersretweets = {};
-
-        for (var i = 0; i < parsedCompRetweets.length; i++) {
-            compareusersretweets[parsedCompRetweets[i].text] = parsedCompRetweets[i];
-        }
-        for (var i = 0; i < parsedCompLikes.length; i++) {
-            compareuserslikes[parsedCompLikes[i].text] = parsedCompLikes[i];
-        }
-        
-        if (RTnotLike) {
-            compareusers = compareusersretweets;
+        if (parsedResponse.indivLikes.length == 0) {   // if username is invalid
+            $(".usernameInput").val("");
+            $(".usernameInput").css("width", "90px");
+            errorAlert();
         } else {
-            compareusers = compareuserslikes;
-        }
+            var parsedCompRetweets = parsedResponse.indivRetweets;
+            var parsedCompLikes = parsedResponse.indivLikes;
 
-        displayedSugs = compareusers;
-        topSugList();
-        topSugSlide();
+            // clear data for previous comparison
+            compareusers = {};
+            compareuserslikes = {};
+            compareusersretweets = {};
+
+            for (var i = 0; i < parsedCompRetweets.length; i++) {
+                compareusersretweets[parsedCompRetweets[i].text] = parsedCompRetweets[i];
+            }
+            for (var i = 0; i < parsedCompLikes.length; i++) {
+                compareuserslikes[parsedCompLikes[i].text] = parsedCompLikes[i];
+            }
+
+            if (RTnotLike) {
+                compareusers = compareusersretweets;
+            } else {
+                compareusers = compareuserslikes;
+            }
+
+            displayedSugs = compareusers;
+            topSugList();
+            topSugSlide();
+        }
     })
 }
 
@@ -104,32 +110,38 @@ function getIndivUser() {
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
         var parsedResponse = JSON.parse(responseJSON); 
-        //console.log(parsedResponse);
-        var parsedIndivRetweets = parsedResponse.indivRetweets;
-        var parsedIndivLikes = parsedResponse.indivLikes;
         
-        // clear data for previous username
-        indivuser = {};
-        indivuserretweets = {};
-        indivuserlikes = {};
-        
-        // populating individual lists        
-        for (var i = 0; i < parsedIndivRetweets.length; i++) {
-            indivuserretweets[parsedIndivRetweets[i].text] = parsedIndivRetweets[i];
-        }
-        for (var i = 0; i < parsedIndivLikes.length; i++) {
-            indivuserlikes[parsedIndivLikes[i].text] = parsedIndivLikes[i];
-        }
-        
-        if (RTnotLike) {
-            indivuser = indivuserretweets;
+        if (parsedResponse.indivLikes.length == 0) {   // if username is invalid
+            $(".usernameInput").val("");
+            $(".usernameInput").css("width", "90px");
+            errorAlert();
         } else {
-            indivuser = indivuserlikes;
+            var parsedIndivRetweets = parsedResponse.indivRetweets;
+            var parsedIndivLikes = parsedResponse.indivLikes;
+
+            // clear data for previous username
+            indivuser = {};
+            indivuserretweets = {};
+            indivuserlikes = {};
+
+            // populating individual lists        
+            for (var i = 0; i < parsedIndivRetweets.length; i++) {
+                indivuserretweets[parsedIndivRetweets[i].text] = parsedIndivRetweets[i];
+            }
+            for (var i = 0; i < parsedIndivLikes.length; i++) {
+                indivuserlikes[parsedIndivLikes[i].text] = parsedIndivLikes[i];
+            }
+
+            if (RTnotLike) {
+                indivuser = indivuserretweets;
+            } else {
+                indivuser = indivuserlikes;
+            }
+
+            displayedSugs = indivuser;
+            topSugList();
+            topSugSlide();
         }
-        
-        displayedSugs = indivuser;
-        topSugList();
-        topSugSlide();
     })
 }
 
