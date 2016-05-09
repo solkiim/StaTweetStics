@@ -597,5 +597,8 @@ public class StopWords {
         add("ask");
         add("asked");
         add("asks");
+        add("put");
+        add("puts");
+        add("putting");
     }
 }

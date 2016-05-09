@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.io.File;
 //TODO REMOVE
 import java.net.InetAddress;
-
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.sql.Connection;
@@ -151,7 +151,7 @@ public abstract class GUIServer {
 	 * 
 	 */
 	private static class UserHandler implements Route {
-		public List<Word> modelHelper(List<Tweet> topic, boolean likesRT) {
+		private List<Word> modelHelper(List<Tweet> topic, boolean likesRT) {
 			List<Word> results = new ArrayList<>();
 			Ranker<Word> rank = new TweetRanker(topic,likesRT);
 			Word.reset(SimilarWords.combineSimilar(Word.cache()));
@@ -164,16 +164,24 @@ public abstract class GUIServer {
 				if (w >= topWords) {
 					continue;
 				}
-				if (w < displayWords) {
-					if(!results.contains(s)){
-						results.add(s);
-						break;
-					}
-				}
-				
+				results.add(s);
 				w++;
 			}
 			return results;
+		}
+		private List<Word> rankRanked(List<Word> res, boolean likesRT) {
+			List<Word> copy = new ArrayList<>();
+			for (Word w : res) {
+				copy.add(w);
+			}
+			Collections.sort(copy, (a, b) -> {
+				return -Integer.compare(a.getTweets().size(),b.getTweets().size());
+			});
+			if (copy.size() > 0) {
+				return copy.subList(0,1);
+			} else {
+				return copy;
+			}
 		}
 		public List<List<Word>> model(List<String> usrHandle) {
 			List<List<Word>> results = new ArrayList<>(2);
@@ -187,7 +195,6 @@ public abstract class GUIServer {
 			MyLDA4 lda = new MyLDA4(topWords,userList);
 			lda.inference();
 			lda.printFB();
-			System.out.println("Results");
 			int u = -1;
 			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
 			for (List<List<Tweet>> topics : usrResults) {
@@ -198,9 +205,12 @@ public abstract class GUIServer {
 					if (t >= topTopics) {
 						return results;
 					}
-					List<Word> h0 = modelHelper(topic,false);
-					results.get(0).addAll(h0);
-					results.get(1).addAll(modelHelper(topic,true));
+					List<Word> r0 = modelHelper(topic,false);
+					List<Word> r1 = modelHelper(topic,true);
+					r0 = rankRanked(r0,false);
+					r1 = rankRanked(r1,true);
+					results.get(0).addAll(r0);
+					results.get(1).addAll(r1);
 				}
 			}
 			return results;
