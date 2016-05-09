@@ -184,8 +184,9 @@ public class Oauth {
 			return str.toString();
 		} catch (IOException e) {
 			System.out.println("Please enter a valid Twitter handle");
-			return new String(); 
+			 throw new IOException();
 		}
+//		return new String();
 	}
 	
 	/**

@@ -102,6 +102,8 @@ public class StopWords {
         add("com");
         add("come");
         add("comes");
+        add("coming");
+        add("came");
         add("concerning");
         add("consequently");
         add("consider");
