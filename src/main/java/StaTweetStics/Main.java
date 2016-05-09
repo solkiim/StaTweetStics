@@ -25,31 +25,13 @@ public class Main{
 	public static void main(String[] args) throws Exception{
 		System.out.println("StaTweetStics");
 		System.out.println("args:"+Arrays.asList(args));
-		
-		Db.setURL(args[args.length-1]);
-		if (args.length == 2) {
-			Db.setURL(args[args.length-1]);
-			User usr = null;
-			try (Db db = new Db()) {
-				usr = new UserSingle(args[0]);
-			}
-			System.out.println(usr.getTweets());
-			return;	
+		if(args.length < 1 || args.length > 1){
+			System.out.println("Usage: ./run <database>");
 		}
-		else if(args.length > 2){
+		else{
 			Db.setURL(args[args.length-1]);
-			for (int i = 0; i < args.length; i++) {
-				if (args[i].equals("--wf3")) {
-					List<String> arg2 = Arrays.asList(args);
-					List<String> arg3 = arg2.subList(i+1,args.length-1);
-					String[] args4 = arg3.toArray(new String[0]);
-					try (Db db = new Db()) {
-						willtest3(args4);
-					}
-				}
-			}
-		}
-		GUIServer.run(4567);
+			GUIServer.run(4567);
+		} 
 	}
 	private static void willtest(String[] args) {
 		System.out.println("willtest:"+Arrays.asList(args));
