@@ -67,7 +67,7 @@ public class WordSerializer implements JsonSerializer<Word> {
         twtLK = tweet;
       }
       companiesRT.put(tweet.handle(), companiesRT.getOrDefault(tweet.handle(), 0.0) + tweet.retweets());
-      companiesLK.put(tweet.handle(), companiesLK.getOrDefault(tweet.handle(), 0.0) + tweet.retweets()); 
+      companiesLK.put(tweet.handle(), companiesLK.getOrDefault(tweet.handle(), 0.0) + tweet.likes()); 
       companies.put(tweet.handle(), companies.getOrDefault(tweet.handle(), 0.0) + 1.0);   
         // JsonObject arrObj = new JsonObject();
         // arrObj.add("retweets",new JsonPrimitive(tweet.rawRetweets()));
