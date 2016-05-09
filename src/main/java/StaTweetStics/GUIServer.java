@@ -371,12 +371,14 @@ public abstract class GUIServer {
 				Map<String, Object> variables = new HashMap<>();
 				QueryParamsMap qm = req.queryMap();
 				System.out.println("testVar");
-				System.out.println(qm.value("usernames"));
-				//List<String> usrHandle = qm.value("usernames");
-				// //usrHandle.add(input);
-				// List<List<Word>> results = model(usrHandle);
-				// variables.put("indivRetweets",results.get(0).toArray());
-				// variables.put("indivLikes",results.get(1).toArray());
+				String qmarr = qm.value("usernames");
+				String[] output = GSON.fromJson(qmarr , String[].class);
+				List<String> usrHandle = Arrays.asList(output);
+				System.out.println(usrHandle);
+				//usrHandle.add(input);
+				List<List<Word>> results = model(usrHandle);
+				variables.put("indivRetweets",results.get(0).toArray());
+				variables.put("indivLikes",results.get(1).toArray());
 				return GSON.toJson(variables);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
