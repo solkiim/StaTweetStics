@@ -36,6 +36,7 @@ public class TweetStringParser implements Parser<List<String>, String> {
 		command.add(new Tuple("\\.\\.+"," "));
 		command.add(new Tuple("( |^\\s)['!\"$%&'()*+,-./:;<=>?@\\[\\]^_`\\{\\|\\}~']+\\w+( |$)", " "));
 		command.add(new Tuple("@\\w+", " "));//removes user
+		command.add(new Tuple("[\\u{1f600}-\\u{1F6FF}]", ""));
 		command.add(new Tuple("[\\.\\!\\?\\,\\;\\:\\\'\\\"\\-\\”\\“\\’\\—\\…\\%\\(\\)\\‘]", ""));
 		//command.add(new Tuple("^(([0-9]*)|(([0-9]*)\\.([0-9]*)))$"," "));
 		command.add(new Tuple("[1-9][0-9]*|0"," "));

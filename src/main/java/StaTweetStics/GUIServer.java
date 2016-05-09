@@ -236,7 +236,7 @@ public abstract class GUIServer {
 				Map<String, Object> variables = new HashMap<>();
 				QueryParamsMap qm = req.queryMap();
 				String input = qm.value("user");
-				System.out.println("user handle: "+input);
+				//System.out.println("user handle: "+input);
 				List<String> usrHandle = new ArrayList();
 				usrHandle.add(input);
 				List<List<Word>> results = model(usrHandle);
@@ -269,7 +269,7 @@ public abstract class GUIServer {
 				results.add(s);
 				w++;
 			}
-			System.out.println("Multi: "+results);
+			//System.out.println("Multi: "+results);
 			return results;
 		}
 		private List<Word> rankRanked(List<Word> res, List<Word> rset, boolean likesRT) {
@@ -341,7 +341,7 @@ public abstract class GUIServer {
 				String qmarr = qm.value("usernames");
 				String[] output = GSON.fromJson(qmarr , String[].class);
 				List<String> usrHandle = Arrays.asList(output);
-				System.out.println(usrHandle);
+				//System.out.println(usrHandle);
 				//usrHandle.add(input);
 				List<List<Word>> results = model(usrHandle);
 				variables.put("indivRetweets",results.get(0).toArray());
