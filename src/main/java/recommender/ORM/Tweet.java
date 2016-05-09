@@ -37,6 +37,8 @@ public interface Tweet extends Entity, Edge<Word,Tweet> {
 	void parse(Parser<List<String>,String> parse);
 	String handle();
 	String text();
+	void setLikes();
+	void setRT();
 	double retweets();
 	int rawRetweets();
 	void setTweetScore(double average);

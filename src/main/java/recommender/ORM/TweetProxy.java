@@ -115,6 +115,14 @@ public class TweetProxy extends EntityProxy<Tweet> implements Tweet {
       internal = (Tweet) checkCache(id);
     }
   }
+  public void setLikes() {
+    fill();
+    internal.setLikes();
+  }
+  public void setRT() {
+    fill();
+    internal.setRT();
+  }
 
   /**
    * this correctly fill in the data for a Way.

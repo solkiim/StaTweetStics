@@ -48,9 +48,10 @@ import edu.brown.cs.OAuth.*;
  * interations for the server.
  */
 public abstract class GUIServer {
-
-	private static final int TOP_WORDS = 5;
+	private static final int topWords = 5;
 	private static final int topTopics = 5;
+	private static final int displayWords = 1;
+	private static final int TOP_WORDS = 5;
 	private static final Gson GSON = new GsonBuilder()
 	.registerTypeAdapter(Word.class, new WordSerializer()).create();
 	private static final Splitter MY_SPLITTER = 
@@ -151,6 +152,62 @@ public abstract class GUIServer {
 	 * 
 	 */
 	private static class UserHandler implements Route {
+		public List<Word> modelHelper(List<Tweet> topic, boolean likesRT) {
+			List<Word> results = new ArrayList<>();
+			Ranker<Word> rank = new TweetRanker(topic,likesRT);
+			Word.reset(SimilarWords.combineSimilar(Word.cache()));
+			List<Word> ranks = rank.rank();
+			NERanker<Word, Tweet> pr = new NERanker<>();
+			pr.init(ranks);
+			ranks = pr.rank();
+			int w = 0;
+			for (Word s : ranks) {
+				if (w < displayWords) {
+					if(!results.contains(s)){
+						results.add(s);
+						break;
+					}
+				}
+				if (w >= topWords) {
+					continue;
+				}
+				w++;
+				//System.out.print("  ");
+				//System.out.println(s.printWordData());
+			}
+			return results;
+		}
+		public List<List<Word>> model(List<String> usrHandle) {
+			List<List<Word>> results = new ArrayList<>(2);
+			results.add(new ArrayList<>());
+			results.add(new ArrayList<>());
+			List<User> userList = new ArrayList<>();
+			userList.add(new UserMulti(usrHandle));
+			
+			System.out.println("ranking - part 1");
+
+			MyLDA4 lda = new MyLDA4(6,userList);
+			lda.inference();
+			lda.printFB();
+			System.out.println("Results");
+			int u = -1;
+			int i = 0;
+			//List<List<List<Word>>> wordsUser = new ArrayList<>();
+			List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
+			for (List<List<Tweet>> topics : usrResults) {
+				//List<List<Word>> wordsTopic = new ArrayList<>();
+				u++;
+				System.out.println("User "+userList.get(u).getHandle()+": ");
+				for (List<Tweet> topic : topics) {
+					results.get(0).addAll(modelHelper(topic,false));
+					results.get(1).addAll(modelHelper(topic,true));
+					//wordsTopic.add(ranks);
+				}
+				//wordsUser.add(wordsTopic);
+			}
+			System.out.println("MyLDA4");
+			return results;
+		}
 		/**
 		 * spark server handler.
 		 * @param req the request
@@ -163,59 +220,11 @@ public abstract class GUIServer {
 				Map<String, Object> variables = new HashMap<>();
 				QueryParamsMap qm = req.queryMap();
 				String input = qm.value("user");
-				List<Word> results = new ArrayList<>();
-
-				List<User> userList = new ArrayList<>();
-				List<String> usrHandle = new ArrayList<>();
+				List<String> usrHandle = new ArrayList();
 				usrHandle.add(input);
-				userList.add(new UserMulti(usrHandle));
-				int topWords = 5;
-				int topTopics = 5;
-				int displayWords = 1;
-				System.out.println("ranking - part 1");
-
-				MyLDA4 lda = new MyLDA4(6,userList);
-				lda.inference();
-				lda.printFB();
-				System.out.println("Results");
-				int u = -1;
-				int i = 0;
-				List<List<List<Word>>> wordsUser = new ArrayList<>();
-				List<List<List<Tweet>>> usrResults = lda.getTopicsToRank();
-				for (List<List<Tweet>> topics : usrResults) {
-					List<List<Word>> wordsTopic = new ArrayList<>();
-					u++;
-					System.out.println("User "+userList.get(u).getHandle()+": ");
-					for (List<Tweet> topic : topics) {
-						if (i > topTopics) {
-							continue;
-						}
-						System.out.println("Topic "+i+": ");
-						i++;
-						Ranker<Word> rank = new TweetRanker(topic);
-						Word.reset(SimilarWords.combineSimilar(Word.cache()));
-						List<Word> ranks = rank.rank();
-						NERanker<Word, Tweet> pr = new NERanker<>();
-						pr.init(ranks);
-						ranks = pr.rank();
-						int w = 0;
-						for (Word s : ranks) {
-							if (w < displayWords) {
-								results.add(s);
-							}
-							if (w >= topWords) {
-								continue;
-							}
-							w++;
-							System.out.print("  ");
-							System.out.println(s.printWordData());
-						}
-						wordsTopic.add(ranks);
-					}
-					wordsUser.add(wordsTopic);
-				}
-				System.out.println("MyLDA4");
-				variables.put("yourTrending",results.toArray());
+				List<List<Word>> results = model(usrHandle);
+				variables.put("yourTrendingRetweets",results.get(0).toArray());
+				variables.put("yourTrendingLikes",results.get(1).toArray());
 				return GSON.toJson(variables);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
