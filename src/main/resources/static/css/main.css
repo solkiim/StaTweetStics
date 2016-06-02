@@ -1,3 +1,4 @@
+/*------------------ FONTS ------------------*/
 @font-face {
     font-family: 'Proxima Nova Bold';
     src: url('fonts/Proxima Nova Bold.otf');
@@ -26,6 +27,7 @@
     font-family: 'Proxima Nova Alt Condensed Light';
     src: url('fonts/Proxima Nova Alt Condensed Light.otf');
 }
+
 
 /*------------------ GENERAL ------------------*/
 html {
@@ -72,7 +74,6 @@ ul {
 #content {
     margin: 43px 0 0 0;
 }
-
 
 
 /*------------------ INTRO DIALOG BOX ------------------*/
@@ -224,7 +225,6 @@ ul {
     margin-top: 0px;
     color: #162252;
     font-size: 17px;
-/*    letter-spacing: 1px;*/
     display: inline!important;
     border: 0px;
     line-height: 27px;
