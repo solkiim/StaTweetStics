@@ -10,8 +10,8 @@ var compareusersretweets = {};
 var usersToCompare = [];
 var userCount = 1;
 
-var indiv = true;
-var RTnotLike = true;
+var indiv = true;   // individual user vs group
+var RTnotLike = true;   // retweets not likes
 
 var displayedSugs;    // sugs displayed currently
 
@@ -45,8 +45,8 @@ function dialogBoxes() {
                 username = value;
                 $(".usernameInput").val(value); // set username
                 getIndivUser();
-            } else {
-                indivuser = {"enter":[], "a twitter handle":[], "to see":[], "super cool":[], "stats!":[]};
+            } else {    // if no valid username was entered
+                indivuser = {"enter":[], "a twitter handle":[], "to see":[], "super cool":[], "stats!":[]}; // set default message
                 compareusers = indivuser;
                 displayedSugs = indivuser;
                 topSugList();
@@ -56,7 +56,7 @@ function dialogBoxes() {
     });
 }
 
-function errorAlert() {
+function errorAlert() { // if username is invalid
     vex.dialog.buttons.YES.text = "try again!"
     
     vex.dialog.confirm({
@@ -64,47 +64,9 @@ function errorAlert() {
     });
 }
 
+
 /*------------------ GETTING TRENDING LISTS ------------------*/
-function getCompareUsers() {
-    // sending the usernames to the backend
-    var postParameters = {'usernames': JSON.stringify(usersToCompare)};
-    $.get("/compareUserTweets", postParameters, function(responseJSON) {
-        var parsedResponse = JSON.parse(responseJSON);
-        
-        if (parsedResponse.indivLikes.length == 0) {   // if username is invalid
-            $(".usernameInput").val("");
-            $(".usernameInput").css("width", "90px");
-            errorAlert();
-        } else {
-            var parsedCompRetweets = parsedResponse.indivRetweets;
-            var parsedCompLikes = parsedResponse.indivLikes;
-
-            // clear data for previous comparison
-            compareusers = {};
-            compareuserslikes = {};
-            compareusersretweets = {};
-
-            for (var i = 0; i < parsedCompRetweets.length; i++) {
-                compareusersretweets[parsedCompRetweets[i].text] = parsedCompRetweets[i];
-            }
-            for (var i = 0; i < parsedCompLikes.length; i++) {
-                compareuserslikes[parsedCompLikes[i].text] = parsedCompLikes[i];
-            }
-
-            if (RTnotLike) {
-                compareusers = compareusersretweets;
-            } else {
-                compareusers = compareuserslikes;
-            }
-
-            displayedSugs = compareusers;
-            topSugList();
-            topSugSlide();
-        }
-    })
-}
-
-// updating username in back end and getting new data
+// getting individual user trending lists
 function getIndivUser() {    
     // sending the username to the backend
     var postParameters = {'user': username};
@@ -124,7 +86,7 @@ function getIndivUser() {
             indivuserretweets = {};
             indivuserlikes = {};
 
-            // populating individual lists        
+            // get and save the new comparison data
             for (var i = 0; i < parsedIndivRetweets.length; i++) {
                 indivuserretweets[parsedIndivRetweets[i].text] = parsedIndivRetweets[i];
             }
@@ -132,6 +94,7 @@ function getIndivUser() {
                 indivuserlikes[parsedIndivLikes[i].text] = parsedIndivLikes[i];
             }
 
+            // set current data to correct metric
             if (RTnotLike) {
                 indivuser = indivuserretweets;
             } else {
@@ -139,6 +102,48 @@ function getIndivUser() {
             }
 
             displayedSugs = indivuser;
+            topSugList();
+            topSugSlide();
+        }
+    })
+}
+
+// getting compare users trending lists
+function getCompareUsers() {
+    // sending the usernames to the backend
+    var postParameters = {'usernames': JSON.stringify(usersToCompare)};
+    $.get("/compareUserTweets", postParameters, function(responseJSON) {
+        var parsedResponse = JSON.parse(responseJSON);
+        
+        if (parsedResponse.indivLikes.length == 0) {   // if username is invalid
+            $(".usernameInput").val("");
+            $(".usernameInput").css("width", "90px");
+            errorAlert();
+        } else {
+            var parsedCompRetweets = parsedResponse.indivRetweets;
+            var parsedCompLikes = parsedResponse.indivLikes;
+
+            // clear data for previous comparison
+            compareusers = {};
+            compareuserslikes = {};
+            compareusersretweets = {};
+
+            // get and save the new comparison data
+            for (var i = 0; i < parsedCompRetweets.length; i++) {
+                compareusersretweets[parsedCompRetweets[i].text] = parsedCompRetweets[i];
+            }
+            for (var i = 0; i < parsedCompLikes.length; i++) {
+                compareuserslikes[parsedCompLikes[i].text] = parsedCompLikes[i];
+            }
+
+            // set current data to correct metric
+            if (RTnotLike) {
+                compareusers = compareusersretweets;
+            } else {
+                compareusers = compareuserslikes;
+            }
+
+            displayedSugs = compareusers;
             topSugList();
             topSugSlide();
         }
@@ -158,10 +163,12 @@ changeURL = function(e) {
 /*------------------ STATS TOGGLE ------------------*/
 var statsOut = false;
 
+// when slide-list toggle switch clicked
 $(document).on("click", "#topsugslist li, #topsugsslide", function() { 
     $("#statsTitle").html($(this).text() + " Stats:");
     makeTrendGraph($(this).text());
     
+    // display data for correct metric
     if (RTnotLike) {
         $("#avgtitle").html("avg retweets:");
         var avgrt = displayedSugs[$(this).text()].avgRT;
@@ -169,7 +176,7 @@ $(document).on("click", "#topsugslist li, #topsugsslide", function() {
         $("#avgvalue").html(avgrt);
         
         $("#toptweetvalue").html(displayedSugs[$(this).text()].tweetTextRT);
-        if (!indiv) {
+        if (!indiv) {   // add author if comparing
             $("#toptweetvalue").append("<br>-@");
             $("#toptweetvalue").append(displayedSugs[$(this).text()].nameRT);
         }
@@ -180,7 +187,7 @@ $(document).on("click", "#topsugslist li, #topsugsslide", function() {
         $("#avgvalue").html(avglk);
         
         $("#toptweetvalue").html(displayedSugs[$(this).text()].tweetTextLK);
-        if (!indiv) {
+        if (!indiv) {   // add author if comparing
             $("#toptweetvalue").append("<br>-@");
             $("#toptweetvalue").append(displayedSugs[$(this).text()].nameLK);
         }
@@ -194,6 +201,7 @@ $(document).on("click", "#topsugslist li, #topsugsslide", function() {
     }
 });
 
+// when close status button clicked
 $("#closeStats").click(function() { 
     $("#tweetStats").toggle();
     $("#suggestions").attr("class", "col col-sm-12");
@@ -238,6 +246,7 @@ function cycle() {
 
 
 /*------------------ USERNAME INPUT ------------------*/
+// resize input field based on the input typed
 function resizeInput() {
     $("input").autoresize({padding:20,minWidth:40,maxWidth:300});
 }
@@ -308,8 +317,9 @@ $("#usernameEdit").click(function() {
 
 
 /*------------------ USERNAME ADD ------------------*/
-$("#usernameAdd").click(function() { //on add input button click
-    if (userCount < 4 && !indiv) {
+// when add username input button clicked
+$("#usernameAdd").click(function() {
+    if (userCount < 4 && !indiv) {  // max 5 users
         userCount = userCount + 1;
         $("#inputGroup").append('<h3>, </h3>');
         $("#inputGroup").append('<input type="text" class="usernameInput" placeholder="username" autocomplete="off" style="border-bottom: 1px solid #162252" onkeypress="$(this).autoresize({padding:0,minWidth:0,maxWidth:300});">'); //add input box
@@ -327,6 +337,7 @@ $("[name='list-or-slide']").bootstrapSwitch();
 $(".bootstrap-switch-label").html("<div></div>");
 $(".bootstrap-switch").css("background","#162252");
 
+// when slide-or-list toggle switch clicked
 $("input[name='list-or-slide']").on("switchChange.bootstrapSwitch", function(event, state) {
     $("#closeStats").click();
     if (state) {    // if switched to list
@@ -344,6 +355,7 @@ $("[name='like-or-retweet']").bootstrapSwitch();
 $(".bootstrap-switch-label").html("<div></div>");
 $(".bootstrap-switch").css("background","#162252");
 
+// when like-or-retweet toggle switch clicked
 $("input[name='like-or-retweet']").on("switchChange.bootstrapSwitch", function(event, state) {
     $("#closeStats").click();
     if (state) {    // if switched to retweets
@@ -371,6 +383,7 @@ $("[name='indiv-or-compare']").bootstrapSwitch();
 $(".bootstrap-switch-label").html("<div></div>");
 $(".bootstrap-switch").css("background","#162252");
 
+// when indiv-or-compare toggle switch clicked
 $("input[name='indiv-or-compare']").on("switchChange.bootstrapSwitch", function(event, state) {
     if (state) {    // if switched to individual
         indiv = true;
@@ -383,17 +396,3 @@ $("input[name='indiv-or-compare']").on("switchChange.bootstrapSwitch", function(
         $(".fa").click();
     }
 });
-
-
-/*------------------ SUGGESTION TYPE ------------------*/
-//$("input[name='trendtype']").click(function(){
-//    $(this).prop("checked", true);
-//    if ($(this).val() === "indivuser") {
-//        displayedSugs = indivuser;
-//    } else if ($(this).val() === "compareusers") {
-//        console.log("compareusers");
-//        displayedSugs = compareusers;
-//    }
-//    topSugList();
-//    topSugSlide();
-//});
