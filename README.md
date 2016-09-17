@@ -13,6 +13,6 @@ mvn install
 ```
 ./run [database]
 ```
-Then, open ```http://localhost:4567``` and play around to your heart's content!
+Then, open ```http://localhost:4567/StaTweetStics``` and play around to your heart's content!
 
 ![alt tag](http://solkim.com/img/statweetstics.png)
