@@ -9,6 +9,7 @@ edu/brown/cs/suggest/ORM/Db$Operation.class
 edu/brown/cs/StaTweetStics/GUIServer$ExceptionPrinter.class
 edu/brown/cs/suggest/ORM/EntityBean.class
 edu/brown/cs/suggest/ORM/Db.class
+.DS_Store
 edu/brown/cs/suggest/StopWords.class
 edu/brown/cs/suggest/TweetStringParser.class
 edu/brown/cs/suggest/Graph/NERanker.class

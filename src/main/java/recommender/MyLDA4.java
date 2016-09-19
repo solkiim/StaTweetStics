@@ -85,7 +85,7 @@ public class MyLDA4 {
 		this(0.25,0.01,0.01,20.0,20.0,20,500,inTopWords,_users);
 	}
 	public MyLDA4(double inAlpha, double inBeta, double inBetaB,
-		double inGamma0,double inGamma1,  int inNumTopics, 
+		double inGamma0,double inGamma1,  int inNumTopics,
 		int inNumIterations, int inTopWords, List<User> _users) {
 		users = _users;
 		numUsers = users.size();
@@ -227,7 +227,7 @@ public class MyLDA4 {
 			for (int dIndex = 0; dIndex < docSize; dIndex++) {
 				int wordSize = corpus.get(uIndex).get(dIndex).size();
 				sampleDoc(uIndex, dIndex);
-				for (int wIndex = 0; wIndex < wordSize; wIndex++) { 
+				for (int wIndex = 0; wIndex < wordSize; wIndex++) {
 					sampleWord(uIndex, dIndex, wIndex);
 				}
 			}
@@ -251,7 +251,7 @@ public class MyLDA4 {
 					// Get current word
 					int word = corpus.get(uIndex).get(dIndex).get(wIndex);
 					// Decrease counts
-					//C_word: 
+					//C_word:
 					topicWordCount[topic][word] -= 1;
 					//countAllWords:
 					sumTopicWordCount[topic] -= 1;
@@ -479,7 +479,7 @@ public class MyLDA4 {
 						continue;
 					}
 					i++;
-					System.out.println("Word:{"+id2WordVocabulary.get(rnk)+" , "+phi_word[tIndex][rnk]+"}");
+					// System.out.println("Word:{"+id2WordVocabulary.get(rnk)+" , "+phi_word[tIndex][rnk]+"}");
 				}
 			}
 		}
@@ -504,7 +504,7 @@ public class MyLDA4 {
 						continue;
 					}
 					i++;
-					System.out.println("Word:{"+id2WordVocabulary.get(rnk)+" , "+phi_word[tIndex][rnk]+"}");
+					// System.out.println("Word:{"+id2WordVocabulary.get(rnk)+" , "+phi_word[tIndex][rnk]+"}");
 				}
 				}
 		}
@@ -619,22 +619,3 @@ public class MyLDA4 {
 		writer.close();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

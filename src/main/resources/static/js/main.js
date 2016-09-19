@@ -20,8 +20,8 @@ $(document).ready(function() {
     
     // particle background setup
     $('#particles').particleground({
-        dotColor: '#E1E9FF',
-        lineColor: '#E1E9FF' /*F0F4FF*/
+        dotColor: '#F0F4FF',
+        lineColor: '#F0F4FF' /*E1E9FF*/
     });
     
     dialogBoxes();
@@ -67,11 +67,11 @@ function errorAlert() { // if username is invalid
 
 /*------------------ GETTING TRENDING LISTS ------------------*/
 // getting individual user trending lists
-function getIndivUser() {    
+function getIndivUser() {
     // sending the username to the backend
     var postParameters = {'user': username};
     $.get("/userTweets", postParameters, function(responseJSON) {
-        var parsedResponse = JSON.parse(responseJSON); 
+        var parsedResponse = JSON.parse(responseJSON);
         
         if (parsedResponse.indivLikes.length == 0) {   // if username is invalid
             $(".usernameInput").val("");
@@ -155,7 +155,7 @@ function getCompareUsers() {
 changeURL = function(e) {
     var tweetContent = document.getElementById("tweetInput").value;
     var tcURI = encodeURI(tweetContent);
-    var tweetURL = "https://twitter.com/intent/tweet?text=" + tcURI; 
+    var tweetURL = "https://twitter.com/intent/tweet?text=" + tcURI;
     e.href = tweetURL;
 };
 
@@ -164,7 +164,7 @@ changeURL = function(e) {
 var statsOut = false;
 
 // when slide-list toggle switch clicked
-$(document).on("click", "#topsugslist li, #topsugsslide", function() { 
+$(document).on("click", "#topsugslist li, #topsugsslide", function() {
     $("#statsTitle").html($(this).text() + " Stats:");
     makeTrendGraph($(this).text());
     
@@ -202,7 +202,7 @@ $(document).on("click", "#topsugslist li, #topsugsslide", function() {
 });
 
 // when close status button clicked
-$("#closeStats").click(function() { 
+$("#closeStats").click(function() {
     $("#tweetStats").toggle();
     $("#suggestions").attr("class", "col col-sm-12");
     $("#tweetStats").css("display", "none");
@@ -298,7 +298,7 @@ $("#usernameEdit").click(function() {
             $('#inputGroup > input').each(function () {
                 if (this.value != "") {
                     usersToCompare.push(this.value);
-                }  
+                }
             });
             getCompareUsers();
         }

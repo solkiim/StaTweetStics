@@ -11,6 +11,10 @@ mvn install
 ```
 
 ```
+mvn package
+```
+
+```
 ./run [database]
 ```
 Then, open ```http://localhost:4567/StaTweetStics``` and play around to your heart's content!
